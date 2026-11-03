@@ -1,0 +1,16 @@
+{
+  "name": "papo-reto",
+  "private": true,
+  "description": "Portal de notícias para o público jovem",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "db:nova": "supabase migration new",
+    "db:status": "supabase migration list --remote",
+    "db:push": "supabase db push --remote"
+  },
+  "devDependencies": {
+    "supabase": "^3.0.0"
+  }
+}

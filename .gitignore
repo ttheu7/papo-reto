@@ -1,0 +1,17 @@
+# Dependências e builds
+node_modules/
+dist/
+.wrangler/
+
+# Segredos: nunca vão pro Git
+.env
+.env.*
+!.env.example
+
+# Arquivos locais da Supabase CLI
+supabase/.temp/
+supabase/.branches/
+
+# Sistema
+.DS_Store
+Thumbs.db

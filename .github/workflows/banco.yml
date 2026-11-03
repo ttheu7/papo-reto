@@ -1,0 +1,41 @@
+# Aplica no Supabase as migrations novas de supabase/migrations sempre que
+# elas chegam na main. Também dá pra rodar à mão pela aba Actions.
+name: Banco de dados
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/migrations/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Nunca duas rodadas mexendo no banco ao mesmo tempo.
+concurrency:
+  group: banco-de-dados
+  cancel-in-progress: false
+
+jobs:
+  migrations:
+    name: Aplicar migrations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # Instala a CLI exatamente na versão do package-lock.json, sem rodar
+      # scripts de instalação e sem nenhum segredo disponível neste passo.
+      - run: npm ci --ignore-scripts
+
+      # Conecta direto no banco pela string do pooler em modo sessão (IPv4,
+      # que é o que o Actions tem). Não usa token de acesso do Supabase.
+      - name: Aplicar migrations pendentes
+        run: npx supabase db push --remote="$SUPABASE_DB_URL" --yes
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
