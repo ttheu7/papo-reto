@@ -2,7 +2,7 @@
 
 Portal de notícias para o público jovem: reúne o que os principais portais do Brasil e do mundo estão noticiando, com resumos feitos por IA e link para a matéria original.
 
-> Em desenvolvimento. "Papo Reto" é um nome provisório.
+> Em desenvolvimento.
 
 ## Organização
 
