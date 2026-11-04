@@ -1,0 +1,51 @@
+---
+import '../styles/global.css';
+import Topo from '../components/Topo.astro';
+import Rodape from '../components/Rodape.astro';
+
+interface Props { titulo: string; descricao: string; semTopo?: boolean }
+const { titulo, descricao, semTopo = false } = Astro.props;
+const canonico = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonico} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body id="topo">
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+    {!semTopo && <Topo />}
+    <slot name="topo" />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Rodape />
+    <script>
+      // Entradas: cada filho de [data-revela] sobe uma vez, em sequência, ao entrar na tela.
+      const blocos = document.querySelectorAll<HTMLElement>('[data-revela]');
+      blocos.forEach((b) => Array.from(b.children).forEach((f, i) => (f as HTMLElement).style.setProperty('--i', String(Math.min(i, 8)))));
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) if (e.isIntersecting) { e.target.classList.add('visivel'); io.unobserve(e.target); }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
+        blocos.forEach((b) => io.observe(b));
+      } else {
+        blocos.forEach((b) => b.classList.add('visivel'));
+      }
+    </script>
+  </body>
+</html>

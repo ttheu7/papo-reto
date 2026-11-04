@@ -84,15 +84,17 @@ Regras:
 
 Nunca coloque segredos no código, em logs, em JSONs ou no site. Nos workflows, os segredos entram só nos passos que precisam deles (`env` no passo), nunca no passo de `npm ci`.
 
-## Visual (do protótipo)
+## Visual
 
-As telas de referência estão em `docs/prototipo/`: início no computador, página do acontecimento e celular. O conteúdo delas é ilustrativo.
+As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e blocos existem), não o design. O design foi feito com a skill taste-skill (direção "one motif", seed 1484486149) e revisado com a web-design-guidelines.
 
-- **Cores:** fundo `#F5F6F8`, superfície `#FFFFFF`, texto `#16193A`, texto secundário `#4B5068`, azul das ações `#2B4BF2`, amarelo marca-texto `#FFE45C`, linhas `#D9DCE6` e bordas de etiqueta `#C3C7D4`.
-- **Fontes:** Schibsted Grotesk (interface e títulos) e Newsreader (texto dos resumos), via Google Fonts.
-- **Elementos:** bordas de 2px na cor do texto, com sombra dura (`6px 6px 0 #16193A`) só nos destaques. Sem fotos.
-- **Medidor de cobertura:** 10 barrinhas, preenchidas conforme o número de portais.
-- **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA e alvos de toque com pelo menos 44px).
+- **Ideia:** o motivo é a barrinha reta do medidor de cobertura ("papo reto"). Ela vira a pilha de pastas do topo, os marcadores da lista, o painel e o logotipo de blocos do rodapé. Não invente outra forma.
+- **Cores:** fundo `#f8f8f8`, texto `#0a0a0a`, menta `#c3edce` (o que o Papo Reto explica: resumo), rosa `#f8c7c9` (o que os portais publicaram: fontes), branco `#ffffff`, verde `#1f6b3a` só em botões. Tudo em `apps/web/src/styles/global.css`.
+- **Fontes:** League Spartan 700 (títulos) e Figtree 400/600 (texto), servidas pelo próprio site via `@fontsource` (nenhuma chamada ao Google).
+- **Regras da casa:** cinco tamanhos de letra (`--step-*`), sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título, cantos retos, botão com os cantos de cima chanfrados (a aba da pasta).
+- **Imagens:** sem fotos dos portais. Só imagens de acervos de domínio público ou CC0, nunca ao lado de uma notícia específica. Hoje o site é 100% tipográfico e gráfico.
+- **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA, alvos de 44px, `prefers-reduced-motion`).
+- **Conferir:** `node ~/.claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4321/papo-reto/ --allow few-pictures,no-footage` com o `npm run preview -w @papo-reto/web` rodando. As manchetes longas de notícia passam de duas linhas no celular: é conteúdo de terceiros, não cortamos.
 
 ## Comandos
 

@@ -1,13 +1,146 @@
 ---
-// Página provisória. O site de verdade vem na etapa 5.
+import Base from '../layouts/Base.astro';
+import PilhaDeHoje from '../components/PilhaDeHoje.astro';
+import ListaDeNoticias from '../components/ListaDeNoticias.astro';
+import Medidor from '../components/Medidor.astro';
+import { eventos, hoje, portaisAtuais } from '../lib/dados';
+import { caminho, dataPorExtenso, horaDe, REPOSITORIO } from '../lib/formato';
+
+const idsDeHoje = new Set(hoje.eventos.map((e) => e.id));
+const mais = eventos.eventos.filter((e) => !idsDeHoje.has(e.id));
+const portais = portaisAtuais();
+const nomesDosPortais = portais.slice(0, 3).map((p) => p.nome);
+const barras = [46, 72, 58, 100, 84, 64, 92, 38, 76, 54];
 ---
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Papo Reto</title>
-  </head>
-  <body>
-    <h1>Papo Reto</h1>
-  </body>
-</html>
+<Base titulo="Papo Reto: o que importa hoje" descricao="As notícias do dia, explicadas em até três frases, com link para quem noticiou. Grátis, sem anúncio e sem cadastro.">
+  <section class="hoje escuro" aria-labelledby="hoje-titulo">
+    <div class="hoje__cabeca moldura">
+      <h1 id="hoje-titulo">o que importa hoje</h1>
+      <p class="hoje__apoio">As notícias do dia explicadas em até três frases, com link para quem noticiou.</p>
+      <p class="hoje__data">{dataPorExtenso(eventos.geradoEm)}, atualizado às {horaDe(eventos.geradoEm)}</p>
+    </div>
+    {hoje.eventos.length > 0 ? (
+      <PilhaDeHoje eventos={hoje.eventos} geradoEm={eventos.geradoEm} />
+    ) : (
+      <p class="moldura hoje__vazio">Nada novo nas últimas 24 horas. Volte daqui a pouco.</p>
+    )}
+  </section>
+
+  <section class="secao moldura mais" id="mais-noticias" aria-labelledby="mais-titulo">
+    <div class="cabeca">
+      <h2 class="secao__titulo" id="mais-titulo">mais notícias</h2>
+      <span class="contagem">das últimas 48 horas</span>
+    </div>
+    <ListaDeNoticias eventos={mais} geradoEm={eventos.geradoEm} comAtalhos />
+  </section>
+
+  <section class="secao moldura funciona" aria-labelledby="funciona-titulo">
+    <h2 class="so-leitor" id="funciona-titulo">Como funciona</h2>
+    <p class="funciona__frase" data-revela>
+      <span>A cada 30 minutos a gente lê os portais</span>
+      <span class="peca peca--rosa">{nomesDosPortais.join(' · ')}</span>
+      <span>, conta quantos falaram de cada assunto</span>
+      <span class="peca peca--branca"><Medidor cobertura={3} /></span>
+      <span>e explica tudo em até três frases</span>
+      <span class="peca peca--menta">IA</span>
+      <span>, sempre com o link da matéria original.</span>
+    </p>
+    <div class="funciona__acao">
+      <p>Os resumos são feitos por IA só com as manchetes e descrições dos portais, e cada um mostra de onde veio.</p>
+      <a class="botao" href={caminho('como-funciona/')}>Ver como funciona</a>
+    </div>
+  </section>
+
+  <section class="secao moldura" aria-labelledby="painel-titulo">
+    <div class="painel escuro">
+      <div class="painel__frase">
+        <h2 id="painel-titulo">grátis, sem anúncio e sem cadastro</h2>
+        <svg class="painel__barras" viewBox="0 0 100 60" preserveAspectRatio="none" role="img" aria-label="O medidor de cobertura do Papo Reto, em tamanho grande">
+          {barras.map((h, i) => <rect x={i * 10} y={60 - h * 0.6} width="7" height={h * 0.6} class={i % 3 === 0 ? 'b-menta' : i % 3 === 1 ? 'b-rosa' : 'b-branca'} style={`--d:${i}`} />)}
+        </svg>
+      </div>
+      <div class="painel__blocos">
+        <div>
+          <h3>Feito por estudantes</h3>
+          <p>O Papo Reto é um projeto de Ciência da Computação da Unoesc Videira. O código é aberto e qualquer pessoa pode ver como cada notícia chega aqui.</p>
+        </div>
+        <div>
+          <h3>Viu um erro?</h3>
+          <p>Todo resumo tem um botão para reportar erro. A gente lê, corrige e conta o que mudou, direto no GitHub.</p>
+        </div>
+        <a class="botao" href={REPOSITORIO}>Ver o código</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hoje { padding-bottom: 0; overflow: hidden; }
+  .hoje__cabeca { padding-top: clamp(32px, 3vw, 48px); padding-bottom: clamp(48px, 4vw, 64px); text-align: center; display: grid; justify-items: center; gap: 20px; }
+  .hoje h1 { font-size: clamp(3.5rem, 0.6rem + 7.4vw, 8rem); line-height: 0.88; }
+  .hoje__apoio { font-size: var(--step-lead); max-width: 40ch; line-height: 1.35; color: var(--on-dark); text-wrap: balance; }
+  .hoje__data { font-size: var(--step-small); color: var(--on-dark-muted); font-weight: 600; }
+  .hoje__data::first-letter { text-transform: uppercase; }
+  .hoje__vazio { padding-bottom: 96px; font-size: var(--step-lead); }
+
+  .mais { background: var(--white); margin-top: 0; padding-top: clamp(80px, 9vw, 140px); padding-bottom: clamp(80px, 9vw, 140px); }
+  .mais :global(.atalhos a) { background: var(--bg); }
+  .mais :global(.linha__marca--original) { background: var(--pink); }
+
+  .funciona { display: grid; grid-template-columns: 7fr 5fr; gap: 40px var(--gutter); align-items: end; }
+  .funciona__frase {
+    font-family: var(--display); font-weight: 700; letter-spacing: -0.03em;
+    font-size: var(--step-lead); line-height: 1.3; max-width: 30em;
+  }
+  .funciona__frase > span { display: inline; }
+  .peca {
+    display: inline-flex !important; color: var(--ink); align-items: center; justify-content: center; vertical-align: -0.12em;
+    height: 1em; min-width: 1.9em; padding: 0 0.3em; margin: 0 0.15em;
+    font-family: var(--text); font-size: var(--step-small); letter-spacing: 0; line-height: 1; font-weight: 600;
+  }
+  .peca .medidor { font-size: 1em; }
+  .peca--rosa { background: var(--pink); }
+  .peca--menta { background: var(--mint); }
+  .peca--branca { background: var(--white); }
+  .funciona__acao { display: grid; gap: 24px; justify-items: start; max-width: 36ch; }
+
+  .painel {
+    position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 6fr 5fr; gap: 48px; padding: 56px 56px 0; margin-inline: calc(var(--margin) * -1 + 20px);
+  }
+  .painel__frase { display: grid; gap: 56px; align-content: space-between; }
+  .painel__frase h2 { font-size: var(--step-head); max-width: 9em; color: var(--mint); }
+  .painel__blocos { display: grid; gap: 56px; align-content: start; justify-items: start; max-width: 340px; justify-self: end; margin-right: 6%; padding-bottom: 56px; }
+  .painel__blocos h3 { font-family: var(--text); font-size: var(--step-lead); letter-spacing: -0.01em; line-height: 1.2; margin-bottom: 12px; }
+  .painel__blocos p { font-size: var(--step-body); color: var(--on-dark); }
+  .painel__barras {
+    display: block; width: min(44vw, 620px); height: clamp(260px, 30vw, 420px); margin-bottom: -48px;
+  }
+  .b-menta { fill: var(--mint); }
+  .b-rosa { fill: var(--pink); }
+  .b-branca { fill: var(--white); }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .painel__barras rect { transform: scaleY(0.2); transform-box: fill-box; transform-origin: bottom; transition: transform 1100ms var(--ease-expo); transition-delay: calc(var(--d, 0) * 60ms); }
+    .js .painel.visivel .painel__barras rect { transform: none; }
+  }
+
+  @media (max-width: 900px) {
+    .painel { grid-template-columns: 1fr; padding: 40px 24px 0; margin-inline: calc(var(--margin) * -1 + 10px); min-height: 0; gap: 40px; }
+    .painel__blocos { justify-self: start; max-width: none; gap: 40px; margin: 0; }
+    .painel__barras { width: 100%; height: 52vw; margin-bottom: -13vw; }
+    .painel__frase { display: contents; }
+    .painel__frase h2 { order: 0; }
+    .painel__blocos { order: 1; padding-bottom: 0; }
+    .painel__barras { order: 2; }
+    .funciona { grid-template-columns: 1fr; }
+  }
+</style>
+
+<script>
+  // As barras do painel crescem quando ele entra na tela.
+  const painel = document.querySelector('.painel');
+  if (painel && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { painel.classList.add('visivel'); io.disconnect(); } }), { threshold: 0.25 });
+    io.observe(painel);
+  } else painel?.classList.add('visivel');
+</script>

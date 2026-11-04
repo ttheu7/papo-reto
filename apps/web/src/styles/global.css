@@ -1,0 +1,153 @@
+/* Papo Reto: direção "one motif" (taste-skill, seed 1484486149).
+   O motivo é a barrinha reta do medidor de cobertura: ela vira as pastas do topo,
+   os marcadores da lista, o painel e o logotipo do rodapé. */
+
+@import '@fontsource/league-spartan/latin-700.css';
+@import '@fontsource/figtree/latin-400.css';
+@import '@fontsource/figtree/latin-600.css';
+
+:root {
+  /* Cor: menta = o que o Papo Reto explica; rosa = o que os portais publicaram. */
+  --bg: #f8f8f8;
+  --surface: #eeeeee;
+  --ink: #0a0a0a;
+  --muted: #5e5e5e;
+  --accent: #1f6b3a;
+  --accent-strong: #154d29;
+  --accent-ink: #ffffff;
+  --mint: #c3edce;
+  --pink: #f8c7c9;
+  --white: #ffffff;
+  --on-dark: #f8f8f8;
+  --on-dark-muted: #b9b9b9;
+
+  /* Tipo: cinco tamanhos, e só. */
+  --display: 'League Spartan', system-ui, sans-serif;
+  --text: 'Figtree', system-ui, sans-serif;
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --step-head: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  --step-hero: clamp(3.5rem, 1rem + 8.4vw, 9.5rem);
+
+  /* Espaço */
+  --margin: clamp(16px, 2.6vw, 32px);
+  --gutter: clamp(20px, 4vw, 64px);
+  --section: clamp(96px, 12vw, 200px);
+  --folder-step: 64px;
+  --tab: 40px;
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-ui: 240ms;
+  --t-reveal: 800ms;
+  --stagger: 70ms;
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: var(--step-body);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.04em; line-height: 0.92; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 0.07em; }
+button { font: inherit; color: inherit; }
+a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(31, 107, 58, 0.15); }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.escuro :focus-visible { outline-color: var(--mint); }
+::selection { background: var(--mint); color: var(--ink); }
+.so-leitor {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; /* taste-skill-ignore: texto só para leitores de tela */
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.pular {
+  position: absolute; left: var(--margin); top: -100px; z-index: 50; padding: 12px 18px;
+  background: var(--accent); color: var(--accent-ink); font-weight: 600; text-decoration: none;
+}
+.pular:focus { top: 12px; }
+
+.moldura { padding-inline: var(--margin); }
+[hidden] { display: none !important; }
+
+/* ---------- Botão: a aba da pasta volta como os cantos de cima ---------- */
+.botao {
+  --chanfro: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  min-height: 48px; padding: 12px 24px 12px;
+  background: var(--accent); color: var(--accent-ink);
+  font-weight: 600; text-decoration: none; border: 0; cursor: pointer;
+  clip-path: polygon(var(--chanfro) 0, calc(100% - var(--chanfro)) 0, 100% var(--chanfro), 100% 100%, 0 100%, 0 var(--chanfro));
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+}
+.botao:active { transform: scale(0.97); }
+.botao--claro { background: var(--ink); color: var(--on-dark); }
+@media (hover: hover) and (pointer: fine) {
+  .botao:hover { background: var(--accent-strong); }
+  .botao--claro:hover { background: #2a2a2a; }
+}
+
+.link {
+  text-decoration: underline; text-decoration-color: transparent;
+  transition: text-decoration-color var(--t-hover) ease;
+}
+@media (hover: hover) and (pointer: fine) { .link:hover { text-decoration-color: currentColor; } }
+
+/* ---------- Medidor de cobertura: o motivo em tamanho de texto ---------- */
+.medidor { display: inline-flex; align-items: flex-end; gap: 3px; height: 1em; vertical-align: -0.1em; }
+.medidor span { width: 0.24em; background: currentColor; opacity: 0.18; height: 100%; }
+.medidor span.cheia { opacity: 1; }
+
+/* ---------- Topo ---------- */
+.topo {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  min-height: 64px; padding-inline: var(--margin); gap: 12px;
+}
+.topo__marca {
+  font-family: var(--display); font-weight: 700; font-size: var(--step-lead); letter-spacing: -0.04em;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 44px;
+}
+.topo__marca .medidor { font-size: 0.9em; }
+.topo__links { display: flex; gap: 20px; justify-self: end; font-size: var(--step-small); font-weight: 600; }
+.topo__links a, .topo__esq a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; white-space: nowrap; }
+@media (max-width: 520px) {
+  .topo { grid-template-columns: auto 1fr; }
+  .topo__esq { display: none; }
+  .topo__marca { justify-self: start; }
+}
+.topo__esq { justify-self: start; font-size: var(--step-small); font-weight: 600; }
+.escuro { background: var(--ink); color: var(--on-dark); }
+
+/* ---------- Seções ---------- */
+.secao { padding-block: var(--section) 0; }
+.secao__titulo { font-size: var(--step-head); }
+.cabeca {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
+}
+.cabeca .contagem { font-size: var(--step-body); color: var(--muted); }
+
+/* ---------- Revelação ao rolar (uma vez) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-revela] > * {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-expo);
+    transition-delay: calc(var(--i, 0) * var(--stagger));
+  }
+  .js [data-revela].visivel > * { opacity: 1; transform: none; }
+}

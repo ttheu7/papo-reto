@@ -1,0 +1,16 @@
+---
+import { caminho } from '../lib/formato';
+import Medidor from './Medidor.astro';
+---
+<header class="topo escuro">
+  <nav class="topo__esq" aria-label="Atalhos">
+    <a class="link" href={caminho('#mais-noticias')}>Notícias</a>
+  </nav>
+  <a class="topo__marca" href={caminho()} aria-label="Papo Reto, página inicial">
+    <Medidor cobertura={4} />
+    <span translate="no">papo reto</span>
+  </a>
+  <nav class="topo__links" aria-label="Sobre o site">
+    <a class="link" href={caminho('como-funciona/')}>Como funciona</a>
+  </nav>
+</header>

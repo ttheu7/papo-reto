@@ -1,0 +1,36 @@
+---
+import type { Evento } from '../lib/dados';
+import { categorias } from '../lib/dados';
+import { caminho } from '../lib/formato';
+import LinhaDeNoticia from './LinhaDeNoticia.astro';
+
+interface Props { eventos: Evento[]; geradoEm: string; comAtalhos?: boolean; mostrarCategoria?: boolean }
+const { eventos, geradoEm, comAtalhos = false, mostrarCategoria = true } = Astro.props;
+const comNoticias = categorias.categorias.filter((c) => c.total > 0).sort((a, b) => b.total - a.total);
+---
+{comAtalhos && comNoticias.length > 0 && (
+  <nav class="atalhos" aria-label="Categorias">
+    <ul>
+      {comNoticias.map((c) => (
+        <li><a href={caminho(`categoria/${c.slug}/`)}>{c.nome} <span class="atalhos__total">{c.total}</span></a></li>
+      ))}
+    </ul>
+  </nav>
+)}
+<ul class="itens" data-revela>
+  {eventos.map((e) => <LinhaDeNoticia evento={e} geradoEm={geradoEm} mostrarCategoria={mostrarCategoria} />)}
+</ul>
+
+<style>
+  .atalhos { margin-top: 32px; }
+  .atalhos ul { display: flex; flex-wrap: wrap; gap: 8px; }
+  .atalhos a {
+    display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px;
+    background: var(--surface); text-decoration: none; font-weight: 600; font-size: var(--step-small);
+    transition: background-color var(--t-hover) ease;
+  }
+  .atalhos__total { color: var(--muted); font-variant-numeric: tabular-nums; }
+  @media (hover: hover) and (pointer: fine) { .atalhos a:hover { background: var(--mint); } }
+  .itens { display: grid; grid-template-columns: 1fr 1fr; gap: 40px var(--gutter); margin-top: 56px; }
+  @media (max-width: 900px) { .itens { grid-template-columns: 1fr; gap: 32px; margin-top: 40px; } }
+</style>

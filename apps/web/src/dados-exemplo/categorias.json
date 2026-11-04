@@ -1,0 +1,50 @@
+{
+ "geradoEm": "2026-11-04T13:36:47.246Z",
+ "categorias": [
+  {
+   "slug": "brasil",
+   "nome": "Brasil",
+   "total": 13
+  },
+  {
+   "slug": "ciencia",
+   "nome": "Ciência",
+   "total": 1
+  },
+  {
+   "slug": "economia",
+   "nome": "Economia",
+   "total": 4
+  },
+  {
+   "slug": "educacao",
+   "nome": "Educação",
+   "total": 0
+  },
+  {
+   "slug": "esportes",
+   "nome": "Esportes",
+   "total": 1
+  },
+  {
+   "slug": "mundo",
+   "nome": "Mundo",
+   "total": 17
+  },
+  {
+   "slug": "politica",
+   "nome": "Política",
+   "total": 0
+  },
+  {
+   "slug": "pop",
+   "nome": "Pop",
+   "total": 4
+  },
+  {
+   "slug": "tecnologia",
+   "nome": "Tecnologia",
+   "total": 3
+  }
+ ]
+}

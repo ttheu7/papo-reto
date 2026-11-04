@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import ListaDeNoticias from '../../components/ListaDeNoticias.astro';
+import { categorias, eventos, eventosDaCategoria } from '../../lib/dados';
+import { caminho, plural } from '../../lib/formato';
+
+export function getStaticPaths() {
+  return categorias.categorias.map((c) => ({ params: { slug: c.slug }, props: { slug: c.slug, nome: c.nome } }));
+}
+
+const { slug, nome } = Astro.props as { slug: string; nome: string };
+const lista = eventosDaCategoria(slug);
+const outras = categorias.categorias.filter((c) => c.slug !== slug);
+---
+<Base titulo={`${nome} | Papo Reto`} descricao={`Notícias de ${nome.toLowerCase()} das últimas 48 horas, explicadas em até três frases.`}>
+  <Cabecalho grande>
+    <h1 id="pagina-titulo">{nome.toLowerCase()}</h1>
+    <p class="abre__apoio">
+      {lista.length > 0 ? `${plural(lista.length, 'notícia', 'notícias')} de ${nome.toLowerCase()} nas últimas 48 horas.` : `Nada de ${nome.toLowerCase()} nas últimas 48 horas.`}
+    </p>
+  </Cabecalho>
+
+  <section class="secao moldura lista" aria-labelledby="lista-titulo">
+    <h2 class="so-leitor" id="lista-titulo">Notícias de {nome}</h2>
+    {lista.length > 0 ? (
+      <ListaDeNoticias eventos={lista} geradoEm={eventos.geradoEm} mostrarCategoria={false} />
+    ) : (
+      <p class="vazio">Enquanto isso, veja <a class="link" href={caminho()}>o que importa hoje</a>.</p>
+    )}
+  </section>
+
+  <section class="secao moldura" aria-labelledby="outras-titulo">
+    <h2 class="secao__titulo" id="outras-titulo">outras categorias</h2>
+    <ul class="outras" data-revela>
+      {outras.map((c) => (
+        <li>
+          <a href={caminho(`categoria/${c.slug}/`)}>
+            <span>{c.nome}</span>
+            <span class="outras__total">{c.total}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .lista { padding-top: clamp(16px, 3vw, 48px); }
+  .vazio { font-size: var(--step-lead); }
+  .outras { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 40px; }
+  .outras a {
+    display: flex; justify-content: space-between; align-items: center; min-height: 64px; padding: 0 20px;
+    background: var(--surface); font-weight: 600; text-decoration: none; transition: background-color var(--t-hover) ease;
+  }
+  .outras li:nth-child(3n + 1) a:hover { background: var(--mint); }
+  .outras li:nth-child(3n + 2) a:hover { background: var(--pink); }
+  .outras li:nth-child(3n) a:hover { background: var(--white); }
+  .outras__total { font-variant-numeric: tabular-nums; color: var(--muted); }
+</style>

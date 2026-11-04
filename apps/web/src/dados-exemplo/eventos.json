@@ -1,0 +1,1534 @@
+{
+ "geradoEm": "2026-11-04T13:36:47.246Z",
+ "eventos": [
+  {
+   "id": "58ee7f8a-fd5c-470a-a988-891b5e4ad67b",
+   "titulo": "Democratas conquistam maioria na Câmara e no Senado dos EUA",
+   "resumo": "O Partido Democrata garantiu o controle do Congresso americano após vitórias em Estados como Texas e Kansas. A mudança altera o equilíbrio de poder em Washington durante o mandato de Donald Trump.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:36:47.246Z",
+   "atualizadoEm": "2026-11-04T13:36:47.246Z",
+   "publicadoEm": "2026-11-04T13:36:47.246Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Eleições nos EUA: em noite histórica, Partido Democrata conquista controle da Câmara e do Senado; veja resultados",
+     "url": "https://www.bbc.co.uk/portuguese/live/c6073r14jp7gt",
+     "publicadaEm": "2026-11-04T13:36:47.246Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "a83676fa-2d72-4f85-a2a6-2e32718f757d",
+   "titulo": "Jovens participam de cerimônia de Juramento à Bandeira em Santarém",
+   "resumo": "Sessenta jovens participaram do ato solene em frente à Junta Militar e receberam o Certificado de Dispensa de Incorporação. O documento é obrigatório para a emissão de outros registros civis e participação em concursos.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:28:16.000Z",
+   "atualizadoEm": "2026-11-04T13:28:16.000Z",
+   "publicadoEm": "2026-11-04T13:28:16.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Serviço militar em Santarém: 60 jovens juram à bandeira e recebem certificado de dispensa",
+     "url": "https://g1.globo.com/pa/santarem-regiao/noticia/2026/11/04/servico-militar-em-santarem-60-jovens-juram-a-bandeira-e-recebem-certificado-de-dispensa.ghtml",
+     "publicadaEm": "2026-11-04T13:28:16.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "8f81664a-635a-40fe-b976-f6cb1554346c",
+   "titulo": "Procon divulga lista de material escolar para escolas particulares no Pará",
+   "resumo": "O órgão estadual publicou a relação de itens que podem ser exigidos e proibiu a cobrança de produtos de higiene, limpeza e uso coletivo. Pais devem guardar notas fiscais para eventuais trocas e reclamações.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:27:05.000Z",
+   "atualizadoEm": "2026-11-04T13:27:05.000Z",
+   "publicadoEm": "2026-11-04T13:27:05.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Procon divulga lista de material escolar para 2027 no Pará; veja o que pode ser exigido",
+     "url": "https://g1.globo.com/pa/para/noticia/2026/11/04/procon-divulga-lista-de-material-escolar-para-2027-no-para-veja-o-que-pode-ser-exigido.ghtml",
+     "publicadaEm": "2026-11-04T13:27:05.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f5a81870-8348-4d10-a292-ac571a63e0f4",
+   "titulo": "Idoso de 75 anos é preso após disparar arma e ameaçar vizinhos no interior de SP",
+   "resumo": "A Guarda Civil Municipal deteve o suspeito após denúncias de que ele intimidou moradores com um facão e atirou de dentro de uma caminhonete. Com ele, os agentes encontraram uma espingarda e munições.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:26:54.000Z",
+   "atualizadoEm": "2026-11-04T13:26:54.000Z",
+   "publicadoEm": "2026-11-04T13:26:54.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Idoso de 75 anos é preso após atirar e ameaçar vizinhos com facão no interior de SP",
+     "url": "https://g1.globo.com/sp/sao-carlos-regiao/noticia/2026/11/04/idoso-de-75-anos-e-preso-apos-atirar-e-ameacar-vizinhos-com-facao-no-interior-de-sp.ghtml",
+     "publicadaEm": "2026-11-04T13:26:54.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "8a044ee4-e22c-45fd-a191-8126454aa028",
+   "titulo": "Assista aos vídeos do Bom Dia Amazônia desta quarta-feira",
+   "resumo": "O telejornal matinal foi veiculado normalmente pela Rede Amazônica nesta quarta-feira.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:26:32.000Z",
+   "atualizadoEm": "2026-11-04T13:26:32.000Z",
+   "publicadoEm": "2026-11-04T13:26:32.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "VÍDEOS: Bom Dia Amazônia desta quarta-feira, 4 de novembro de 2026",
+     "url": "https://g1.globo.com/am/amazonas/playlist/videos-bom-dia-amazonia-desta-quarta-feira-4-de-novembro-de-2026.ghtml",
+     "publicadaEm": "2026-11-04T13:26:32.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "2f5c460c-c9f0-4e52-8563-0ba4b7f70dc4",
+   "titulo": "Piauí estima mais de mil novos casos de câncer de próstata em 2026",
+   "resumo": "A campanha Novembro Azul alerta para a importância do diagnóstico precoce da doença, que é o tipo mais incidente entre os homens no estado. Especialistas recomendam avaliação médica a partir dos 50 anos ou mais cedo para grupos de risco.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:25:30.000Z",
+   "atualizadoEm": "2026-11-04T13:25:30.000Z",
+   "publicadoEm": "2026-11-04T13:25:30.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Piauí deve registrar mais de 1,1 mil casos de câncer de próstata em 2026; veja quando procurar um médico",
+     "url": "https://g1.globo.com/pi/piaui/noticia/2026/11/04/piaui-casos-cancer-prostata.ghtml",
+     "publicadaEm": "2026-11-04T13:25:30.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "859993a3-6f5d-4915-a5bc-0ff838ca30dc",
+   "titulo": "Prefeitura de Salvador anuncia atrações para o Festival Virada 2027",
+   "resumo": "Ivete Sangalo e Bell Marques estão entre os nomes confirmados para a festa gratuita que acontece na capital baiana. O evento será realizado entre os dias 30 de dezembro e 3 de janeiro.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "pop",
+    "nome": "Pop"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:25:19.000Z",
+   "atualizadoEm": "2026-11-04T13:25:19.000Z",
+   "publicadoEm": "2026-11-04T13:25:19.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Atrações Festival Virada Salvador 2027",
+     "url": "https://g1.globo.com/ba/bahia/noticia/2026/11/04/atracoes-festival-virada-salvador-2027.ghtml",
+     "publicadaEm": "2026-11-04T13:25:19.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "cef7d221-d2cc-448c-a12d-d35b8027119b",
+   "titulo": "Polícia investiga desaparecimento de jovem de 21 anos em João Pessoa",
+   "resumo": "Imagens de segurança registraram o rapaz sendo agredido por um grupo na rua após sair de seu condomínio. A família relata que a tornozeleira eletrônica dele foi encontrada em uma área de mata próxima.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:23:21.000Z",
+   "atualizadoEm": "2026-11-04T13:23:21.000Z",
+   "publicadoEm": "2026-11-04T13:23:21.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Imagens mostram jovem desaparecido após sair de casa sendo agradedido em João Pessoa; VEJA VÍDEO",
+     "url": "https://g1.globo.com/pb/paraiba/noticia/2026/11/04/imagens-mostram-jovem-desaparecido-apos-sair-de-casa-sendo-agradedido-em-joao-pessoa-veja-video.ghtml",
+     "publicadaEm": "2026-11-04T13:23:21.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "dc5891a0-9b27-4c28-ae54-978a2a4e0d2d",
+   "titulo": "Jovem de 19 anos é morto a tiros em parque aquático de Pernambuco",
+   "resumo": "A vítima foi perseguida por três homens encapuzados que desceram de um veículo atirando. A Polícia Civil investiga o caso para identificar a autoria e a motivação do crime.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:23:20.000Z",
+   "atualizadoEm": "2026-11-04T13:23:20.000Z",
+   "publicadoEm": "2026-11-04T13:23:20.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Jovem é perseguido e morto a tiros em parque aquático de Pesqueira; VÍDEO mostra o crime",
+     "url": "https://g1.globo.com/pe/caruaru-regiao/noticia/2026/11/04/jovem-e-perseguido-e-morto-a-tiros-em-parque-aquatico-de-pesqueira-video-mostra-o-crime.ghtml",
+     "publicadaEm": "2026-11-04T13:23:20.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "e020fb38-1da6-4c7b-a451-63e155d19a22",
+   "titulo": "Constituição dos EUA proíbe Donald Trump de disputar novo mandato em 2028",
+   "resumo": "A 22ª Emenda estabelece que uma mesma pessoa não pode ser eleita presidente mais de duas vezes. A restrição ocorre na mesma semana em que os democratas conquistaram a maioria no Congresso nas eleições de meio de mandato.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:23:01.000Z",
+   "atualizadoEm": "2026-11-04T13:23:01.000Z",
+   "publicadoEm": "2026-11-04T13:23:01.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Constituição dos EUA proíbe Trump de ser eleito presidente novamente em 2028",
+     "url": "https://g1.globo.com/mundo/noticia/2026/11/04/constituicao-dos-eua-proibe-trump-de-ser-eleito-presidente-novamente-em-2028.ghtml",
+     "publicadaEm": "2026-11-04T13:23:01.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "44e28772-6074-4cd0-b5cc-29b54c6a399d",
+   "titulo": "Fiscalização no Amapá notifica suspeitos de provocar incêndio em reserva",
+   "resumo": "Uma operação integrada notificou quatro proprietários suspeitos de causar queimadas no entorno de uma unidade de conservação no Amapá. A fiscalização utilizou sobrevoos para identificar focos de incêndio e monitorar danos na região. Os notificados devem explicar as causas e as medidas adotadas para evitar o fogo.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:22:43.000Z",
+   "atualizadoEm": "2026-11-04T13:22:43.000Z",
+   "publicadoEm": "2026-11-04T13:22:43.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Fiscalização notifica quatro suspeitos de provocar fogo em área de conservação no Amapá",
+     "url": "https://g1.globo.com/ap/amapa/noticia/2026/11/04/fiscalizacao-notifica-quatro-suspeitos-de-provocar-fogo-em-area-de-conservacao-no-amapa.ghtml",
+     "publicadaEm": "2026-11-04T13:22:43.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "86050eda-7e0e-4148-9af1-fbaa266d138f",
+   "titulo": "Empresas discutem a importância da contabilidade estratégica para 2027",
+   "resumo": "Especialistas apontam que o ano de 2027 exigirá das empresas um planejamento tributário e financeiro mais integrado à gestão. A proposta é que o contador atue como um parceiro estratégico para proteger resultados e otimizar custos. Mudanças fiscais e o cenário econômico motivam a avaliação desse suporte.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "economia",
+    "nome": "Economia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:20:32.000Z",
+   "atualizadoEm": "2026-11-04T13:20:32.000Z",
+   "publicadoEm": "2026-11-04T13:20:32.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Trocar de contador? 2027 exige uma contabilidade que proteja resultados",
+     "url": "https://g1.globo.com/am/amazonas/especial-publicitario/charao-tributario/noticia/2026/11/04/trocar-de-contador-2027-exige-uma-contabilidade-que-proteja-resultados.ghtml",
+     "publicadaEm": "2026-11-04T13:20:32.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "d49395b2-ce0c-411f-b020-007dc07bc895",
+   "titulo": "Paraná está sob alerta de tempestades e Defesa Civil divulga orientações",
+   "resumo": "O Paraná recebeu avisos meteorológicos sobre temporais, com a região sul sob alerta vermelho e o restante do estado em alerta laranja. O estado já registra estragos recentes, incluindo ventos fortes e quedas de granizo em municípios. A Defesa Civil divulgou dicas de segurança e telefones de emergência para a população.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:17:48.000Z",
+   "atualizadoEm": "2026-11-04T13:17:48.000Z",
+   "publicadoEm": "2026-11-04T13:17:48.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Paraná sob alerta vermelho de tempestades: veja orientações sobre como se cuidar durante temporais e telefones de emergência",
+     "url": "https://g1.globo.com/pr/campos-gerais-sul/noticia/2026/11/04/parana-alerta-tempestades-como-se-cuidar-e-telefones-de-emergencia.ghtml",
+     "publicadaEm": "2026-11-04T13:17:48.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "b5560321-acaf-4617-92a8-4e4553b23378",
+   "titulo": "Rafael Nadal vai integrar a diretoria do Real Madrid",
+   "resumo": "O Real Madrid anunciou que o ex-tenista Rafael Nadal passará a fazer parte da direção do clube espanhol. Conhecido torcedor da equipe, ele assume nova função na gestão esportiva.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "esportes",
+    "nome": "Esportes"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:12:00.000Z",
+   "atualizadoEm": "2026-11-04T13:12:00.000Z",
+   "publicadoEm": "2026-11-04T13:12:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Rafael Nadal entrará para a diretoria do Real Madrid",
+     "url": "https://www1.folha.uol.com.br/esporte/2026/11/rafael-nadal-entrara-para-a-diretoria-do-real-madrid.shtml",
+     "publicadaEm": "2026-11-04T13:12:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "b3f94402-b824-4bd9-876d-7577ed404712",
+   "titulo": "Democratas conquistam maioria no Congresso nas eleições de meio de mandato nos EUA",
+   "resumo": "A oposição conquistou maioria na Câmara e no Senado americanos, virando o controle do Congresso. Fatores como rejeição a Trump, custo de vida e votação antecipada influenciaram o resultado da chamada onda azul.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:09:42.000Z",
+   "atualizadoEm": "2026-11-04T13:09:42.000Z",
+   "publicadoEm": "2026-11-04T13:09:42.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Eleições nos EUA: o que significa a “onda azul” e por que ela aconteceu?",
+     "url": "https://www.cnnbrasil.com.br/internacional/eleicoes-nos-eua-o-que-significa-a-onda-azul-e-por-que-ela-aconteceu/",
+     "publicadaEm": "2026-11-04T13:09:42.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "d6e56208-e3a4-45dd-9363-5ea8dca2eae0",
+   "titulo": "Entenda a diferença na simbologia das cores vermelha e azul na política",
+   "resumo": "A associação das cores azul e vermelho a partidos políticos varia conforme o país e a história. Nos Estados Unidos, a inversão para associar o vermelho à direita ocorreu a partir dos anos 2000. A simbologia teve forte influência de eventos históricos como a Revolução Francesa.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:08:39.000Z",
+   "atualizadoEm": "2026-11-04T13:08:39.000Z",
+   "publicadoEm": "2026-11-04T13:08:39.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Por que a cor vermelha é associada a políticos à direita nos EUA e à esquerda no Brasil?",
+     "url": "https://www.cnnbrasil.com.br/curiosidades/por-que-a-cor-vermelha-e-associada-a-politicos-a-direita-nos-eua-e-a-esquerda-no-brasil/",
+     "publicadaEm": "2026-11-04T13:08:39.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "69cf41e8-47b0-4545-8ed3-02c46634b81b",
+   "titulo": "Anvisa aprova versão oral do Wegovy para tratamento de obesidade",
+   "resumo": "A Anvisa aprovou o registro da via oral do medicamento Wegovy para obesidade e sobrepeso. Até então, o produto da Novo Nordisk estava disponível no Brasil apenas em formato de caneta injetável. O pedido de liberação havia sido submetido em janeiro.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "ciencia",
+    "nome": "Ciência"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:06:00.000Z",
+   "atualizadoEm": "2026-11-04T13:06:00.000Z",
+   "publicadoEm": "2026-11-04T13:06:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Anvisa autoriza semaglutida oral de Wegovy para obesidade e sobrepeso",
+     "url": "https://www1.folha.uol.com.br/equilibrioesaude/2026/11/anvisa-autoriza-semaglutida-oral-de-wegovy-para-obesidade-e-sobrepeso.shtml",
+     "publicadaEm": "2026-11-04T13:06:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "07959984-1e86-40af-9897-dac0a36e4436",
+   "titulo": "Kremlin espera que resultado eleitoral não mude ações de Trump",
+   "resumo": "O Kremlin afirmou contar com a continuidade dos esforços de pacificação do presidente americano. A declaração foi feita pelo porta-voz Dmitry Peskov ao comentar o impacto das eleições de meio de mandato.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:05:26.000Z",
+   "atualizadoEm": "2026-11-04T13:05:26.000Z",
+   "publicadoEm": "2026-11-04T13:05:26.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Kremlin diz esperar que resultado das Midterms não afete ações de Trump",
+     "url": "https://www.cnnbrasil.com.br/internacional/kremlin-diz-esperar-que-resultado-das-midterms-nao-afete-acoes-de-trump/",
+     "publicadaEm": "2026-11-04T13:05:26.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "67e6afb6-7355-40c2-86d4-fec2b7b280e8",
+   "titulo": "Especialistas explicam impacto das eleições de meio de mandato nos EUA",
+   "resumo": "Especialistas analisam como as eleições de meio de mandato influenciam a disputa pela Casa Branca e a reorganização dos partidos americanos. O pleito serve como termômetro político e afeta os rumos do governo federal.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:00:58.000Z",
+   "atualizadoEm": "2026-11-04T13:00:58.000Z",
+   "publicadoEm": "2026-11-04T13:00:58.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Midterms nos EUA podem prever resultado da próxima eleição presidencial?",
+     "url": "https://www.cnnbrasil.com.br/internacional/midterms-nos-eua-podem-prever-resultado-da-proxima-eleicao-presidencial/",
+     "publicadaEm": "2026-11-04T13:00:58.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "5fbc4610-5bc7-4248-bfd3-8021bbb36e43",
+   "titulo": "Rapper Vandal lança álbum barroco inspirado na religiosidade da Bahia",
+   "resumo": "O rapper Vandal descreve seu novo álbum como uma obra com vontades próprias e marcada pela religiosidade baiana. O artista afirma que conversava com o disco durante o processo criativo. O projeto musical explora sonoridades barrocas.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "pop",
+    "nome": "Pop"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:00:00.000Z",
+   "atualizadoEm": "2026-11-04T13:00:00.000Z",
+   "publicadoEm": "2026-11-04T13:00:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Vandal, revelação do rap, cria álbum barroco marcado pela religiosidade da Bahia",
+     "url": "https://www1.folha.uol.com.br/ilustrada/2026/11/vandal-revelacao-do-rap-cria-album-barroco-marcado-pela-religiosidade-da-bahia.shtml",
+     "publicadaEm": "2026-11-04T13:00:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "967f2502-f2af-4a90-ac72-42da41d76efa",
+   "titulo": "Aposentados enfrentam dificuldades para receber indenizações do Banco Master",
+   "resumo": "Quase um ano após a liquidação do Banco Master, aposentados que sofreram prejuízos relatam dificuldades para receber os valores definidos pela Justiça. Mesmo com reconhecimento judicial, falta conseguir materializar o dinheiro na prática.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "economia",
+    "nome": "Economia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:00:00.000Z",
+   "atualizadoEm": "2026-11-04T13:00:00.000Z",
+   "publicadoEm": "2026-11-04T13:00:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "O calote do Banco Master nos aposentados",
+     "url": "https://www1.folha.uol.com.br/colunas/romulo-saraiva/2026/11/o-calote-do-banco-master-nos-aposentados.shtml",
+     "publicadaEm": "2026-11-04T13:00:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "de86bd9a-8e3e-46d2-bffa-adb091752270",
+   "titulo": "Alemanha usa museus como ferramenta de relações diplomáticas",
+   "resumo": "O país abriga museus muito conhecidos e também instituições menos famosas. A rede de museus é utilizada pelo governo como uma forma de criar relações diplomáticas.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:00:00.000Z",
+   "atualizadoEm": "2026-11-04T13:00:00.000Z",
+   "publicadoEm": "2026-11-04T13:00:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Como a Alemanha faz dos museus uma forma de criar relações diplomáticas",
+     "url": "https://www1.folha.uol.com.br/ilustrada/2026/11/como-a-alemanha-faz-dos-museus-uma-forma-de-criar-relacoes-diplomaticas.shtml",
+     "publicadaEm": "2026-11-04T13:00:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "10e07f1e-fda9-40bd-9d05-e8686c324535",
+   "titulo": "Papas se tornam opositores da extrema direita global",
+   "resumo": "O papa Leão 14 seguiu os passos de Francisco e se consolidou como opositor da extrema direita. O posicionamento da Igreja Católica reflete um contexto histórico amplo e não é considerado inesperado.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:00:00.000Z",
+   "atualizadoEm": "2026-11-04T13:00:00.000Z",
+   "publicadoEm": "2026-11-04T13:00:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Por que papas se tornaram grandes opositores da extrema direita",
+     "url": "https://www1.folha.uol.com.br/blogs/darwin-e-deus/2026/11/por-que-papas-se-tornaram-grandes-opositores-da-extrema-direita.shtml",
+     "publicadaEm": "2026-11-04T13:00:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "afe0b92b-a07f-4568-9b16-e0f9242647de",
+   "titulo": "Linhas de trem e metrô de SP registram falhas técnicas",
+   "resumo": "Problemas afetaram a linha 9-Esmeralda da ViaMobilidade e a linha 2-Verde do Metrô nesta quarta-feira. Duas das linhas afetadas já tiveram a circulação normalizada.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:58:50.000Z",
+   "atualizadoEm": "2026-11-04T12:58:50.000Z",
+   "publicadoEm": "2026-11-04T12:58:50.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Linhas de trem e metrô de SP registram falhas técnicas nesta quarta (4)",
+     "url": "https://www.cnnbrasil.com.br/nacional/sudeste/sp/linhas-de-trem-e-metro-de-sp-registram-falhas-tecnicas-nesta-quarta-4/",
+     "publicadaEm": "2026-11-04T12:58:50.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "1a93a22d-7f5c-470d-9924-83ffe69cdb23",
+   "titulo": "Dólar abre em queda após vitória democrata nos Estados Unidos",
+   "resumo": "A moeda norte-americana recuou para R$ 5,475 após os democratas conquistarem a maioria nas duas casas do Congresso americano. O resultado representa uma derrota para o presidente Donald Trump nas eleições de meio de mandato.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "economia",
+    "nome": "Economia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:56:00.000Z",
+   "atualizadoEm": "2026-11-04T12:56:00.000Z",
+   "publicadoEm": "2026-11-04T12:56:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Dólar abre em queda com vitória democrata nos EUA; juros futuros ficam de lado à espera do Copom",
+     "url": "https://www1.folha.uol.com.br/mercado/2026/11/dolar-abre-em-queda-com-vitoria-democrata-nos-eua-juros-futuros-ficam-de-lado-a-espera-do-copom.shtml",
+     "publicadaEm": "2026-11-04T12:56:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "91ba0545-d43d-4b56-bc94-f540923ac2c1",
+   "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
+   "resumo": "As reações internacionais ao resultado das urnas incluem críticas à política externa de Trump. Também houve alertas sobre possíveis mudanças nas relações comerciais e apoios ao pleito.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:55:09.000Z",
+   "atualizadoEm": "2026-11-04T12:55:09.000Z",
+   "publicadoEm": "2026-11-04T12:55:09.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
+     "url": "https://www.cnnbrasil.com.br/internacional/lideres-mundiais-reagem-a-vitoria-democrata-nas-eleicoes-dos-eua/",
+     "publicadaEm": "2026-11-04T12:55:09.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "bf72056d-85e7-454c-9b80-5b52ca4d8228",
+   "titulo": "Viridis fecha acordo para vender terras raras à Solvay na França",
+   "resumo": "O contrato prevê o fornecimento de terras raras extraídas de um projeto em Minas Gerais para uma unidade industrial francesa a partir de 2028. O acordo tem validade até 2034.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "economia",
+    "nome": "Economia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:53:31.000Z",
+   "atualizadoEm": "2026-11-04T12:53:31.000Z",
+   "publicadoEm": "2026-11-04T12:53:31.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Viridis fecha acordo para vender terras raras à Solvay na França até 2034",
+     "url": "https://www.cnnbrasil.com.br/infra/viridis-fecha-acordo-para-vender-terras-raras-a-solvay-na-franca-ate-2034/",
+     "publicadaEm": "2026-11-04T12:53:31.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "87807718-a2aa-4b46-805f-9b6ca586b947",
+   "titulo": "João Lucas e Sasha ganham presente caro para o bebê",
+   "resumo": "O músico mostrou nas redes sociais um presente de R$ 4,5 mil que o bebê já recebeu. O casal anunciou a gravidez no final de outubro.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "pop",
+    "nome": "Pop"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:53:19.000Z",
+   "atualizadoEm": "2026-11-04T12:53:19.000Z",
+   "publicadoEm": "2026-11-04T12:53:19.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "João Lucas mostra presente de R$ 4,5 mil que bebê com Sasha já ganhou",
+     "url": "https://www.cnnbrasil.com.br/pop/celebridades/joao-lucas-mostra-presente-de-r-45-mil-que-bebe-com-sasha-ja-ganhou/",
+     "publicadaEm": "2026-11-04T12:53:19.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "167ae7f7-6dfa-469c-9acf-8ddcd64dbcb6",
+   "titulo": "Lula comemora aprovação da PEC da Segurança no Senado",
+   "resumo": "O presidente comemorou a aprovação da PEC da Segurança no Senado Federal. Na ocasião, ele também reforçou a promessa de criar um ministério para a área.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:53:07.000Z",
+   "atualizadoEm": "2026-11-04T12:53:07.000Z",
+   "publicadoEm": "2026-11-04T12:53:07.000Z",
+   "materias": [
+    {
+     "portal": "Estadão",
+     "titulo": "Lula comemora aprovação da PEC da Segurança no Senado e reforça promessa de criar ministério",
+     "url": "https://www.estadao.com.br/brasil/lula-comemora-aprovacao-da-pec-da-seguranca-no-senado-e-reforca-promessa-de-criar-ministerio-npr/",
+     "publicadaEm": "2026-11-04T12:53:07.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "2bb45d52-cc31-428f-b3d7-f1364babd809",
+   "titulo": "Binance diz que hackers usaram falsa entrevista para roubar criptos",
+   "resumo": "A corretora afirmou que invasores usaram uma falsa entrevista de emprego para induzir um engenheiro a instalar um código malicioso. A invasão resultou no roubo de US$ 6,3 bilhões da plataforma na semana passada.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "tecnologia",
+    "nome": "Tecnologia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:52:00.000Z",
+   "atualizadoEm": "2026-11-04T12:52:00.000Z",
+   "publicadoEm": "2026-11-04T12:52:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Binance diz que hackers usaram falsa entrevista de emprego para invadir e roubar US$ 6,3 bi",
+     "url": "https://c-level.folha.uol.com.br/financas/2026/11/binance-diz-que-hackers-usaram-falsa-entrevista-de-emprego-para-invadir-e-roubar-us-63-bi.shtml",
+     "publicadaEm": "2026-11-04T12:52:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "84ba1bf9-f46a-4213-b245-46dd1c344acb",
+   "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:50:37.000Z",
+   "atualizadoEm": "2026-11-04T12:50:37.000Z",
+   "publicadoEm": "2026-11-04T12:50:37.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
+     "url": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/futebol-espanhol/rafael-nadal-pode-fazer-parte-da-diretoria-do-real-madrid-entenda/",
+     "publicadaEm": "2026-11-04T12:50:37.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "86fd152e-2851-4573-bca4-c6fa67c1035a",
+   "titulo": "Companheiro de equipe defende goleiro de jogada que resultou em morte",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:48:00.000Z",
+   "atualizadoEm": "2026-11-04T12:48:00.000Z",
+   "publicadoEm": "2026-11-04T12:48:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Companheiro de equipe defende goleiro de jogada que resultou em morte",
+     "url": "https://www1.folha.uol.com.br/esporte/2026/11/companheiro-de-equipe-defende-goleiro-de-jogada-que-resultou-em-morte-na-espanha.shtml",
+     "publicadaEm": "2026-11-04T12:48:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "231fea1e-a0d3-4a4f-a247-659cbe6de495",
+   "titulo": "Em 'efeito Mamdani', EUA terão número recorde de socialistas no Congresso",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:47:00.000Z",
+   "atualizadoEm": "2026-11-04T12:47:00.000Z",
+   "publicadoEm": "2026-11-04T12:47:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Em 'efeito Mamdani', EUA terão número recorde de socialistas no Congresso",
+     "url": "https://www1.folha.uol.com.br/mundo/2026/11/em-efeito-mamdani-eua-terao-numero-recorde-de-socialistas-no-congresso.shtml",
+     "publicadaEm": "2026-11-04T12:47:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "c582971b-3be8-440e-9abe-1270031f0b83",
+   "titulo": "Líder do Irã diz que resultado das Midterms não muda “hostilidade” dos EUA",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:45:26.000Z",
+   "atualizadoEm": "2026-11-04T12:45:26.000Z",
+   "publicadoEm": "2026-11-04T12:45:26.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Líder do Irã diz que resultado das Midterms não muda “hostilidade” dos EUA",
+     "url": "https://www.cnnbrasil.com.br/internacional/lider-do-ira-diz-que-resultado-das-midterms-nao-muda-hostilidade-dos-eua/",
+     "publicadaEm": "2026-11-04T12:45:26.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "b0b4e98d-4e6b-488f-87b1-1bea735f5d58",
+   "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:44:00.000Z",
+   "atualizadoEm": "2026-11-04T12:44:00.000Z",
+   "publicadoEm": "2026-11-04T12:44:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
+     "url": "https://www1.folha.uol.com.br/mundo/2026/11/china-diz-estar-disposta-a-seguir-trabalhando-com-eua-apos-vitoria-democrata-nas-eleicoes-de-meio-de-mandato.shtml",
+     "publicadaEm": "2026-11-04T12:44:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "27739491-92b8-4e61-9f5c-ea5820977615",
+   "titulo": "Análise: Trump será forçado a mudar após vitória democrata",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:42:49.000Z",
+   "atualizadoEm": "2026-11-04T12:42:49.000Z",
+   "publicadoEm": "2026-11-04T12:42:49.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Análise: Trump será forçado a mudar após vitória democrata",
+     "url": "https://www.cnnbrasil.com.br/internacional/analise-trump-sera-forcado-a-mudar-apos-vitoria-democrata/",
+     "publicadaEm": "2026-11-04T12:42:49.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "4c2ff0c6-e317-4d3f-b2f5-f5a7c0395b7f",
+   "titulo": "Surfe: Brasil se aproxima de conquistar o nono título mundial em doze anos",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:39:15.000Z",
+   "atualizadoEm": "2026-11-04T12:39:15.000Z",
+   "publicadoEm": "2026-11-04T12:39:15.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Surfe: Brasil se aproxima de conquistar o nono título mundial em doze anos",
+     "url": "https://www.cnnbrasil.com.br/esportes/outros-esportes/surfe-brasil-se-aproxima-de-conquistar-o-nono-titulo-mundial-em-doze-anos/",
+     "publicadaEm": "2026-11-04T12:39:15.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f2fc384b-b7bf-4088-afcc-0f395a9c531a",
+   "titulo": "Governo publica novas regras para combater golpes por SMS; veja o que muda",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "tecnologia",
+    "nome": "Tecnologia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:39:12.000Z",
+   "atualizadoEm": "2026-11-04T12:39:12.000Z",
+   "publicadoEm": "2026-11-04T12:39:12.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Governo publica novas regras para combater golpes por SMS; veja o que muda",
+     "url": "https://g1.globo.com/tecnologia/ciberseguranca/noticia/2026/11/04/governo-publica-novas-regras-para-combater-golpes-por-sms-veja-o-que-muda.ghtml",
+     "publicadaEm": "2026-11-04T12:39:12.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "eb1d069c-53ad-4cc4-897e-39016fac5b56",
+   "titulo": "Sharp objects found in Halloween sweets in three European nations",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:34:33.000Z",
+   "atualizadoEm": "2026-11-04T12:34:33.000Z",
+   "publicadoEm": "2026-11-04T12:34:33.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Sharp objects found in Halloween sweets in three European nations",
+     "url": "https://www.bbc.co.uk/news/articles/cvglw7x239pwo",
+     "publicadaEm": "2026-11-04T12:34:33.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "6c45a39e-75dc-481b-9a32-d7f08ef54e6d",
+   "titulo": "Epidemia de assinaturas cria novas divisões sociais entre o público do streaming",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:34:00.000Z",
+   "atualizadoEm": "2026-11-04T12:34:00.000Z",
+   "publicadoEm": "2026-11-04T12:34:00.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "Epidemia de assinaturas cria novas divisões sociais entre o público do streaming",
+     "url": "https://www1.folha.uol.com.br/ilustrada/2026/11/epidemia-de-assinaturas-cria-novas-divisoes-sociais-entre-o-publico-do-streaming.shtml",
+     "publicadaEm": "2026-11-04T12:34:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "6dcbefbf-dff3-43dd-8d07-a8e87ef441bd",
+   "titulo": "Iran's chief negotiator says Americans voted 'no to war'",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:21:21.000Z",
+   "atualizadoEm": "2026-11-04T12:21:21.000Z",
+   "publicadoEm": "2026-11-04T12:21:21.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Iran's chief negotiator says Americans voted 'no to war'",
+     "url": "https://www.bbc.co.uk/news/articles/c6d934npl9y8o",
+     "publicadaEm": "2026-11-04T12:21:21.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "c7124214-efe0-4169-994a-1186b4efa247",
+   "titulo": "Economia e democracia foram os temas mais importantes para americanos nas eleições, indica pesquisa",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:21:07.000Z",
+   "atualizadoEm": "2026-11-04T12:21:07.000Z",
+   "publicadoEm": "2026-11-04T12:21:07.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Economia e democracia foram os temas mais importantes para americanos nas eleições, indica pesquisa",
+     "url": "https://www.bbc.com/portuguese/articles/cmg4795366kdo",
+     "publicadaEm": "2026-11-04T12:21:07.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "6c764f08-a4ae-4e82-84b9-d2d1bb91432c",
+   "titulo": "Republicanos da Flórida derrotam democratas e Estado elege primeiro governador negro",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:12:19.000Z",
+   "atualizadoEm": "2026-11-04T12:12:19.000Z",
+   "publicadoEm": "2026-11-04T12:12:19.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Republicanos da Flórida derrotam democratas e Estado elege primeiro governador negro",
+     "url": "https://www.bbc.com/portuguese/articles/cm75p0lp5g1ro",
+     "publicadaEm": "2026-11-04T12:12:19.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "a7fa98db-b102-4f10-a8e1-ba5cda3c790f",
+   "titulo": "Deb Haaland é eleita primeira mulher indígena governadora nos EUA",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T12:04:05.000Z",
+   "atualizadoEm": "2026-11-04T12:04:05.000Z",
+   "publicadoEm": "2026-11-04T12:04:05.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Deb Haaland é eleita primeira mulher indígena governadora nos EUA",
+     "url": "https://www.bbc.com/portuguese/articles/c8vgxypwnpezo",
+     "publicadaEm": "2026-11-04T12:04:05.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "5a93d30c-5f49-4285-92e7-58a0dfb8375d",
+   "titulo": "Painel permite analisar mudanças climáticas no Brasil e América Latina",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:48:00.000Z",
+   "atualizadoEm": "2026-11-04T11:48:00.000Z",
+   "publicadoEm": "2026-11-04T11:48:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Painel permite analisar mudanças climáticas no Brasil e América Latina",
+     "url": "https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2026-11/painel-permite-analisar-mudancas-climaticas-no-brasil-e-america-latina",
+     "publicadaEm": "2026-11-04T11:48:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "293a79b4-d49a-4586-8467-ac6b83d630b5",
+   "titulo": "ANC under pressure to reverse South Africa decline",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:47:44.000Z",
+   "atualizadoEm": "2026-11-04T11:47:44.000Z",
+   "publicadoEm": "2026-11-04T11:47:44.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "ANC under pressure to reverse South Africa decline",
+     "url": "https://www.bbc.co.uk/news/articles/cr4g1x6l77xyo",
+     "publicadaEm": "2026-11-04T11:47:44.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "11ea97dd-89b0-492f-8b8b-1ee4d69ddf76",
+   "titulo": "Rwanda's army team removed from Africa league after US sanctions, NBA says",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:46:09.000Z",
+   "atualizadoEm": "2026-11-04T11:46:09.000Z",
+   "publicadoEm": "2026-11-04T11:46:09.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Rwanda's army team removed from Africa league after US sanctions, NBA says",
+     "url": "https://www.bbc.co.uk/news/articles/c699zdx9knmpo",
+     "publicadaEm": "2026-11-04T11:46:09.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "136d1354-fddb-4158-9c20-4964f0d8e8e3",
+   "titulo": "Quem é Gina Hinojosa, democrata de ascendência mexicana que será 1ª latina a governar o Texas",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:35:54.000Z",
+   "atualizadoEm": "2026-11-04T11:35:54.000Z",
+   "publicadoEm": "2026-11-04T11:35:54.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Quem é Gina Hinojosa, democrata de ascendência mexicana que será 1ª latina a governar o Texas",
+     "url": "https://www.bbc.com/portuguese/articles/ckm23qjvm888o",
+     "publicadaEm": "2026-11-04T11:35:54.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "98f5f1b8-8584-4e44-acfc-fdf6d3fa8806",
+   "titulo": "Racismo e desigualdades afetam aprendizagem das crianças, diz estudo",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:28:00.000Z",
+   "atualizadoEm": "2026-11-04T11:28:00.000Z",
+   "publicadoEm": "2026-11-04T11:28:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Racismo e desigualdades afetam aprendizagem das crianças, diz estudo",
+     "url": "https://agenciabrasil.ebc.com.br/educacao/noticia/2026-11/racismo-e-desigualdades-afetam-aprendizagem-das-criancas-diz-estudo-0",
+     "publicadaEm": "2026-11-04T11:28:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "cdec0f3e-1521-4a17-9b07-c3d378c2a32a",
+   "titulo": "Exames do presidente Lula estão dentro da normalidade, diz boletim",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:27:00.000Z",
+   "atualizadoEm": "2026-11-04T11:27:00.000Z",
+   "publicadoEm": "2026-11-04T11:27:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Exames do presidente Lula estão dentro da normalidade, diz boletim",
+     "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/exames-do-presidente-lula-estao-dentro-da-normalidade-diz-boletim",
+     "publicadaEm": "2026-11-04T11:27:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f21c481c-99ac-48ad-8ba5-ac7c618e2aa3",
+   "titulo": "Redução da maioridade penal pode voltar à pauta no Senado; entenda as duas propostas em debate",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:22:37.000Z",
+   "atualizadoEm": "2026-11-04T11:22:37.000Z",
+   "publicadoEm": "2026-11-04T11:22:37.000Z",
+   "materias": [
+    {
+     "portal": "Estadão",
+     "titulo": "Redução da maioridade penal pode voltar à pauta no Senado; entenda as duas propostas em debate",
+     "url": "https://www.estadao.com.br/brasil/reducao-da-maioridade-penal-pode-voltar-a-pauta-no-senado-entenda-as-duas-propostas-em-debate/",
+     "publicadaEm": "2026-11-04T11:22:37.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "2bdfbe99-5486-4866-ab24-d3045f078d6c",
+   "titulo": "Canva anuncia demissão de 1,2 mil funcionários e corta 22% da equipe",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "tecnologia",
+    "nome": "Tecnologia"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:20:20.000Z",
+   "atualizadoEm": "2026-11-04T11:20:20.000Z",
+   "publicadoEm": "2026-11-04T11:20:20.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Canva anuncia demissão de 1,2 mil funcionários e corta 22% da equipe",
+     "url": "https://g1.globo.com/tecnologia/noticia/2026/11/04/canva-anuncia-demissao-de-12-mil-funcionarios-em-reestruturacao.ghtml",
+     "publicadaEm": "2026-11-04T11:20:20.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "9b50b3e7-90c6-47ad-8111-3dacf8a0b0e0",
+   "titulo": "Enem 2026: confira dicas para cuidar do corpo e da mente na reta final",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:10:00.000Z",
+   "atualizadoEm": "2026-11-04T11:10:00.000Z",
+   "publicadoEm": "2026-11-04T11:10:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Enem 2026: confira dicas para cuidar do corpo e da mente na reta final",
+     "url": "https://agenciabrasil.ebc.com.br/educacao/noticia/2026-11/enem-2026-confira-dicas-para-cuidar-do-corpo-e-da-mente-na-reta-final",
+     "publicadaEm": "2026-11-04T11:10:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "1d0a200b-d7c9-4965-be63-684ad4da0ef7",
+   "titulo": "Democratas conquistam Congresso em esmagadora rejeição a Trump",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T11:08:00.000Z",
+   "atualizadoEm": "2026-11-04T11:08:00.000Z",
+   "publicadoEm": "2026-11-04T11:08:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Democratas conquistam Congresso em esmagadora rejeição a Trump",
+     "url": "https://agenciabrasil.ebc.com.br/internacional/noticia/2026-11/democratas-conquistam-congresso-em-esmagadora-rejeicao-trump",
+     "publicadaEm": "2026-11-04T11:08:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f234b0dd-c7fd-4cdd-a87a-c3ad537a8ec6",
+   "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:54:38.000Z",
+   "atualizadoEm": "2026-11-04T10:54:38.000Z",
+   "publicadoEm": "2026-11-04T10:54:38.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
+     "url": "https://www.bbc.com/portuguese/articles/cr1ex57zlqj2o",
+     "publicadaEm": "2026-11-04T10:54:38.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "ad82df3d-e7a9-4e26-bad5-bb68ade8cc7a",
+   "titulo": "Refinaria de Manguinhos será avaliada para aproveitamento da estrutura",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:52:00.000Z",
+   "atualizadoEm": "2026-11-04T10:52:00.000Z",
+   "publicadoEm": "2026-11-04T10:52:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Refinaria de Manguinhos será avaliada para aproveitamento da estrutura",
+     "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-11/refinaria-de-manguinhos-sera-avaliada-para-aproveitamento-da-estrutura",
+     "publicadaEm": "2026-11-04T10:52:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "2606cd80-489f-4b08-9ecf-409049072d53",
+   "titulo": "Entenda a diferença entre o voto proporcional e o voto distrital misto",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:50:00.000Z",
+   "atualizadoEm": "2026-11-04T10:50:00.000Z",
+   "publicadoEm": "2026-11-04T10:50:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Entenda a diferença entre o voto proporcional e o voto distrital misto",
+     "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-11/entenda-diferenca-entre-o-voto-proporcional-e-o-voto-distrital-misto",
+     "publicadaEm": "2026-11-04T10:50:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "48a6f134-6f44-45cb-af49-90f0201d96b3",
+   "titulo": "US contractor gave Ethiopia secrets to help kill Tigray fighters",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:35:03.000Z",
+   "atualizadoEm": "2026-11-04T10:35:03.000Z",
+   "publicadoEm": "2026-11-04T10:35:03.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "US contractor gave Ethiopia secrets to help kill Tigray fighters",
+     "url": "https://www.bbc.co.uk/news/articles/c6y8lz73vmv7o",
+     "publicadaEm": "2026-11-04T10:35:03.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "1f00c42d-0ca3-4a5a-b5b3-f1b25cf4ac45",
+   "titulo": "Trump diz que vai reconhecer resultado da eleição, que democratas 'fizeram bom trabalho' e critica republicanos",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:31:13.000Z",
+   "atualizadoEm": "2026-11-04T10:31:13.000Z",
+   "publicadoEm": "2026-11-04T10:31:13.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Trump diz que vai reconhecer resultado da eleição, que democratas 'fizeram bom trabalho' e critica republicanos",
+     "url": "https://www.bbc.com/portuguese/articles/cw146dj0regko",
+     "publicadaEm": "2026-11-04T10:31:13.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "584acff3-7899-474c-8bee-51df1dfd9f3a",
+   "titulo": "Chuvas fortes atingem quatro regiões nesta quarta e quinta-feira",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:31:00.000Z",
+   "atualizadoEm": "2026-11-04T10:31:00.000Z",
+   "publicadoEm": "2026-11-04T10:31:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Chuvas fortes atingem quatro regiões nesta quarta e quinta-feira",
+     "url": "https://agenciabrasil.ebc.com.br/meio-ambiente/noticia/2026-11/chuvas-fortes-atingem-quatro-regioes-nesta-quarta-e-quinta-feira",
+     "publicadaEm": "2026-11-04T10:31:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "3754c28a-d8e6-4de0-a185-46d8a6d69773",
+   "titulo": "Trump takes aim at Republicans but says Democrats did a 'good job'",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:15:42.000Z",
+   "atualizadoEm": "2026-11-04T10:15:42.000Z",
+   "publicadoEm": "2026-11-04T10:15:42.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Trump takes aim at Republicans but says Democrats did a 'good job'",
+     "url": "https://www.bbc.co.uk/news/articles/c6073l9y15xxo",
+     "publicadaEm": "2026-11-04T10:15:42.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "3e70f7e2-3610-4cee-aedb-1913c30deb89",
+   "titulo": "Mega-Sena sorteia prêmio acumulado de R$ 46 milhões nesta quarta-feira",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:12:00.000Z",
+   "atualizadoEm": "2026-11-04T10:12:00.000Z",
+   "publicadoEm": "2026-11-04T10:12:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Mega-Sena sorteia prêmio acumulado de R$ 46 milhões nesta quarta-feira",
+     "url": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-11/mega-sena-sorteia-premio-acumulado-de-r-46-milhoes-nesta-quarta-feira",
+     "publicadaEm": "2026-11-04T10:12:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "dacbcc05-28d0-479c-94ec-8c5baae5790d",
+   "titulo": "Left-wing Democrat Abdul El-Sayed wins in Michigan to become first Muslim senator",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:03:19.000Z",
+   "atualizadoEm": "2026-11-04T10:03:19.000Z",
+   "publicadoEm": "2026-11-04T10:03:19.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Left-wing Democrat Abdul El-Sayed wins in Michigan to become first Muslim senator",
+     "url": "https://www.bbc.co.uk/news/articles/c893z55pxrewo",
+     "publicadaEm": "2026-11-04T10:03:19.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f9361019-d15f-4715-927c-28578f5b9b27",
+   "titulo": "Quem é Abdul El-Sayed, primeiro muçulmano eleito senador nos EUA",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:02:45.000Z",
+   "atualizadoEm": "2026-11-04T10:02:45.000Z",
+   "publicadoEm": "2026-11-04T10:02:45.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Quem é Abdul El-Sayed, primeiro muçulmano eleito senador nos EUA",
+     "url": "https://www.bbc.com/portuguese/articles/c933xk7el2ggo",
+     "publicadaEm": "2026-11-04T10:02:45.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "ad0912df-0cad-43de-88ce-6b6b97cdf85d",
+   "titulo": "Copom decide nesta quarta-feira se corta ou mantém a Taxa Selic",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T10:01:00.000Z",
+   "atualizadoEm": "2026-11-04T10:01:00.000Z",
+   "publicadoEm": "2026-11-04T10:01:00.000Z",
+   "materias": [
+    {
+     "portal": "Agência Brasil",
+     "titulo": "Copom decide nesta quarta-feira se corta ou mantém a Taxa Selic",
+     "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-11/copom-decide-nesta-quarta-feira-se-corta-ou-mantem-taxa-selic",
+     "publicadaEm": "2026-11-04T10:01:00.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "6bae792a-9ac4-41a9-9bcd-dce60f06a6bf",
+   "titulo": "Beth Carvalho tem joias menos óbvias da discografia reavivadas por Enzo Belmonte no álbum 'Obrigado, Madrinha!'",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "pop",
+    "nome": "Pop"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T09:59:59.000Z",
+   "atualizadoEm": "2026-11-04T09:59:59.000Z",
+   "publicadoEm": "2026-11-04T09:59:59.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Beth Carvalho tem joias menos óbvias da discografia reavivadas por Enzo Belmonte no álbum 'Obrigado, Madrinha!'",
+     "url": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/04/beth-carvalho-tem-joias-menos-obvias-da-discografia-reavivadas-por-enzo-belmonte-no-album-obrigado-madrinha.ghtml",
+     "publicadaEm": "2026-11-04T09:59:59.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "4b414ca7-10db-4391-99cb-e2374f5e0bdd",
+   "titulo": "Republicana moderada é derrotada e perde cadeira no Senado após quase 30 anos",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T08:45:04.000Z",
+   "atualizadoEm": "2026-11-04T08:45:04.000Z",
+   "publicadoEm": "2026-11-04T08:45:04.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Republicana moderada é derrotada e perde cadeira no Senado após quase 30 anos",
+     "url": "https://www.bbc.com/portuguese/articles/cq70pdkx8wnpo",
+     "publicadaEm": "2026-11-04T08:45:04.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "bad7b974-b31f-40df-bf36-6d612c209bf1",
+   "titulo": "‘Com a PEC da Segurança, não existe mais espaço para empurrar a responsabilidade’, diz especialista",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T08:30:00.000Z",
+   "atualizadoEm": "2026-11-04T08:30:00.000Z",
+   "publicadoEm": "2026-11-04T08:30:00.000Z",
+   "materias": [
+    {
+     "portal": "Estadão",
+     "titulo": "‘Com a PEC da Segurança, não existe mais espaço para empurrar a responsabilidade’, diz especialista",
+     "url": "https://www.estadao.com.br/brasil/com-a-pec-da-seguranca-nao-existe-mais-espaco-para-empurrar-a-responsabilidade-diz-especialista/",
+     "publicadaEm": "2026-11-04T08:30:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "be62797f-cd98-4606-8c16-e3c291ecabcc",
+   "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T07:58:57.000Z",
+   "atualizadoEm": "2026-11-04T07:58:57.000Z",
+   "publicadoEm": "2026-11-04T07:58:57.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
+     "url": "https://www.bbc.com/portuguese/articles/crn8wnw3eq0wo",
+     "publicadaEm": "2026-11-04T07:58:57.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "1d62cb96-b708-4c1f-bf21-7b1947aa47cd",
+   "titulo": "Delhi air quality worsens ahead of Diwali as firework restrictions enter force",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T07:39:38.000Z",
+   "atualizadoEm": "2026-11-04T07:39:38.000Z",
+   "publicadoEm": "2026-11-04T07:39:38.000Z",
+   "materias": [
+    {
+     "portal": "BBC News",
+     "titulo": "Delhi air quality worsens ahead of Diwali as firework restrictions enter force",
+     "url": "https://www.bbc.co.uk/news/articles/c699z8792n7ro",
+     "publicadaEm": "2026-11-04T07:39:38.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  }
+ ]
+}

@@ -24,3 +24,6 @@ apps/web/public/dados/
 
 # Arquivos de trabalho da skill de design
 .taste-skill/
+
+# Configuração local do app Claude
+.claude/

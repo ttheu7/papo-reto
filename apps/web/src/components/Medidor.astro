@@ -1,0 +1,10 @@
+---
+// O motivo do site: dez barrinhas, cheias conforme o número de portais que noticiaram.
+interface Props { cobertura: number; class?: string }
+const { cobertura, class: classe } = Astro.props;
+const cheias = Math.max(0, Math.min(10, cobertura));
+const rotulo = cobertura === 1 ? 'Noticiado por 1 portal' : `Noticiado por ${cobertura} portais`;
+---
+<span class:list={['medidor', classe]} role="img" aria-label={rotulo} title={rotulo}>
+  {Array.from({ length: 10 }, (_, i) => <span class:list={{ cheia: i < cheias }} />)}
+</span>

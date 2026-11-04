@@ -1,0 +1,120 @@
+{
+ "geradoEm": "2026-11-04T13:36:47.246Z",
+ "eventos": [
+  {
+   "id": "58ee7f8a-fd5c-470a-a988-891b5e4ad67b",
+   "titulo": "Democratas conquistam maioria na Câmara e no Senado dos EUA",
+   "resumo": "O Partido Democrata garantiu o controle do Congresso americano após vitórias em Estados como Texas e Kansas. A mudança altera o equilíbrio de poder em Washington durante o mandato de Donald Trump.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:36:47.246Z",
+   "atualizadoEm": "2026-11-04T13:36:47.246Z",
+   "publicadoEm": "2026-11-04T13:36:47.246Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Eleições nos EUA: em noite histórica, Partido Democrata conquista controle da Câmara e do Senado; veja resultados",
+     "url": "https://www.bbc.co.uk/portuguese/live/c6073r14jp7gt",
+     "publicadaEm": "2026-11-04T13:36:47.246Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "a83676fa-2d72-4f85-a2a6-2e32718f757d",
+   "titulo": "Jovens participam de cerimônia de Juramento à Bandeira em Santarém",
+   "resumo": "Sessenta jovens participaram do ato solene em frente à Junta Militar e receberam o Certificado de Dispensa de Incorporação. O documento é obrigatório para a emissão de outros registros civis e participação em concursos.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:28:16.000Z",
+   "atualizadoEm": "2026-11-04T13:28:16.000Z",
+   "publicadoEm": "2026-11-04T13:28:16.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Serviço militar em Santarém: 60 jovens juram à bandeira e recebem certificado de dispensa",
+     "url": "https://g1.globo.com/pa/santarem-regiao/noticia/2026/11/04/servico-militar-em-santarem-60-jovens-juram-a-bandeira-e-recebem-certificado-de-dispensa.ghtml",
+     "publicadaEm": "2026-11-04T13:28:16.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "8f81664a-635a-40fe-b976-f6cb1554346c",
+   "titulo": "Procon divulga lista de material escolar para escolas particulares no Pará",
+   "resumo": "O órgão estadual publicou a relação de itens que podem ser exigidos e proibiu a cobrança de produtos de higiene, limpeza e uso coletivo. Pais devem guardar notas fiscais para eventuais trocas e reclamações.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:27:05.000Z",
+   "atualizadoEm": "2026-11-04T13:27:05.000Z",
+   "publicadoEm": "2026-11-04T13:27:05.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Procon divulga lista de material escolar para 2027 no Pará; veja o que pode ser exigido",
+     "url": "https://g1.globo.com/pa/para/noticia/2026/11/04/procon-divulga-lista-de-material-escolar-para-2027-no-para-veja-o-que-pode-ser-exigido.ghtml",
+     "publicadaEm": "2026-11-04T13:27:05.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f5a81870-8348-4d10-a292-ac571a63e0f4",
+   "titulo": "Idoso de 75 anos é preso após disparar arma e ameaçar vizinhos no interior de SP",
+   "resumo": "A Guarda Civil Municipal deteve o suspeito após denúncias de que ele intimidou moradores com um facão e atirou de dentro de uma caminhonete. Com ele, os agentes encontraram uma espingarda e munições.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:26:54.000Z",
+   "atualizadoEm": "2026-11-04T13:26:54.000Z",
+   "publicadoEm": "2026-11-04T13:26:54.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "Idoso de 75 anos é preso após atirar e ameaçar vizinhos com facão no interior de SP",
+     "url": "https://g1.globo.com/sp/sao-carlos-regiao/noticia/2026/11/04/idoso-de-75-anos-e-preso-apos-atirar-e-ameacar-vizinhos-com-facao-no-interior-de-sp.ghtml",
+     "publicadaEm": "2026-11-04T13:26:54.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "8a044ee4-e22c-45fd-a191-8126454aa028",
+   "titulo": "Assista aos vídeos do Bom Dia Amazônia desta quarta-feira",
+   "resumo": "O telejornal matinal foi veiculado normalmente pela Rede Amazônica nesta quarta-feira.",
+   "geradoPorIa": true,
+   "categoria": {
+    "slug": "brasil",
+    "nome": "Brasil"
+   },
+   "cobertura": 1,
+   "criadoEm": "2026-11-04T13:26:32.000Z",
+   "atualizadoEm": "2026-11-04T13:26:32.000Z",
+   "publicadoEm": "2026-11-04T13:26:32.000Z",
+   "materias": [
+    {
+     "portal": "g1",
+     "titulo": "VÍDEOS: Bom Dia Amazônia desta quarta-feira, 4 de novembro de 2026",
+     "url": "https://g1.globo.com/am/amazonas/playlist/videos-bom-dia-amazonia-desta-quarta-feira-4-de-novembro-de-2026.ghtml",
+     "publicadaEm": "2026-11-04T13:26:32.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,81 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecalho from '../components/Cabecalho.astro';
+import Medidor from '../components/Medidor.astro';
+import { portaisAtuais } from '../lib/dados';
+import { caminho, REPOSITORIO } from '../lib/formato';
+
+const portais = portaisAtuais();
+---
+<Base titulo="Como funciona | Papo Reto" descricao="De onde vêm as notícias do Papo Reto, onde entra a IA, direitos autorais e o que acontece com os seus dados.">
+  <Cabecalho grande>
+    <h1 id="pagina-titulo">como funciona</h1>
+    <p class="abre__apoio">O Papo Reto não escreve notícia. Ele junta o que os portais publicaram, explica em poucas palavras e te leva até a matéria original.</p>
+  </Cabecalho>
+
+  <div class="moldura passos">
+    <section class="passo passo--rosa" aria-labelledby="fontes-titulo">
+      <h2 id="fontes-titulo">de onde vêm as notícias</h2>
+      <div class="passo__texto" data-revela>
+        <p>A cada 30 minutos, um programa lê os feeds RSS públicos dos portais: a lista de manchetes que eles mesmos publicam para outros sites e aplicativos. Guardamos o título, o link e a data de cada matéria.</p>
+        <p>O medidor <Medidor cobertura={3} /> mostra quantos portais diferentes falaram do mesmo assunto. Matérias de portais que cobram assinatura levam a etiqueta <strong class="etiqueta">Exige assinatura</strong>.</p>
+      </div>
+      {portais.length > 0 && (
+        <ul class="portais" aria-label="Portais com notícias nas últimas 48 horas">
+          {portais.map((p) => <li><span>{p.nome}</span>{p.exigeAssinatura && <span class="etiqueta">Exige assinatura</span>}</li>)}
+        </ul>
+      )}
+    </section>
+
+    <section class="passo passo--menta" aria-labelledby="ia-titulo">
+      <h2 id="ia-titulo">onde entra a IA</h2>
+      <div class="passo__texto" data-revela>
+        <p>Um modelo de IA (Gemini, do Google) recebe só as manchetes e as descrições curtas dos feeds e escreve um título e até três frases. Ele não lê a matéria inteira e foi instruído a não inventar nada que não esteja ali.</p>
+        <p>Mesmo assim, IA erra. Por isso todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e tem um botão para reportar erro. Quando não há resumo, você vê a manchete original.</p>
+        <p>Nenhum dado seu é enviado para a IA: ela só recebe texto público dos portais.</p>
+      </div>
+    </section>
+
+    <section class="passo passo--branco" aria-labelledby="direitos-titulo">
+      <h2 id="direitos-titulo">direitos autorais</h2>
+      <div class="passo__texto" data-revela>
+        <p>As matérias pertencem aos portais. Aqui aparecem só o título, um resumo escrito por nós e o link para a matéria completa, que é onde vale a pena ler.</p>
+        <p>Não usamos fotos dos portais. Por isso o visual do site é feito só de letras, cores e barrinhas.</p>
+      </div>
+    </section>
+
+    <section class="passo passo--escuro escuro" aria-labelledby="dados-titulo">
+      <h2 id="dados-titulo">seus dados</h2>
+      <div class="passo__texto" data-revela>
+        <p>Não tem cadastro, anúncio, nem cookie de rastreamento. As fontes de letra vêm do próprio site, sem chamar serviços de terceiros.</p>
+        <p>Newsletter e doações via Pix chegam em breve. Quando chegarem, vamos pedir só o necessário e explicar aqui antes.</p>
+        <a class="botao" href={REPOSITORIO}>Ver o código no GitHub</a>
+      </div>
+    </section>
+  </div>
+
+  <section class="secao moldura fim" aria-labelledby="fim-titulo">
+    <h2 class="secao__titulo" id="fim-titulo">bora ler?</h2>
+    <a class="botao" href={caminho()}>Ver o que importa hoje</a>
+  </section>
+</Base>
+
+<style>
+  .passos { display: grid; gap: 0; margin-top: clamp(40px, 6vw, 96px); }
+  .passo { display: grid; grid-template-columns: 5fr 7fr; gap: 32px var(--gutter); padding: clamp(32px, 5vw, 72px); align-items: start; }
+  .passo h2 { font-size: var(--step-head); }
+  .passo__texto { display: grid; gap: 16px; max-width: 60ch; justify-items: start; }
+  .passo--rosa { background: var(--pink); }
+  .passo--menta { background: var(--mint); }
+  .passo--branco { background: var(--white); }
+  .passo--escuro .etiqueta { color: var(--mint); }
+  .passo--rosa .etiqueta { color: var(--accent-strong); }
+  .etiqueta { color: var(--accent); font-weight: 600; }
+  .portais { grid-column: 2; display: flex; flex-wrap: wrap; gap: 8px; }
+  .portais li { display: inline-flex; gap: 10px; align-items: center; min-height: 44px; padding: 0 16px; background: var(--white); font-weight: 600; font-size: var(--step-small); }
+  .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  @media (max-width: 900px) {
+    .passo { grid-template-columns: 1fr; }
+    .portais { grid-column: 1; }
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecalho from '../../components/Cabecalho.astro';
+import MedidorGrande from '../../components/MedidorGrande.astro';
+import ListaDeNoticias from '../../components/ListaDeNoticias.astro';
+import { eventos, type Evento } from '../../lib/dados';
+import { caminho, dataPorExtenso, linkParaReportar, quando } from '../../lib/formato';
+
+export function getStaticPaths() {
+  return eventos.eventos.map((e) => ({ params: { id: e.id }, props: { evento: e } }));
+}
+
+const { evento: e } = Astro.props as { evento: Evento };
+const geradoEm = eventos.geradoEm;
+const portais = e.materias.map((m) => m.portal).filter((p, i, a) => a.indexOf(p) === i);
+const relacionados = e.categoria ? eventos.eventos.filter((x) => x.id !== e.id && x.categoria?.slug === e.categoria?.slug).slice(0, 6) : [];
+const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria original.`;
+---
+<Base titulo={`${e.titulo} | Papo Reto`} descricao={descricao}>
+  <Cabecalho>
+    <h1 id="pagina-titulo">{e.titulo}</h1>
+    <p class="abre__meta">
+      {e.categoria && <a class="link" href={caminho(`categoria/${e.categoria.slug}/`)}>{e.categoria.nome}</a>}
+      <span><time datetime={e.publicadoEm}>{dataPorExtenso(e.publicadoEm)}, {quando(e.publicadoEm, geradoEm)}</time></span>
+      <span>{portais.join(', ')}</span>
+    </p>
+    <MedidorGrande slot="figura" cobertura={e.cobertura} />
+  </Cabecalho>
+
+  <div class="moldura evento">
+    <section class="minuto" aria-labelledby="minuto-titulo" data-revela>
+      <h2 id="minuto-titulo">em 1 minuto</h2>
+      {e.resumo ? (
+        <>
+          <p class="minuto__texto">{e.resumo}</p>
+          <p class="minuto__aviso">
+            Resumo gerado por IA a partir das manchetes e descrições de {portais.join(', ')}. Pode ter erros: confira na matéria original.
+          </p>
+          <a class="botao botao--claro" href={linkParaReportar(e.id, e.titulo)}>Reportar erro neste resumo</a>
+        </>
+      ) : (
+        <>
+          <p class="minuto__texto">Este assunto ainda não tem resumo. Por enquanto, o melhor caminho é ler direto na fonte, logo ao lado.</p>
+          <a class="botao botao--claro" href={linkParaReportar(e.id, e.titulo)}>Reportar um problema</a>
+        </>
+      )}
+    </section>
+
+    <section class="quem" aria-labelledby="quem-titulo">
+      <h2 id="quem-titulo">quem noticiou</h2>
+      <ul class="quem__lista" data-revela>
+        {e.materias.map((m) => (
+          <li>
+            <a class="quem__materia" href={m.url} rel="noopener">
+              <span class="quem__portal">{m.portal}</span>
+              <span class="quem__titulo">{m.titulo}</span>
+              <span class="quem__meta">
+                <time datetime={m.publicadaEm}>{quando(m.publicadaEm, geradoEm)}</time>
+                {m.exigeAssinatura && <span class="etiqueta">Exige assinatura</span>}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+
+  {relacionados.length > 0 && e.categoria && (
+    <section class="secao moldura" aria-labelledby="relacionados-titulo">
+      <div class="cabeca">
+        <h2 class="secao__titulo" id="relacionados-titulo">mais de {e.categoria.nome.toLowerCase()}</h2>
+        <a class="link contagem" href={caminho(`categoria/${e.categoria.slug}/`)}>ver todas</a>
+      </div>
+      <div>
+        <ListaDeNoticias eventos={relacionados} geradoEm={geradoEm} mostrarCategoria={false} />
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .evento { display: grid; grid-template-columns: 7fr 5fr; gap: 0; margin-top: clamp(40px, 6vw, 96px); align-items: stretch; }
+  .minuto { background: var(--mint); padding: clamp(28px, 4vw, 56px); display: grid; gap: 24px; align-content: start; justify-items: start; }
+  .minuto h2, .quem h2 { font-size: var(--step-head); }
+  .minuto__texto { font-size: var(--step-lead); line-height: 1.45; max-width: 36ch; }
+  .minuto__aviso { font-size: var(--step-body); max-width: 52ch; }
+  .quem { background: var(--pink); padding: clamp(28px, 4vw, 56px); display: grid; gap: 24px; align-content: start; }
+  .quem__lista { display: grid; gap: 12px; }
+  .quem__materia {
+    display: grid; gap: 6px; padding: 18px 20px; background: var(--white); text-decoration: none; min-height: 44px;
+    transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+  }
+  .quem__materia:active { transform: scale(0.99); }
+  @media (hover: hover) and (pointer: fine) { .quem__materia:hover { background: var(--bg); } .quem__materia:hover .quem__titulo { text-decoration: underline; } }
+  .quem__portal { font-weight: 600; font-size: var(--step-small); }
+  .quem__titulo { font-size: var(--step-body); line-height: 1.35; text-decoration-thickness: 1px; }
+  .quem__meta { display: flex; gap: 12px; font-size: var(--step-small); color: var(--muted); }
+  .etiqueta { color: var(--accent); font-weight: 600; }
+  @media (max-width: 900px) { .evento { grid-template-columns: 1fr; gap: 24px; } }
+</style>
