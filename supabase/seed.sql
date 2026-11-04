@@ -32,3 +32,17 @@ insert into public.fonte (nome, url_feed, url_site, politica_uso, exige_assinatu
   ('BBC News',        'https://feeds.bbci.co.uk/news/world/rss.xml',                             'https://www.bbc.com/news',         'resumo',                   false),
   ('Agência Brasil',  'https://agenciabrasil.ebc.com.br/feed/ultimasnoticias/feed.xml',          'https://agenciabrasil.ebc.com.br', 'republicacao_com_credito', false),
   ('Tecnoblog',       'https://tecnoblog.net/feed',                                              'https://tecnoblog.net',            'resumo',                   false);
+
+-- Categoria padrão dos feeds de seção (coluna criada na migration fonte_categoria).
+update public.fonte f
+   set categoria_id = c.id
+  from public.categoria c,
+       (values
+         ('https://g1.globo.com/dynamo/tecnologia/rss2.xml',                         'tecnologia'),
+         ('https://g1.globo.com/rss/g1/pop-arte/',                                   'pop'),
+         ('https://tecnoblog.net/feed',                                              'tecnologia'),
+         ('https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/brasil/', 'brasil'),
+         ('https://feeds.bbci.co.uk/news/world/rss.xml',                             'mundo')
+       ) as m (url_feed, slug)
+ where f.url_feed = m.url_feed
+   and c.slug = m.slug;

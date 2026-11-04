@@ -1,5 +1,5 @@
 /** Parâmetros de rastreio removidos antes de deduplicar. */
-const PARAMETROS_DE_RASTREIO = /^(utm_|fbclid$|gclid$|mc_cid$|mc_eid$|cmpid$|xtor$|ref$|ref_src$)/i;
+const PARAMETROS_DE_RASTREIO = /^(utm_|at_|fbclid$|gclid$|mc_cid$|mc_eid$|cmpid$|xtor$|ref$|ref_src$)/i;
 
 /**
  * Deixa a URL canônica: tira o redirecionador da Folha, os parâmetros de

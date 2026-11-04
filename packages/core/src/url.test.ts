@@ -14,6 +14,10 @@ describe('normalizarUrl', () => {
     );
   });
 
+  it('remove os parâmetros de campanha da BBC', () => {
+    expect(normalizarUrl('https://www.bbc.co.uk/news/articles/c1?at_medium=RSS&at_campaign=rss')).toBe('https://www.bbc.co.uk/news/articles/c1');
+  });
+
   it('recusa o que não é http(s)', () => {
     expect(normalizarUrl('javascript:alert(1)')).toBeNull();
     expect(normalizarUrl('não é url')).toBeNull();

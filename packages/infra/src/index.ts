@@ -1,2 +1,7 @@
 // Adaptadores que implementam as portas do core.
-export {};
+export * from './configuracao';
+export * from './registro';
+export * from './postgres/conexao';
+export * from './postgres/repositorios-da-coleta';
+export * from './rss/interpretar-feed';
+export * from './rss/leitor-rss-http';
