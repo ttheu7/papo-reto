@@ -63,11 +63,11 @@ describe('ResumirEventos', () => {
     });
   });
 
-  it('descarta ids inventados e repetidos, ignora slug desconhecido e corta o texto em três frases', async () => {
+  it('descarta ids inventados e repetidos, ignora slug desconhecido e corta o texto em quatro frases', async () => {
     const repo = new ResumosEmMemoria(MODELO, CATEGORIAS, eventos(2));
     const ia = new IaFalsa(async () => ({
       resumos: [
-        { eventoId: 'e1', titulo: 'Ok', texto: 'Um. Dois. Três. Quatro.', categoriaSlug: 'inventada' },
+        { eventoId: 'e1', titulo: 'Ok', texto: 'Um. Dois. Três. Quatro. Cinco.', categoriaSlug: 'inventada' },
         { eventoId: 'e1', titulo: 'De novo', texto: 'X.', categoriaSlug: null },
         { eventoId: 'nao-existe', titulo: 'Fantasma', texto: 'Y.', categoriaSlug: null },
         { eventoId: 'e2', titulo: '  ', texto: 'Sem título.', categoriaSlug: null },
@@ -80,7 +80,7 @@ describe('ResumirEventos', () => {
 
     expect(r.resumosGerados).toBe(1);
     expect(repo.gravados).toHaveLength(1);
-    expect(repo.gravados[0]).toMatchObject({ eventoId: 'e1', texto: 'Um. Dois. Três.', categoriaId: null });
+    expect(repo.gravados[0]).toMatchObject({ eventoId: 'e1', texto: 'Um. Dois. Três. Quatro.', categoriaId: null });
   });
 
   it('erro de cota encerra a etapa sem lançar e fica registrado', async () => {
@@ -129,8 +129,8 @@ describe('ResumirEventos', () => {
 });
 
 describe('limitarFrases', () => {
-  it('mantém até três frases, inclusive com ! e ?', () => {
-    expect(limitarFrases('Oi! Tudo bem? Sim. Não.')).toBe('Oi! Tudo bem? Sim.');
+  it('mantém até quatro frases, inclusive com ! e ?', () => {
+    expect(limitarFrases('Oi! Tudo bem? Sim. Não. Talvez.')).toBe('Oi! Tudo bem? Sim. Não.');
     expect(limitarFrases('Sem ponto final')).toBe('Sem ponto final');
   });
 });

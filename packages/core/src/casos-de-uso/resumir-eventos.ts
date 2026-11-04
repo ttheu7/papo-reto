@@ -26,9 +26,9 @@ export interface ResultadoDosResumos {
 }
 
 const TAMANHO_MAXIMO_DO_TITULO = 120;
-const FRASES_NO_TEXTO = 3;
+const FRASES_NO_TEXTO = 4;
 
-/** Corta o texto em até três frases. */
+/** Corta o texto em até quatro frases. */
 export function limitarFrases(texto: string, maximo = FRASES_NO_TEXTO): string {
   const frases = texto.trim().match(/[^.!?…]+(?:[.!?…]+["”')\]]*|$)/g) ?? [];
   return frases.slice(0, maximo).join('').trim();

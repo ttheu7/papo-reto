@@ -1,13 +1,13 @@
 # Papo Reto
 
-Portal de notícias gratuito para o público jovem: reúne o que os principais portais do Brasil e do mundo publicaram, explica cada acontecimento em até três frases (com IA) e leva para a matéria original.
+Portal de notícias gratuito para o público jovem: reúne o que os principais portais do Brasil e do mundo publicaram, explica cada acontecimento em até quatro frases (com IA) e leva para a matéria original.
 
 No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêmico de Ciência da Computação da Unoesc Videira (PRATIC IV).
 
 ## Como funciona
 
 1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs e grava evento e notícia no Supabase.
-2. Se houver `GEMINI_API_KEY`, o coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo de até três frases e categoria. Sem chave, ou com a cota esgotada, essa etapa é pulada e o site mostra a manchete original.
+2. Se houver `GEMINI_API_KEY`, o coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo de até quatro frases e categoria. Sem chave, ou com a cota esgotada, essa etapa é pulada e o site mostra a manchete original.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
 

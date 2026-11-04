@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Cabecalho from '../../components/Cabecalho.astro';
 import ListaDeNoticias from '../../components/ListaDeNoticias.astro';
 import { eventos, type Evento } from '../../lib/dados';
-import { caminho, dataPorExtenso, linkParaReportar, plural, portaisDe, quando } from '../../lib/formato';
+import { caminho, dataPorExtenso, linkParaReportar, portaisDe, quando } from '../../lib/formato';
 
 export function getStaticPaths() {
   return eventos.eventos.map((e) => ({ params: { id: e.id }, props: { evento: e } }));
@@ -18,11 +18,12 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 <Base titulo={`${e.titulo} | Papo Reto`} descricao={descricao}>
   <Cabecalho cat={e.categoria?.slug ?? 'geral'}>
     <h1 id="pagina-titulo">{e.titulo}</h1>
-    <div class="lado">
+    <p class="meta">
       {e.categoria && <a class="editoria editoria--papel" href={caminho(`categoria/${e.categoria.slug}/`)}>{e.categoria.nome}</a>}
-      <p><time datetime={e.publicadoEm}>{dataPorExtenso(e.publicadoEm)}, {quando(e.publicadoEm, geradoEm)}</time></p>
-      <p>Noticiado por {plural(e.cobertura, 'portal', 'portais')}: {portais.join(', ')}</p>
-    </div>
+      <time datetime={e.publicadoEm}>{dataPorExtenso(e.publicadoEm)}, {quando(e.publicadoEm, geradoEm)}</time>
+      <span aria-hidden="true">·</span>
+      <span>Noticiado por {portais.join(', ')}</span>
+    </p>
   </Cabecalho>
 
   <div class="moldura evento">
@@ -75,11 +76,12 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 </Base>
 
 <style>
-  :global(.abre__folha):has(.lado) { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); align-items: end; gap: 24px var(--gutter); }
-  .lado { display: grid; gap: 10px; justify-items: start; font-size: var(--step-small); font-weight: 600; }
-  .lado p::first-letter { text-transform: uppercase; }
-  @media (max-width: 900px) { :global(.abre__folha):has(.lado) { grid-template-columns: 1fr; } }
-  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); padding-top: var(--gutter); align-items: start; }
+  /* Cabeçalho mais baixo: o título e, embaixo dele, uma linha só com editoria, data e portais. */
+  :global(.abre__folha):has(.meta) { padding-block: clamp(24px, 3.6vw, 52px); gap: 18px; }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--step-small); font-weight: 600; }
+  .meta time { display: inline-block; }
+  .meta time::first-letter { text-transform: uppercase; }
+  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); padding-top: var(--gutter); align-items: stretch; }
   .minuto, .quem { display: grid; gap: 22px; align-content: start; justify-items: start; }
   .minuto h2, .quem h2 { font-size: var(--step-head); }
   .minuto__texto { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.45; max-width: 38ch; }

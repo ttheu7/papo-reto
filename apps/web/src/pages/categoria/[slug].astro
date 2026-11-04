@@ -13,11 +13,11 @@ const { slug, nome } = Astro.props as { slug: string; nome: string };
 const lista = eventosDaCategoria(slug);
 const outras = categorias.categorias.filter((c) => c.slug !== slug);
 ---
-<Base titulo={`${nome} | Papo Reto`} descricao={`Notícias de ${nome.toLowerCase()} das últimas 48 horas, explicadas em até três frases.`}>
+<Base titulo={`${nome} | Papo Reto`} descricao={`Notícias de ${nome.toLowerCase()} das últimas 48 horas, explicadas em até quatro frases.`}>
   <Cabecalho grande cat={slug}>
     <h1 id="pagina-titulo">{nome}</h1>
     <p class="abre__apoio">
-      {lista.length > 0 ? `${plural(lista.length, 'notícia', 'notícias')} de ${nome.toLowerCase()} nas últimas 48 horas, explicadas em até três frases.` : `Nada de ${nome.toLowerCase()} nas últimas 48 horas.`}
+      {lista.length > 0 ? `${plural(lista.length, 'notícia', 'notícias')} de ${nome.toLowerCase()} nas últimas 48 horas, explicadas em até quatro frases.` : `Nada de ${nome.toLowerCase()} nas últimas 48 horas.`}
     </p>
   </Cabecalho>
 

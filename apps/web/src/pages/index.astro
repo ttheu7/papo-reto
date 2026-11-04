@@ -17,7 +17,7 @@ const editorias = categorias.categorias
 const portais = portaisAtuais();
 const fonteDaManchete = manchete?.materias[0];
 ---
-<Base capa titulo="Papo Reto: as notícias do dia, explicadas" descricao="As notícias do dia explicadas em até três frases, com link para quem noticiou. Grátis, sem anúncio e sem cadastro.">
+<Base capa titulo="Papo Reto: as notícias do dia, explicadas" descricao="As notícias do dia explicadas em até quatro frases, com link para quem noticiou. Grátis, sem anúncio e sem cadastro.">
   {manchete && (
     <section class="capa moldura" aria-labelledby="manchete-titulo">
       <h2 class="so-leitor">O que importa hoje</h2>
@@ -94,7 +94,7 @@ const fonteDaManchete = manchete?.materias[0];
     <div class="carta card" data-revela>
       <h2 id="sobre-titulo">Grátis, sem anúncio e sem cadastro</h2>
       <p>A gente é uma turma de Ciência da Computação da Unoesc Videira, em Santa Catarina. Fizemos o Papo Reto porque notícia boa existe, mas chega espalhada em dez portais e escrita para quem já sabe do assunto.</p>
-      <p>Aqui cada notícia vem explicada em até três frases e sempre com o link de quem apurou. Para ler a matéria inteira, você vai até o portal: o trabalho é deles.</p>
+      <p>Aqui cada notícia vem explicada em até quatro frases e sempre com o link de quem apurou. Para ler a matéria inteira, você vai até o portal: o trabalho é deles.</p>
       <p>O código é aberto. Se um resumo estiver errado, cada notícia tem um botão para avisar, e a correção fica registrada no GitHub.</p>
       <p class="carta__assinatura">Turma de PRATIC IV, Unoesc Videira</p>
       <a class="botao" href={REPOSITORIO}>Ver o código</a>
@@ -107,7 +107,7 @@ const fonteDaManchete = manchete?.materias[0];
       </div>
       <div>
         <h3>A IA explica</h3>
-        <p>Um modelo de IA escreve até três frases usando só o título e a descrição dos portais, sem inventar nada.</p>
+        <p>Um modelo de IA escreve até quatro frases usando só o título e a descrição dos portais, sem inventar nada.</p>
       </div>
       <div>
         <h3>Você vai à fonte</h3>

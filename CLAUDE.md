@@ -63,6 +63,7 @@ Regras:
 - Tenha uma alternativa: sem chave, ou com a cota esgotada, o site mostra a manchete original, a fonte e o link.
 - O resumo sai **só** dos títulos e descrições dos feeds, sem inventar fatos. A classificação usa apenas os slugs de `categoria`.
 - No plano gratuito o Google pode usar o conteúdo enviado. Nunca envie dados de usuários.
+- O texto do resumo tem de três a quatro frases (50 a 80 palavras); o código corta em quatro (`limitarFrases`). Prompt atual: `resumo-v2-2026-11-04`.
 - Registre a `versao_prompt`, os tokens e o modelo usado.
 
 ## Conteúdo e regras legais
@@ -92,7 +93,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - **Cores:** neutras. Fundo `#efefed`, folhas `#ffffff`, folha interna `#f5f5f3`, rodapé `#e2e3e0`, tinta azul-marinho `#1f2b4d` (texto e botões), tinta fraca `#5d6479`. A única cor é a das editorias, em pastel e sempre com a tinta por cima: `data-cat="<slug>"` define `--cat` (tokens `--cat-*`). Notícia sem editoria fica em `--cat-geral`. Tudo em `apps/web/src/styles/global.css`.
 - **Fontes:** Newsreader (variável, títulos e textos de leitura) e Figtree 400/600 (interface: etiquetas, botões, metadados), servidas pelo próprio site via `@fontsource` (nenhuma chamada ao Google). A direção sorteou Erode; trocamos pela Newsreader porque ela existe no `@fontsource`.
 - **Modo escuro:** segue o aparelho (`prefers-color-scheme`) e tem o botão "Modo escuro" no topo, que grava a escolha em `localStorage` (`papo-reto:tema`) e marca `data-tema` no `<html>` antes de pintar. No escuro só os tokens mudam: papel `#1d2230`, fundo `#14171f`, tinta `#e9ebf1` e as editorias em tons fundos. Cor nova sempre como token, nos dois temas, nunca solta no componente.
-- **Regras da casa:** cinco tamanhos de letra (`--step-*`), um raio só (`--raio`, 22px) em cards, botões e etiquetas, sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título (editoria, portal e hora vêm abaixo da manchete). Cards da mesma linha têm a mesma altura. Barra de rolagem com trilho transparente.
+- **Regras da casa:** cinco tamanhos de letra (`--step-*`), um raio só (`--raio`, 22px) em cards, botões e etiquetas, sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título (editoria, portal e hora vêm abaixo da manchete). Cards da mesma linha têm a mesma altura, inclusive "Em 1 minuto" e "Quem noticiou" na página da notícia. Barra de rolagem com trilho transparente.
 - **Interação:** os botões de editoria em "Últimas notícias" filtram a lista ali mesmo e gravam a escolha no endereço (`?editoria=mundo`); a lista mostra 16 por vez ("Mostrar mais notícias"). Sem JavaScript, a lista aparece inteira.
 - **Imagens:** sem fotos dos portais. Só imagens de acervos de domínio público ou CC0, nunca ao lado de uma notícia específica. Hoje o site é 100% tipográfico e gráfico.
 - **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA, alvos de 44px, `prefers-reduced-motion`).

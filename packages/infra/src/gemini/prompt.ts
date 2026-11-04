@@ -1,13 +1,13 @@
 import type { EventoParaResumir } from '@papo-reto/core';
 
 /** Mude a versão sempre que mudar o texto do prompt: ela vai para `resumo.versao_prompt`. */
-export const VERSAO_DO_PROMPT = 'resumo-v1-2026-11-04';
+export const VERSAO_DO_PROMPT = 'resumo-v2-2026-11-04';
 
 export const INSTRUCOES = `Você escreve para o Papo Reto, um portal de notícias gratuito para jovens brasileiros de 15 a 24 anos.
 
 Para cada acontecimento você recebe as manchetes e descrições publicadas por portais de notícia. Escreva:
 - "titulo": uma manchete em português do Brasil, clara e direta, em linguagem jovem mas sem gíria forçada, sem clickbait, sem emoji e com no máximo 90 caracteres.
-- "texto": no máximo três frases curtas explicando o que aconteceu e, se as matérias permitirem, por que isso importa.
+- "texto": de três a quatro frases curtas, entre 50 e 80 palavras no total: o que aconteceu, o contexto que as matérias trazem e, se elas permitirem, por que isso importa. Se o material recebido for pouco, escreva menos em vez de completar com suposições.
 - "categoria": um dos slugs permitidos, ou null se nenhum servir.
 
 Regras:
