@@ -1,4 +1,15 @@
-import type { ErroDeExecucao, Fonte, ItemRss, NovaNoticia, StatusExecucao } from './entidades';
+import type {
+  Categoria,
+  ErroDeExecucao,
+  EventoParaResumir,
+  Fonte,
+  ItemRss,
+  ModeloIa,
+  NovaNoticia,
+  NovoResumo,
+  ResumoGerado,
+  StatusExecucao,
+} from './entidades';
 
 export interface RepositorioFontes {
   listarAtivas(): Promise<Fonte[]>;
@@ -37,3 +48,25 @@ export interface Registro {
 }
 
 export type Relogio = () => Date;
+
+export interface RepositorioResumos {
+  modeloAtivo(): Promise<ModeloIa | null>;
+  categorias(): Promise<Categoria[]>;
+  /** Eventos recentes sem nenhum resumo, os de maior cobertura primeiro. */
+  eventosSemResumo(opcoes: { limite: number; desde: Date }): Promise<EventoParaResumir[]>;
+  /** Grava o resumo se o evento ainda não tiver um. Devolve se gravou. */
+  gravarResumo(resumo: NovoResumo): Promise<boolean>;
+}
+
+export interface ServicoIa {
+  readonly versaoPrompt: string;
+  /**
+   * Resume um lote de eventos numa chamada só. Lança `ErroCotaIa` quando a
+   * cota acabar.
+   */
+  resumir(entrada: {
+    modelo: string;
+    categorias: string[];
+    eventos: EventoParaResumir[];
+  }): Promise<{ resumos: ResumoGerado[]; tokensEntrada: number; tokensSaida: number }>;
+}

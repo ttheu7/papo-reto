@@ -1,6 +1,24 @@
 // Implementações em memória das portas, só para testes.
-import type { ErroDeExecucao, Fonte, ItemRss, NovaNoticia, StatusExecucao } from '../entidades';
-import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias } from '../portas';
+import type {
+  Categoria,
+  ErroDeExecucao,
+  EventoParaResumir,
+  Fonte,
+  ItemRss,
+  ModeloIa,
+  NovaNoticia,
+  NovoResumo,
+  StatusExecucao,
+} from '../entidades';
+import type {
+  LeitorRss,
+  Registro,
+  RepositorioExecucoes,
+  RepositorioFontes,
+  RepositorioNoticias,
+  RepositorioResumos,
+  ServicoIa,
+} from '../portas';
 
 export function fonte(parcial: Partial<Fonte> & Pick<Fonte, 'id'>): Fonte {
   return {
@@ -95,5 +113,47 @@ export class RegistroMudo implements Registro {
   }
   erro(mensagem: string, dados?: Record<string, unknown>) {
     this.linhas.push({ nivel: 'erro', mensagem, ...(dados && { dados }) });
+  }
+}
+
+export class ResumosEmMemoria implements RepositorioResumos {
+  gravados: NovoResumo[] = [];
+  categoriaDoEvento = new Map<string, number | null>();
+  pedidos: { limite: number; desde: Date }[] = [];
+
+  constructor(
+    public modelo: ModeloIa | null,
+    readonly listaDeCategorias: Categoria[],
+    readonly pendentes: EventoParaResumir[],
+  ) {}
+
+  async modeloAtivo() {
+    return this.modelo;
+  }
+  async categorias() {
+    return this.listaDeCategorias;
+  }
+  async eventosSemResumo(opcoes: { limite: number; desde: Date }) {
+    this.pedidos.push(opcoes);
+    const resumidos = new Set(this.gravados.map((r) => r.eventoId));
+    return this.pendentes.filter((e) => !resumidos.has(e.id)).slice(0, opcoes.limite);
+  }
+  async gravarResumo(r: NovoResumo) {
+    if (this.gravados.some((g) => g.eventoId === r.eventoId)) return false;
+    this.gravados.push(r);
+    if ((this.categoriaDoEvento.get(r.eventoId) ?? null) === null) this.categoriaDoEvento.set(r.eventoId, r.categoriaId);
+    return true;
+  }
+}
+
+export class IaFalsa implements ServicoIa {
+  readonly versaoPrompt = 'teste-v1';
+  chamadas: Parameters<ServicoIa['resumir']>[0][] = [];
+
+  constructor(private readonly responder: (entrada: Parameters<ServicoIa['resumir']>[0], chamada: number) => ReturnType<ServicoIa['resumir']>) {}
+
+  async resumir(entrada: Parameters<ServicoIa['resumir']>[0]) {
+    this.chamadas.push(entrada);
+    return this.responder(entrada, this.chamadas.length);
   }
 }

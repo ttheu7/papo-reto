@@ -16,8 +16,10 @@ insert into public.categoria (slug, nome) values
 -- Confira no AI Studio o nome exato de um modelo liberado no plano gratuito.
 -- Custos em dólar por 1 milhão de tokens: ficam em 0 até você copiar os
 -- valores da tabela de preços do Gemini.
+-- A migration modelo_gemini_3_5_flash_lite já cadastra este modelo; aqui é só garantia.
 insert into public.modelo_ia (provedor, modelo, custo_entrada_1m, custo_saida_1m, ativo) values
-  ('Google', 'gemini-2.5-flash-lite', 0, 0, true);
+  ('Google', 'gemini-3.5-flash-lite', 0, 0, true)
+on conflict (provedor, modelo) do nothing;
 
 -- Feeds levantados em outubro de 2026: confira se ainda respondem antes de ativar.
 -- Mais de um feed do mesmo portal? Use o mesmo nome em todos.

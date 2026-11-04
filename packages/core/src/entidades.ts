@@ -48,3 +48,38 @@ export interface ResultadoDaColeta {
   novasNoticias: number;
   erros: ErroDeExecucao[];
 }
+
+export interface ModeloIa {
+  id: number;
+  provedor: string;
+  modelo: string;
+  /** Dólares por 1 milhão de tokens. */
+  custoEntrada1m: number;
+  custoSaida1m: number;
+}
+
+/** O que a IA recebe de um evento: só títulos e descrições dos feeds. */
+export interface EventoParaResumir {
+  id: string;
+  materias: { portal: string; titulo: string; descricao: string | null }[];
+}
+
+export interface ResumoGerado {
+  eventoId: string;
+  titulo: string;
+  texto: string;
+  categoriaSlug: string | null;
+}
+
+export interface NovoResumo {
+  eventoId: string;
+  modeloIaId: number;
+  titulo: string;
+  texto: string;
+  versaoPrompt: string;
+  tokensEntrada: number;
+  tokensSaida: number;
+  custoEstimado: number;
+  /** Só é aplicada se o evento ainda não tiver categoria. */
+  categoriaId: number | null;
+}

@@ -1,6 +1,6 @@
 // Ponto de entrada da coleta: monta as dependências e chama os casos de uso.
 // Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY).
-import { ColetarNoticias, mensagemDe } from '@papo-reto/core';
+import { ColetarNoticias, mensagemDe, ResumirEventos } from '@papo-reto/core';
 import {
   conectar,
   LeitorRssHttp,
@@ -9,6 +9,8 @@ import {
   RepositorioExecucoesPg,
   RepositorioFontesPg,
   RepositorioNoticiasPg,
+  RepositorioResumosPg,
+  ServicoIaGemini,
 } from '@papo-reto/infra';
 
 const registro = new RegistroJson({ app: 'coletor' });
@@ -26,6 +28,24 @@ async function principal(): Promise<number> {
       registro,
       agora: () => new Date(),
     }).executar();
+
+    // Os resumos rodam mesmo se a coleta falhar: pode haver eventos pendentes.
+    if (config.chaveGemini) {
+      try {
+        await new ResumirEventos({
+          resumos: new RepositorioResumosPg(sql),
+          execucoes,
+          ia: new ServicoIaGemini({ chave: config.chaveGemini }),
+          registro,
+          agora: () => new Date(),
+        }).executar(coleta.execucaoId);
+      } catch (erro) {
+        // Falha nos resumos nunca derruba a execução: o site mostra a manchete original.
+        registro.erro('etapa de resumos falhou', { execucaoId: coleta.execucaoId, erro: mensagemDe(erro) });
+      }
+    } else {
+      registro.info('GEMINI_API_KEY ausente; resumos pulados', { execucaoId: coleta.execucaoId });
+    }
 
     return coleta.status === 'falha' ? 1 : 0;
   } finally {
