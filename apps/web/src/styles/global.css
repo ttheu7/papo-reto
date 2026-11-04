@@ -16,6 +16,10 @@
   --ink: #1f2b4d;          /* tinta azul-marinho */
   --muted: #5d6479;        /* tinta fraca, AA sobre papel e chão */
   --on-ink: #ffffff;
+  --ink-forte: #2e3d66;     /* botão com o mouse em cima */
+  --barra: rgba(31, 43, 77, 0.35);
+  --barra-forte: rgba(31, 43, 77, 0.55);
+  --toque: rgba(31, 43, 77, 0.12);
 
   /* Editorias: a única cor do site. Pastéis, sempre com a tinta por cima. */
   --cat-brasil: #cde9d3;
@@ -55,14 +59,68 @@
   --stagger: 60ms;
 
   color-scheme: light;
-  scrollbar-color: rgba(31, 43, 77, 0.35) transparent;
+  scrollbar-color: var(--barra) transparent;
+}
+
+/* Modo escuro: segue o aparelho, a não ser que a pessoa escolha no botão do topo (data-tema). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='claro']) {
+    --chao: #14171f;
+    --papel: #1d2230;
+    --papel-2: #262c3c;
+    --cinza: #0f1218;
+    --ink: #e9ebf1;
+    --muted: #a7adbd;
+    --on-ink: #14171f;
+    --ink-forte: #ffffff;
+    --barra: rgba(233, 235, 241, 0.3);
+    --barra-forte: rgba(233, 235, 241, 0.5);
+    --toque: rgba(233, 235, 241, 0.12);
+    /* Editorias no escuro: os mesmos tons, fundos e sem brilho, com a tinta clara por cima. */
+    --cat-brasil: #24402d;
+    --cat-mundo: #22354f;
+    --cat-politica: #4b2b2a;
+    --cat-economia: #463b1a;
+    --cat-tecnologia: #1c4341;
+    --cat-ciencia: #35411f;
+    --cat-educacao: #40372a;
+    --cat-esportes: #4c311f;
+    --cat-pop: #48263a;
+    --cat-geral: #2b3040;
+    color-scheme: dark;
+  }
+}
+:root[data-tema='escuro'] {
+  --chao: #14171f;
+  --papel: #1d2230;
+  --papel-2: #262c3c;
+  --cinza: #0f1218;
+  --ink: #e9ebf1;
+  --muted: #a7adbd;
+  --on-ink: #14171f;
+  --ink-forte: #ffffff;
+  --barra: rgba(233, 235, 241, 0.3);
+  --barra-forte: rgba(233, 235, 241, 0.5);
+  --toque: rgba(233, 235, 241, 0.12);
+  /* Editorias no escuro: os mesmos tons, fundos e sem brilho, com a tinta clara por cima. */
+  --cat-brasil: #24402d;
+  --cat-mundo: #22354f;
+  --cat-politica: #4b2b2a;
+  --cat-economia: #463b1a;
+  --cat-tecnologia: #1c4341;
+  --cat-ciencia: #35411f;
+  --cat-educacao: #40372a;
+  --cat-esportes: #4c311f;
+  --cat-pop: #48263a;
+  --cat-geral: #2b3040;
+  color-scheme: dark;
 }
 
 /* Barra de rolagem: trilho transparente. */
 ::-webkit-scrollbar { width: 12px; height: 12px; background: transparent; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(31, 43, 77, 0.35); border-radius: 12px; border: 3px solid transparent; background-clip: padding-box; }
-::-webkit-scrollbar-thumb:hover { background-color: rgba(31, 43, 77, 0.55); }
+::-webkit-scrollbar-thumb { background: var(--barra); border-radius: 12px; border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--barra-forte); }
 
 /* Cada editoria vira uma variável: data-cat="mundo" dá --cat a cor de Mundo. */
 [data-cat] { --cat: var(--cat-geral); }
@@ -97,7 +155,7 @@ p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 0.07em; }
 button { font: inherit; color: inherit; }
-a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(31, 43, 77, 0.12); }
+a, button { touch-action: manipulation; -webkit-tap-highlight-color: var(--toque); }
 img, svg { display: block; max-width: 100%; }
 :focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
 ::selection { background: var(--cat-economia); color: var(--ink); }
@@ -134,7 +192,7 @@ img, svg { display: block; max-width: 100%; }
 .botao:active { transform: scale(0.97); }
 .botao--papel { background: var(--papel); color: var(--ink); }
 @media (hover: hover) and (pointer: fine) {
-  .botao:hover { background: #2e3d66; }
+  .botao:hover { background: var(--ink-forte); }
   .botao--papel:hover { background: var(--papel-2); }
 }
 

@@ -108,7 +108,7 @@ const editorias = [...contagem.entries()].sort((a, b) => b[1].total - a[1].total
     .filtro .editoria[aria-pressed='false']:hover { background: color-mix(in srgb, var(--cat, var(--papel-2)) 55%, var(--papel)); }
   }
   .filtro__status { font-size: var(--step-small); color: var(--muted); min-height: 1.4em; }
-  .lista__itens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); align-items: start; }
+  .lista__itens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); align-items: stretch; }
   .lista__mais { display: flex; justify-content: center; padding-top: var(--gutter); }
   @media (max-width: 860px) { .lista__itens { grid-template-columns: 1fr; gap: 12px; } }
 </style>

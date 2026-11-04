@@ -13,9 +13,12 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
   <div class="topo__folha">
     <div class="topo__linha">
       <p class="topo__data">{dataPorExtenso(geradoEm)}</p>
-      <p class="topo__edicao">
-        Edição das {horaDe(geradoEm)}<span class="topo__ha" data-ha={geradoEm}></span>
-      </p>
+      <div class="topo__direita">
+        <p class="topo__edicao">
+          Edição das {horaDe(geradoEm)}<span class="topo__ha" data-ha={geradoEm}></span>
+        </p>
+        <button type="button" class="topo__tema" data-tema-botao aria-pressed="false" hidden><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" /></svg>Modo escuro</button>
+      </div>
     </div>
     {capa ? (
       <>
@@ -38,6 +41,24 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
 </header>
 
 <script>
+  // Botão de tema: alterna entre claro e escuro e lembra a escolha neste aparelho.
+  const botaoTema = document.querySelector<HTMLButtonElement>('[data-tema-botao]');
+  if (botaoTema) {
+    const raiz = document.documentElement;
+    const escuroAgora = () =>
+      raiz.dataset.tema ? raiz.dataset.tema === 'escuro' : matchMedia('(prefers-color-scheme: dark)').matches;
+    const mostrar = () => botaoTema.setAttribute('aria-pressed', String(escuroAgora()));
+    botaoTema.hidden = false;
+    mostrar();
+    botaoTema.addEventListener('click', () => {
+      const tema = escuroAgora() ? 'claro' : 'escuro';
+      raiz.dataset.tema = tema;
+      try { localStorage.setItem('papo-reto:tema', tema); } catch {}
+      mostrar();
+    });
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', mostrar);
+  }
+
   // "há 12 minutos": quanto tempo faz que esta edição saiu, contado no aparelho de quem lê.
   const alvo = document.querySelector<HTMLElement>('[data-ha]');
   if (alvo?.dataset.ha) {
@@ -59,9 +80,17 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
     padding: 14px var(--dentro) 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; justify-items: center; text-align: center;
   }
   .topo__linha {
-    width: 100%; display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap;
+    width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 8px 24px; flex-wrap: wrap;
     font-size: var(--step-small); font-weight: 600; color: var(--muted);
   }
+  .topo__direita { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; justify-content: flex-end; }
+  .topo__tema {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 0; border-radius: var(--raio);
+    background: var(--papel-2); color: var(--ink); font: 600 var(--step-small) / 1 var(--sans); cursor: pointer;
+    transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  .topo__tema:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) { .topo__tema:hover { background: var(--cat-geral); } }
   .topo__data::first-letter { text-transform: uppercase; }
   .topo__ha { font-variant-numeric: tabular-nums; }
   .topo__nome {
@@ -86,6 +115,6 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
   @media (max-width: 640px) {
     .topo__editorias ul { gap: 6px; }
     .topo__editorias .editoria { padding: 0 14px; }
-    .topo__linha { justify-content: center; }
+    .topo__linha, .topo__direita { justify-content: center; }
   }
 </style>
