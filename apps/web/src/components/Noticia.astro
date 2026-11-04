@@ -1,0 +1,44 @@
+---
+// Uma notícia na lista: editoria, hora, manchete (o link) e o resumo, quando houver.
+import type { Evento } from '../lib/dados';
+import { caminho, quando, portaisDe, exigeAssinatura } from '../lib/formato';
+
+interface Props { evento: Evento; geradoEm: string; mostrarCategoria?: boolean; comResumo?: boolean }
+const { evento: e, geradoEm, mostrarCategoria = true, comResumo = true } = Astro.props;
+const slug = e.categoria?.slug ?? 'geral';
+---
+<li class="noticia" data-cat={slug}>
+  <h3 class="noticia__titulo"><a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
+  <p class="noticia__meta">
+    {mostrarCategoria && e.categoria && <span class="editoria">{e.categoria.nome}</span>}
+    <span>{portaisDe(e).join(', ')}</span>
+    <span aria-hidden="true">·</span>
+    <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time>
+    {exigeAssinatura(e) && <span class="assinatura">· Exige assinatura</span>}
+  </p>
+  {comResumo && e.resumo && <p class="noticia__resumo">{e.resumo}</p>}
+</li>
+
+<style>
+  .noticia {
+    position: relative; display: grid; gap: 8px; align-content: start;
+    padding: 18px 20px 20px; border-radius: var(--raio); background: var(--papel);
+    transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  .noticia:active { transform: scale(0.99); }
+  .noticia__meta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px;
+    font-size: var(--step-small); font-weight: 600; color: var(--muted);
+  }
+  .noticia__meta time { font-variant-numeric: tabular-nums; }
+  .noticia__titulo { font-size: var(--step-lead); line-height: 1.15; letter-spacing: -0.015em; }
+  .noticia__titulo a { text-decoration: underline; text-decoration-thickness: 0.06em; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
+  .noticia__titulo a::after { content: ''; position: absolute; inset: 0; border-radius: var(--raio); }
+  .noticia__titulo a:focus-visible { outline: none; }
+  .noticia:has(.noticia__titulo a:focus-visible) { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .noticia__resumo { font-size: var(--step-body); line-height: 1.5; max-width: 62ch; }
+  @media (hover: hover) and (pointer: fine) {
+    .noticia:hover { background: color-mix(in srgb, var(--cat) 35%, var(--papel)); }
+    .noticia:hover .noticia__titulo a { text-decoration-color: currentColor; }
+  }
+</style>

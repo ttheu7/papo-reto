@@ -3,8 +3,8 @@ import '../styles/global.css';
 import Topo from '../components/Topo.astro';
 import Rodape from '../components/Rodape.astro';
 
-interface Props { titulo: string; descricao: string; semTopo?: boolean }
-const { titulo, descricao, semTopo = false } = Astro.props;
+interface Props { titulo: string; descricao: string; capa?: boolean }
+const { titulo, descricao, capa = false } = Astro.props;
 const canonico = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -15,7 +15,7 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonico} />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#efefed" />
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     <meta property="og:type" content="website" />
@@ -25,11 +25,12 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body id="topo">
     <a class="pular" href="#conteudo">Pular para o conteúdo</a>
-    {!semTopo && <Topo />}
-    <slot name="topo" />
-    <main id="conteudo" tabindex="-1">
-      <slot />
-    </main>
+    <div class="folha">
+      <Topo capa={capa} />
+      <main id="conteudo" tabindex="-1">
+        <slot />
+      </main>
+    </div>
     <Rodape />
     <script>
       // Entradas: cada filho de [data-revela] sobe uma vez, em sequência, ao entrar na tela.

@@ -86,15 +86,16 @@ Nunca coloque segredos no código, em logs, em JSONs ou no site. Nos workflows, 
 
 ## Visual
 
-As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e blocos existem), não o design. O design foi feito com a skill taste-skill (direção "one motif", seed 1484486149) e revisado com a web-design-guidelines.
+As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e blocos existem), não o design. O design foi feito com a skill taste-skill (direção "a página é o objeto", seed 2036481194) e revisado com a web-design-guidelines. Ele substituiu a primeira direção ("one motif"), que o grupo achou escura e quadrada demais.
 
-- **Ideia:** o motivo é a barrinha reta do medidor de cobertura ("papo reto"). Ela vira a pilha de pastas do topo, os marcadores da lista, o painel e o logotipo de blocos do rodapé. Não invente outra forma.
-- **Cores:** fundo `#f8f8f8`, texto `#0a0a0a`, menta `#c3edce` (o que o Papo Reto explica: resumo), rosa `#f8c7c9` (o que os portais publicaram: fontes), branco `#ffffff`, verde `#1f6b3a` só em botões. Tudo em `apps/web/src/styles/global.css`.
-- **Fontes:** League Spartan 700 (títulos) e Figtree 400/600 (texto), servidas pelo próprio site via `@fontsource` (nenhuma chamada ao Google).
-- **Regras da casa:** cinco tamanhos de letra (`--step-*`), sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título, cantos retos, botão com os cantos de cima chanfrados (a aba da pasta).
+- **Ideia:** o site é a primeira página do jornal da edição atual. Cabeçalho com data, "Edição das HHhMM" e o nome grande; manchete grande ao lado da coluna "Também hoje"; blocos por editoria; lista de últimas notícias. Cada parte é uma folha de papel (card) sobre o fundo.
+- **Cores:** neutras. Fundo `#efefed`, folhas `#ffffff`, folha interna `#f5f5f3`, rodapé `#e2e3e0`, tinta azul-marinho `#1f2b4d` (texto e botões), tinta fraca `#5d6479`. A única cor é a das editorias, em pastel e sempre com a tinta por cima: `data-cat="<slug>"` define `--cat` (tokens `--cat-*`). Notícia sem editoria fica em `--cat-geral`. Tudo em `apps/web/src/styles/global.css`.
+- **Fontes:** Newsreader (variável, títulos e textos de leitura) e Figtree 400/600 (interface: etiquetas, botões, metadados), servidas pelo próprio site via `@fontsource` (nenhuma chamada ao Google). A direção sorteou Erode; trocamos pela Newsreader porque ela existe no `@fontsource`.
+- **Regras da casa:** cinco tamanhos de letra (`--step-*`), um raio só (`--raio`, 22px) em cards, botões e etiquetas, sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título (editoria, portal e hora vêm abaixo da manchete). Barra de rolagem com trilho transparente.
+- **Interação:** os botões de editoria em "Últimas notícias" filtram a lista ali mesmo e gravam a escolha no endereço (`?editoria=mundo`); a lista mostra 16 por vez ("Mostrar mais notícias"). Sem JavaScript, a lista aparece inteira.
 - **Imagens:** sem fotos dos portais. Só imagens de acervos de domínio público ou CC0, nunca ao lado de uma notícia específica. Hoje o site é 100% tipográfico e gráfico.
 - **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA, alvos de 44px, `prefers-reduced-motion`).
-- **Conferir:** `node ~/.claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4321/papo-reto/ --allow few-pictures,no-footage` com o `npm run preview -w @papo-reto/web` rodando. As manchetes longas de notícia passam de duas linhas no celular: é conteúdo de terceiros, não cortamos.
+- **Conferir:** `node ~/.claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4321/papo-reto/ --allow few-pictures,no-footage` com o `npm run preview -w @papo-reto/web` rodando. As manchetes longas de notícia passam de duas linhas (e por isso a página do acontecimento não tem um elemento dominante): é conteúdo de terceiros, não cortamos. A fonte diferente da sorteada também é aviso esperado.
 
 ## Comandos
 

@@ -35,3 +35,11 @@ export function linkParaReportar(id: string, titulo: string): string {
   const p = new URLSearchParams({ title: `Erro no resumo: ${titulo.slice(0, 80)}`, body: corpo, labels: 'erro-no-resumo' });
   return `${REPOSITORIO}/issues/new?${p.toString()}`;
 }
+
+type ComMaterias = { materias: { portal: string; exigeAssinatura: boolean }[] };
+
+/** Portais distintos que noticiaram o acontecimento, na ordem em que aparecem. */
+export const portaisDe = (e: ComMaterias) => e.materias.map((m) => m.portal).filter((p, i, a) => a.indexOf(p) === i);
+
+/** Verdadeiro quando todas as matérias do acontecimento são de portais com assinatura. */
+export const exigeAssinatura = (e: ComMaterias) => e.materias.length > 0 && e.materias.every((m) => m.exigeAssinatura);

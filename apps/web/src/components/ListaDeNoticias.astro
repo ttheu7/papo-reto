@@ -1,36 +1,114 @@
 ---
+// Lista de notícias em duas colunas. Com `filtro`, ganha os botões de editoria que filtram
+// a lista ali mesmo (sem JavaScript, os botões não aparecem e a lista fica inteira).
 import type { Evento } from '../lib/dados';
-import { categorias } from '../lib/dados';
-import { caminho } from '../lib/formato';
-import LinhaDeNoticia from './LinhaDeNoticia.astro';
+import Noticia from './Noticia.astro';
 
-interface Props { eventos: Evento[]; geradoEm: string; comAtalhos?: boolean; mostrarCategoria?: boolean }
-const { eventos, geradoEm, comAtalhos = false, mostrarCategoria = true } = Astro.props;
-const comNoticias = categorias.categorias.filter((c) => c.total > 0).sort((a, b) => b.total - a.total);
+interface Props { eventos: Evento[]; geradoEm: string; filtro?: boolean; mostrarCategoria?: boolean; porVez?: number }
+const { eventos, geradoEm, filtro = false, mostrarCategoria = true, porVez = 0 } = Astro.props;
+
+const contagem = new Map<string, { nome: string; total: number }>();
+for (const e of eventos) {
+  if (!e.categoria) continue;
+  const c = contagem.get(e.categoria.slug) ?? { nome: e.categoria.nome, total: 0 };
+  c.total++;
+  contagem.set(e.categoria.slug, c);
+}
+const editorias = [...contagem.entries()].sort((a, b) => b[1].total - a[1].total);
 ---
-{comAtalhos && comNoticias.length > 0 && (
-  <nav class="atalhos" aria-label="Categorias">
-    <ul>
-      {comNoticias.map((c) => (
-        <li><a href={caminho(`categoria/${c.slug}/`)}>{c.nome} <span class="atalhos__total">{c.total}</span></a></li>
-      ))}
-    </ul>
-  </nav>
-)}
-<ul class="itens" data-revela>
-  {eventos.map((e) => <LinhaDeNoticia evento={e} geradoEm={geradoEm} mostrarCategoria={mostrarCategoria} />)}
-</ul>
+<div class="lista" data-lista data-por-vez={porVez || undefined}>
+  {filtro && editorias.length > 1 && (
+    <div class="filtro" data-filtro hidden>
+      <div class="filtro__botoes" role="group" aria-label="Filtrar por editoria">
+        <button type="button" class="editoria" aria-pressed="true" data-valor="">Todas <span>{eventos.length}</span></button>
+        {editorias.map(([slug, c]) => (
+          <button type="button" class="editoria" data-cat={slug} aria-pressed="false" data-valor={slug}>{c.nome} <span>{c.total}</span></button>
+        ))}
+      </div>
+      <p class="filtro__status" aria-live="polite" data-status></p>
+    </div>
+  )}
+  <ul class="lista__itens" data-revela>
+    {eventos.map((e) => <Noticia evento={e} geradoEm={geradoEm} mostrarCategoria={mostrarCategoria} />)}
+  </ul>
+  {porVez > 0 && eventos.length > porVez && (
+    <div class="lista__mais" data-mais hidden>
+      <button type="button" class="botao">Mostrar mais notícias</button>
+    </div>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lista]').forEach((lista) => {
+    const itens = Array.from(lista.querySelectorAll<HTMLElement>('.noticia'));
+    const porVez = Number(lista.dataset.porVez) || itens.length;
+    const mais = lista.querySelector<HTMLElement>('[data-mais]');
+    const filtro = lista.querySelector<HTMLElement>('[data-filtro]');
+    const status = filtro?.querySelector<HTMLElement>('[data-status]');
+    const botoes = Array.from(filtro?.querySelectorAll<HTMLButtonElement>('[data-valor]') ?? []);
+    let valor = '';
+    let limite = porVez;
+
+    // Mostra só as notícias da editoria escolhida e, sem filtro, só as primeiras `limite`.
+    const aplicar = () => {
+      let visiveis = 0;
+      let cabem = 0;
+      for (const item of itens) {
+        const daEditoria = !valor || item.dataset.cat === valor;
+        if (daEditoria) cabem++;
+        const mostra = daEditoria && (valor !== '' || cabem <= limite);
+        item.hidden = !mostra;
+        if (mostra) visiveis++;
+      }
+      if (mais) mais.hidden = valor !== '' || visiveis >= itens.length;
+      return visiveis;
+    };
+
+    if (filtro) filtro.hidden = false;
+    aplicar();
+    mais?.querySelector('button')?.addEventListener('click', () => {
+      const primeiraNova = itens[limite];
+      limite += porVez;
+      aplicar();
+      primeiraNova?.querySelector<HTMLElement>('a')?.focus();
+    });
+    // A editoria escolhida fica no endereço (?editoria=mundo), para dar para compartilhar e voltar.
+    const escolher = (botao: HTMLButtonElement, gravar: boolean) => {
+      valor = botao.dataset.valor ?? '';
+      for (const b of botoes) b.setAttribute('aria-pressed', String(b === botao));
+      const visiveis = aplicar();
+      if (status) status.textContent = valor ? `${visiveis} ${visiveis === 1 ? 'notícia' : 'notícias'} de ${botao.firstChild?.textContent?.trim()}` : '';
+      if (gravar) {
+        const url = new URL(location.href);
+        if (valor) url.searchParams.set('editoria', valor);
+        else url.searchParams.delete('editoria');
+        history.replaceState(null, '', url);
+      }
+    };
+    for (const botao of botoes) botao.addEventListener('click', () => escolher(botao, true));
+    const inicial = new URLSearchParams(location.search).get('editoria');
+    const botaoInicial = botoes.find((b) => inicial && b.dataset.valor === inicial);
+    if (botaoInicial) escolher(botaoInicial, false);
+  });
+</script>
 
 <style>
-  .atalhos { margin-top: 32px; }
-  .atalhos ul { display: flex; flex-wrap: wrap; gap: 8px; }
-  .atalhos a {
-    display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px;
-    background: var(--surface); text-decoration: none; font-weight: 600; font-size: var(--step-small);
-    transition: background-color var(--t-hover) ease;
+  .filtro { margin-bottom: 20px; display: grid; gap: 8px; }
+  .filtro__botoes { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filtro .editoria {
+    min-height: 44px; padding: 0 16px; border: 0; cursor: pointer; gap: 8px; font-size: var(--step-body);
+    background: var(--papel); transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
   }
-  .atalhos__total { color: var(--muted); font-variant-numeric: tabular-nums; }
-  @media (hover: hover) and (pointer: fine) { .atalhos a:hover { background: var(--mint); } }
-  .itens { display: grid; grid-template-columns: 1fr 1fr; gap: 40px var(--gutter); margin-top: 56px; }
-  @media (max-width: 900px) { .itens { grid-template-columns: 1fr; gap: 32px; margin-top: 40px; } }
+  .filtro .editoria span { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .filtro .editoria:active { transform: scale(0.96); }
+  .filtro .editoria[aria-pressed='true'] { background: var(--cat, var(--ink)); }
+  .filtro .editoria[data-valor=''][aria-pressed='true'] { background: var(--ink); color: var(--on-ink); }
+  .filtro .editoria[data-valor=''][aria-pressed='true'] span { color: inherit; }
+  @media (hover: hover) and (pointer: fine) {
+    .filtro .editoria[aria-pressed='false']:hover { background: color-mix(in srgb, var(--cat, var(--papel-2)) 55%, var(--papel)); }
+  }
+  .filtro__status { font-size: var(--step-small); color: var(--muted); min-height: 1.4em; }
+  .lista__itens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); align-items: start; }
+  .lista__mais { display: flex; justify-content: center; padding-top: var(--gutter); }
+  @media (max-width: 860px) { .lista__itens { grid-template-columns: 1fr; gap: 12px; } }
 </style>

@@ -1,106 +1,141 @@
-/* Papo Reto: direção "one motif" (taste-skill, seed 1484486149).
-   O motivo é a barrinha reta do medidor de cobertura: ela vira as pastas do topo,
-   os marcadores da lista, o painel e o logotipo do rodapé. */
+/* Papo Reto: direção "a página é o objeto" (taste-skill, seed 2036481194).
+   O site é a primeira página do jornal da edição atual: papel claro, tinta azul-marinho,
+   cantos redondos e cor só para separar as editorias. */
 
-@import '@fontsource/league-spartan/latin-700.css';
+@import '@fontsource-variable/newsreader/opsz.css';
+@import '@fontsource-variable/newsreader/opsz-italic.css';
 @import '@fontsource/figtree/latin-400.css';
 @import '@fontsource/figtree/latin-600.css';
 
 :root {
-  /* Cor: menta = o que o Papo Reto explica; rosa = o que os portais publicaram. */
-  --bg: #f8f8f8;
-  --surface: #eeeeee;
-  --ink: #0a0a0a;
-  --muted: #5e5e5e;
-  --accent: #1f6b3a;
-  --accent-strong: #154d29;
-  --accent-ink: #ffffff;
-  --mint: #c3edce;
-  --pink: #f8c7c9;
-  --white: #ffffff;
-  --on-dark: #f8f8f8;
-  --on-dark-muted: #b9b9b9;
+  /* Papel e tinta: neutros. */
+  --chao: #efefed;        /* o fundo onde as folhas ficam */
+  --papel: #ffffff;        /* as folhas (cards) */
+  --papel-2: #f5f5f3;      /* folha dentro de folha */
+  --cinza: #e2e3e0;        /* o verso: rodapé */
+  --ink: #1f2b4d;          /* tinta azul-marinho */
+  --muted: #5d6479;        /* tinta fraca, AA sobre papel e chão */
+  --on-ink: #ffffff;
+
+  /* Editorias: a única cor do site. Pastéis, sempre com a tinta por cima. */
+  --cat-brasil: #cde9d3;
+  --cat-mundo: #d3e2f4;
+  --cat-politica: #f5d0cc;
+  --cat-economia: #f4e5b2;
+  --cat-tecnologia: #c8ebe9;
+  --cat-ciencia: #e0ecc0;
+  --cat-educacao: #efe3d0;
+  --cat-esportes: #f9d0b3;
+  --cat-pop: #f6d3e4;
+  --cat-geral: #e7e7e4;
 
   /* Tipo: cinco tamanhos, e só. */
-  --display: 'League Spartan', system-ui, sans-serif;
-  --text: 'Figtree', system-ui, sans-serif;
+  --serif: 'Newsreader Variable', Georgia, serif;
+  --sans: 'Figtree', system-ui, sans-serif;
   --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
   --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
-  --step-hero: clamp(3.5rem, 1rem + 8.4vw, 9.5rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-hero: clamp(3.25rem, 1.2rem + 7vw, 7.5rem);
+
+  /* Forma: um raio só, em tudo. */
+  --raio: 22px;
 
   /* Espaço */
-  --margin: clamp(16px, 2.6vw, 32px);
-  --gutter: clamp(20px, 4vw, 64px);
-  --section: clamp(96px, 12vw, 200px);
-  --folder-step: 64px;
-  --tab: 40px;
+  --margin: clamp(16px, 2.4vw, 32px);
+  --gutter: clamp(16px, 2.4vw, 32px);
+  --respiro: clamp(56px, 7vw, 112px);
+  --dentro: clamp(20px, 3vw, 44px);
 
   /* Movimento */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
   --t-press: 140ms;
   --t-hover: 180ms;
-  --t-ui: 240ms;
-  --t-reveal: 800ms;
-  --stagger: 70ms;
+  --stagger: 60ms;
 
   color-scheme: light;
+  scrollbar-color: rgba(31, 43, 77, 0.35) transparent;
 }
 
+/* Barra de rolagem: trilho transparente. */
+::-webkit-scrollbar { width: 12px; height: 12px; background: transparent; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(31, 43, 77, 0.35); border-radius: 12px; border: 3px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: rgba(31, 43, 77, 0.55); }
+
+/* Cada editoria vira uma variável: data-cat="mundo" dá --cat a cor de Mundo. */
+[data-cat] { --cat: var(--cat-geral); }
+[data-cat='brasil'] { --cat: var(--cat-brasil); }
+[data-cat='mundo'] { --cat: var(--cat-mundo); }
+[data-cat='politica'] { --cat: var(--cat-politica); }
+[data-cat='economia'] { --cat: var(--cat-economia); }
+[data-cat='tecnologia'] { --cat: var(--cat-tecnologia); }
+[data-cat='ciencia'] { --cat: var(--cat-ciencia); }
+[data-cat='educacao'] { --cat: var(--cat-educacao); }
+[data-cat='esportes'] { --cat: var(--cat-esportes); }
+[data-cat='pop'] { --cat: var(--cat-pop); }
+
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; background: var(--cinza); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--cinza);
   color: var(--ink);
-  font-family: var(--text);
+  font-family: var(--sans);
   font-size: var(--step-body);
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.04em; line-height: 0.92; margin: 0; text-wrap: balance; }
+h1, h2, h3 {
+  font-family: var(--serif); font-weight: 560; font-optical-sizing: auto;
+  letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-wrap: balance;
+}
 p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 0.07em; }
 button { font: inherit; color: inherit; }
-a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(31, 107, 58, 0.15); }
+a, button { touch-action: manipulation; -webkit-tap-highlight-color: rgba(31, 43, 77, 0.12); }
 img, svg { display: block; max-width: 100%; }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
-.escuro :focus-visible { outline-color: var(--mint); }
-::selection { background: var(--mint); color: var(--ink); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
+::selection { background: var(--cat-economia); color: var(--ink); }
 .so-leitor {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; /* taste-skill-ignore: texto só para leitores de tela */
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .pular {
-  position: absolute; left: var(--margin); top: -100px; z-index: 50; padding: 12px 18px;
-  background: var(--accent); color: var(--accent-ink); font-weight: 600; text-decoration: none;
+  position: absolute; left: var(--margin); top: -100px; z-index: 50; padding: 12px 18px; border-radius: var(--raio);
+  background: var(--ink); color: var(--on-ink); font-weight: 600; text-decoration: none;
 }
 .pular:focus { top: 12px; }
-
-.moldura { padding-inline: var(--margin); }
 [hidden] { display: none !important; }
 
-/* ---------- Botão: a aba da pasta volta como os cantos de cima ---------- */
+/* ---------- A folha: o conteúdo inteiro sobe por cima do rodapé (cortina) ---------- */
+.folha {
+  position: relative; z-index: 1; background: var(--chao);
+  border-radius: 0 0 calc(var(--raio) * 2) calc(var(--raio) * 2);
+  padding-bottom: var(--respiro);
+}
+.moldura { padding-inline: var(--margin); max-width: 1440px; margin-inline: auto; }
+
+/* Card: uma folha de papel, com o raio da casa. */
+.card { background: var(--papel); border-radius: var(--raio); padding: var(--dentro); }
+
+/* ---------- Botão ---------- */
 .botao {
-  --chanfro: 10px;
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
-  min-height: 48px; padding: 12px 24px 12px;
-  background: var(--accent); color: var(--accent-ink);
-  font-weight: 600; text-decoration: none; border: 0; cursor: pointer;
-  clip-path: polygon(var(--chanfro) 0, calc(100% - var(--chanfro)) 0, 100% var(--chanfro), 100% 100%, 0 100%, 0 var(--chanfro));
+  min-height: 48px; padding: 12px 24px; border-radius: var(--raio);
+  background: var(--ink); color: var(--on-ink);
+  font-family: var(--sans); font-weight: 600; font-size: var(--step-body); text-decoration: none; border: 0; cursor: pointer;
   transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
 }
 .botao:active { transform: scale(0.97); }
-.botao--claro { background: var(--ink); color: var(--on-dark); }
+.botao--papel { background: var(--papel); color: var(--ink); }
 @media (hover: hover) and (pointer: fine) {
-  .botao:hover { background: var(--accent-strong); }
-  .botao--claro:hover { background: #2a2a2a; }
+  .botao:hover { background: #2e3d66; }
+  .botao--papel:hover { background: var(--papel-2); }
 }
 
 .link {
@@ -109,44 +144,28 @@ img, svg { display: block; max-width: 100%; }
 }
 @media (hover: hover) and (pointer: fine) { .link:hover { text-decoration-color: currentColor; } }
 
-/* ---------- Medidor de cobertura: o motivo em tamanho de texto ---------- */
-.medidor { display: inline-flex; align-items: flex-end; gap: 3px; height: 1em; vertical-align: -0.1em; }
-.medidor span { width: 0.24em; background: currentColor; opacity: 0.18; height: 100%; }
-.medidor span.cheia { opacity: 1; }
+/* Etiqueta de editoria: a cor da editoria com a tinta por cima. */
+.editoria {
+  display: inline-flex; align-items: center; min-height: 28px; padding: 2px 12px; border-radius: var(--raio);
+  background: var(--cat); color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: var(--step-small);
+  line-height: 1.2; text-decoration: none; letter-spacing: 0; white-space: nowrap;
+}
+a.editoria { position: relative; }
+a.editoria::before { content: ''; position: absolute; inset: -8px -2px; } /* alvo de toque maior */
+.editoria--papel { background: var(--papel); min-height: 36px; padding: 0 14px; }
+.assinatura { font-weight: 600; font-size: var(--step-small); color: var(--ink); }
 
-/* ---------- Topo ---------- */
-.topo {
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-  min-height: 64px; padding-inline: var(--margin); gap: 12px;
-}
-.topo__marca {
-  font-family: var(--display); font-weight: 700; font-size: var(--step-lead); letter-spacing: -0.04em;
-  text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 44px;
-}
-.topo__marca .medidor { font-size: 0.9em; }
-.topo__links { display: flex; gap: 20px; justify-self: end; font-size: var(--step-small); font-weight: 600; }
-.topo__links a, .topo__esq a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: none; white-space: nowrap; }
-@media (max-width: 520px) {
-  .topo { grid-template-columns: auto 1fr; }
-  .topo__esq { display: none; }
-  .topo__marca { justify-self: start; }
-}
-.topo__esq { justify-self: start; font-size: var(--step-small); font-weight: 600; }
-.escuro { background: var(--ink); color: var(--on-dark); }
-
-/* ---------- Seções ---------- */
-.secao { padding-block: var(--section) 0; }
-.secao__titulo { font-size: var(--step-head); }
-.cabeca {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
-}
-.cabeca .contagem { font-size: var(--step-body); color: var(--muted); }
+/* ---------- Títulos de seção ---------- */
+.secao { padding-top: var(--respiro); }
+.cabeca { display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.6vw, 36px); padding-inline: 20px; }
+.cabeca h2 { font-size: var(--step-head); }
+.cabeca p, .cabeca a { font-size: var(--step-body); color: var(--muted); }
 
 /* ---------- Revelação ao rolar (uma vez) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-revela] > * {
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-expo);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 600ms var(--ease-out), transform 800ms var(--ease-expo);
     transition-delay: calc(var(--i, 0) * var(--stagger));
   }
   .js [data-revela].visivel > * { opacity: 1; transform: none; }

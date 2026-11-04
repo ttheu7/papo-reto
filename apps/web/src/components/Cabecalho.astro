@@ -1,23 +1,23 @@
 ---
-// Abertura das páginas internas: campo escuro com o título grande.
-interface Props { id?: string; grande?: boolean }
-const { id = 'pagina-titulo', grande = false } = Astro.props;
-const temFigura = Astro.slots.has('figura');
+// Abertura das páginas internas: uma folha com o título. Com `cat`, a folha leva a cor da editoria.
+interface Props { id?: string; grande?: boolean; cat?: string }
+const { id = 'pagina-titulo', grande = false, cat } = Astro.props;
 ---
-<section class:list={['abre escuro', { 'abre--grande': grande, 'abre--figura': temFigura }]} aria-labelledby={id}>
-  <div class="abre__miolo moldura" data-revela>
+<section class="abre moldura" aria-labelledby={id}>
+  <div class:list={['abre__folha', { 'abre--grande': grande, 'abre--cor': cat }]} data-cat={cat} data-revela>
     <slot />
   </div>
-  {temFigura && <div class="abre__figura moldura"><slot name="figura" /></div>}
 </section>
 
 <style>
-  .abre { padding-bottom: clamp(56px, 7vw, 104px); }
-  .abre--figura .abre__figura { padding-top: clamp(32px, 4vw, 56px); }
-  .abre.abre--grande :global(h1) { font-size: var(--step-hero); line-height: 0.88; }
-  .abre__miolo { padding-top: clamp(40px, 6vw, 96px); display: grid; gap: 20px; max-width: 1200px; }
-  .abre :global(h1) { font-size: var(--step-head); max-width: 18em; }
-  .abre :global(.abre__apoio) { font-size: var(--step-lead); line-height: 1.35; max-width: 40ch; }
-  .abre :global(.abre__meta) { font-size: var(--step-small); color: var(--on-dark-muted); font-weight: 600; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
-  .abre :global(.abre__meta a) { color: var(--on-dark); }
+  .abre { padding-top: var(--gutter); }
+  .abre__folha {
+    background: var(--papel); border-radius: var(--raio); padding: clamp(28px, 5vw, 72px) clamp(24px, 4vw, 56px);
+    display: grid; gap: 20px; justify-items: start;
+  }
+  .abre--cor { background: var(--cat); }
+  .abre__folha :global(h1) { font-size: var(--step-head); max-width: 20em; line-height: 1; }
+  .abre--grande :global(h1) { font-size: var(--step-hero); line-height: 0.95; letter-spacing: -0.035em; }
+  .abre__folha :global(.abre__apoio) { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 44ch; }
+  .abre__folha :global(.abre__meta) { font-size: var(--step-small); font-weight: 600; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
 </style>

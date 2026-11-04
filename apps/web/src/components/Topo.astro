@@ -1,16 +1,91 @@
 ---
-import { caminho } from '../lib/formato';
-import Medidor from './Medidor.astro';
+// O cabeçalho do jornal: data e edição, o nome e as editorias.
+// Na capa o nome é o h1 e aparece grande; nas outras páginas ele é só um link de volta.
+import { categorias, eventos } from '../lib/dados';
+import { caminho, dataPorExtenso, horaDe } from '../lib/formato';
+
+interface Props { capa?: boolean }
+const { capa = false } = Astro.props;
+const geradoEm = eventos.geradoEm;
+const editorias = categorias.categorias.filter((c) => c.total > 0);
 ---
-<header class="topo escuro">
-  <nav class="topo__esq" aria-label="Atalhos">
-    <a class="link" href={caminho('#mais-noticias')}>Notícias</a>
-  </nav>
-  <a class="topo__marca" href={caminho()} aria-label="Papo Reto, página inicial">
-    <Medidor cobertura={4} />
-    <span translate="no">papo reto</span>
-  </a>
-  <nav class="topo__links" aria-label="Sobre o site">
-    <a class="link" href={caminho('como-funciona/')}>Como funciona</a>
-  </nav>
+<header class:list={['topo moldura', { 'topo--capa': capa }]}>
+  <div class="topo__folha">
+    <div class="topo__linha">
+      <p class="topo__data">{dataPorExtenso(geradoEm)}</p>
+      <p class="topo__edicao">
+        Edição das {horaDe(geradoEm)}<span class="topo__ha" data-ha={geradoEm}></span>
+      </p>
+    </div>
+    {capa ? (
+      <>
+        <h1 class="topo__nome" translate="no">Papo Reto</h1>
+        <p class="topo__apoio">As notícias do dia explicadas em até três frases, com o link de quem noticiou. Grátis, sem anúncio e sem cadastro.</p>
+      </>
+    ) : (
+      <a class="topo__nome topo__nome--link" href={caminho()} translate="no" aria-label="Papo Reto, página inicial">Papo Reto</a>
+    )}
+    <nav class="topo__editorias" aria-label="Editorias">
+      <ul>
+        <li><a class="editoria editoria--todas" href={caminho('#ultimas')}>Últimas</a></li>
+        {editorias.map((c) => (
+          <li><a class="editoria" data-cat={c.slug} href={caminho(`categoria/${c.slug}/`)}>{c.nome}</a></li>
+        ))}
+        <li><a class="editoria editoria--todas" href={caminho('como-funciona/')}>Como funciona</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
+
+<script>
+  // "há 12 minutos": quanto tempo faz que esta edição saiu, contado no aparelho de quem lê.
+  const alvo = document.querySelector<HTMLElement>('[data-ha]');
+  if (alvo?.dataset.ha) {
+    const saiu = new Date(alvo.dataset.ha).getTime();
+    const escrever = () => {
+      const min = Math.max(0, Math.round((Date.now() - saiu) / 60_000));
+      if (min > 60 * 24) return;
+      alvo.textContent = min < 1 ? ', agora há pouco' : min < 60 ? `, há ${min} min` : `, há ${Math.floor(min / 60)} h`;
+    };
+    escrever();
+    setInterval(escrever, 60_000);
+  }
+</script>
+
+<style>
+  .topo { padding-top: var(--margin); }
+  .topo__folha {
+    background: var(--papel); border-radius: var(--raio);
+    padding: 14px var(--dentro) 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; justify-items: center; text-align: center;
+  }
+  .topo__linha {
+    width: 100%; display: flex; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap;
+    font-size: var(--step-small); font-weight: 600; color: var(--muted);
+  }
+  .topo__data::first-letter { text-transform: uppercase; }
+  .topo__ha { font-variant-numeric: tabular-nums; }
+  .topo__nome {
+    font-family: var(--serif); font-weight: 600; font-size: var(--step-head);
+    letter-spacing: -0.035em; line-height: 0.95; text-decoration: none;
+  }
+  .topo--capa .topo__nome { font-size: var(--step-hero); font-weight: 620; padding-top: 4px; }
+  .topo__nome--link { display: inline-flex; align-items: center; min-height: 48px; }
+  .topo__apoio { font-size: var(--step-lead); line-height: 1.35; max-width: 34ch; text-wrap: balance; }
+  .topo__editorias { justify-self: stretch; min-width: 0; }
+  .topo__editorias ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding-top: 4px; }
+  .topo__editorias .editoria {
+    min-height: 44px; padding: 0 18px; font-size: var(--step-body);
+    transition: transform var(--t-press) var(--ease-out), filter var(--t-hover) ease;
+  }
+  .topo__editorias .editoria::before { content: none; }
+  .topo__editorias .editoria--todas { background: var(--papel-2); }
+  .topo__editorias .editoria:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) {
+    .topo__editorias .editoria:hover { filter: brightness(0.95); }
+  }
+  @media (max-width: 640px) {
+    .topo__editorias ul { gap: 6px; }
+    .topo__editorias .editoria { padding: 0 14px; }
+    .topo__linha { justify-content: center; }
+  }
+</style>
