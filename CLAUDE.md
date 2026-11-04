@@ -99,9 +99,21 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 ## Comandos
 
 - `npm install`: dependências. No Windows, se o PowerShell bloquear scripts, use `npm.cmd` ou o Prompt de Comando.
-- `npm run db:nova -- nome`: cria uma migration.
+- `npm test`: testes (Vitest). `npm run typecheck`: TypeScript estrito em todos os pacotes e `astro check` no site.
+- `npm run coletar`: lê os feeds, grava no banco e, se houver `GEMINI_API_KEY`, gera os resumos. Lê o `.env`.
+- `npm run dados:site`: gera `apps/web/public/dados/*.json` a partir do banco.
+- `npm run build:web` / `npm run dev:web`: build e servidor de desenvolvimento do site. Sem `public/dados/`, fora do CI, o site usa `apps/web/src/dados-exemplo/`.
+- `npm run db:nova -- nome`: cria uma migration (se a CLI travar no fim, o arquivo já foi criado).
 - `npm run db:status`: compara as migrations locais e remotas (exige `npx supabase login` e `npx supabase link`).
-- Ao criar scripts novos (testes, coletor, build do site), documente-os aqui.
+- Versões exatas (`.npmrc` com `save-exact`). TypeScript fica no 6.x porque o `@astrojs/check` ainda não aceita o 7.
+
+## Código
+
+- `packages/core`: `ColetarNoticias`, `ResumirEventos`, `GerarDadosDoSite`, `normalizarUrl`, portas e o contrato dos JSONs (`casos-de-uso/gerar-dados-do-site.ts`). Falsos em memória para testes em `src/testes/falsos.ts`.
+- `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`, prompt versionado em `gemini/prompt.ts`), logs JSON.
+- `apps/coletor`: `coletar.ts` e `dados-do-site.ts`, só montam dependências.
+- `apps/web`: Astro estático, base `/papo-reto/`.
+- `.github/workflows/publicar.yml`: a cada 30 min coleta, gera os dados, faz o build e publica no Pages.
 
 ## Fluxo de trabalho
 

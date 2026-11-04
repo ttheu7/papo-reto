@@ -1,0 +1,76 @@
+# Coleta as notícias, gera os JSONs do site, faz o build e publica no GitHub Pages.
+# Roda a cada 30 minutos, à mão pela aba Actions e a cada push na main fora de supabase/.
+name: Publicar site
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "supabase/**"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Nunca duas publicações ao mesmo tempo. A que chegar depois espera a anterior.
+concurrency:
+  group: publicar
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Coletar e montar o site
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      # Sem nenhum segredo neste passo e sem scripts de instalação.
+      - run: npm ci --ignore-scripts
+
+      - id: pages
+        uses: actions/configure-pages@v6
+
+      # Se a coleta falhar, o site é publicado mesmo assim com o que já está no banco.
+      - name: Coletar notícias e gerar resumos
+        run: npm run coletar
+        continue-on-error: true
+        timeout-minutes: 10
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # Se o banco estiver fora do ar, o job para aqui e o site anterior continua no ar.
+      - name: Gerar os dados do site
+        run: npm run dados:site
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+
+      - name: Build do site
+        run: npm run build:web
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: apps/web/dist
+
+  deploy:
+    name: Publicar no GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
