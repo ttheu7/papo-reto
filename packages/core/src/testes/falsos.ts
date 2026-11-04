@@ -1,22 +1,26 @@
 // Implementações em memória das portas, só para testes.
 import type {
+  CardDeEvento,
   Categoria,
   ErroDeExecucao,
   EventoParaResumir,
   Fonte,
   ItemRss,
+  MateriaPublica,
   ModeloIa,
   NovaNoticia,
   NovoResumo,
   StatusExecucao,
 } from '../entidades';
 import type {
+  EscritorDeDados,
   LeitorRss,
   Registro,
   RepositorioExecucoes,
   RepositorioFontes,
   RepositorioNoticias,
   RepositorioResumos,
+  RepositorioSite,
   ServicoIa,
 } from '../portas';
 
@@ -155,5 +159,32 @@ export class IaFalsa implements ServicoIa {
   async resumir(entrada: Parameters<ServicoIa['resumir']>[0]) {
     this.chamadas.push(entrada);
     return this.responder(entrada, this.chamadas.length);
+  }
+}
+
+export class SiteEmMemoria implements RepositorioSite {
+  constructor(
+    readonly cards: CardDeEvento[],
+    readonly materias: Map<string, MateriaPublica[]>,
+    readonly listaDeCategorias: Categoria[],
+  ) {}
+  async cardsRecentes({ desde, limite }: { desde: Date; limite: number }) {
+    return this.cards
+      .filter((c) => c.publicadoEm >= desde)
+      .sort((a, b) => b.publicadoEm.getTime() - a.publicadoEm.getTime())
+      .slice(0, limite);
+  }
+  async materiasDosEventos(ids: string[]) {
+    return new Map(ids.map((id) => [id, this.materias.get(id) ?? []]));
+  }
+  async categorias() {
+    return this.listaDeCategorias;
+  }
+}
+
+export class EscritorEmMemoria implements EscritorDeDados {
+  arquivos = new Map<string, unknown>();
+  async escrever(nome: string, dados: unknown) {
+    this.arquivos.set(nome, JSON.parse(JSON.stringify(dados)));
   }
 }

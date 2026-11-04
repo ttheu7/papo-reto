@@ -7,3 +7,5 @@ export * from './rss/interpretar-feed';
 export * from './rss/leitor-rss-http';
 export * from './postgres/repositorio-resumos';
 export * from './gemini/servico-ia-gemini';
+export * from './postgres/repositorio-site';
+export * from './escritor-de-dados';

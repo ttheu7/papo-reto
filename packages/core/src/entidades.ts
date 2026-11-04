@@ -83,3 +83,25 @@ export interface NovoResumo {
   /** Só é aplicada se o evento ainda não tiver categoria. */
   categoriaId: number | null;
 }
+
+/** Linha da vw_evento_card, com a data da matéria mais recente. */
+export interface CardDeEvento {
+  id: string;
+  titulo: string;
+  resumo: string | null;
+  categoriaSlug: string | null;
+  categoriaNome: string | null;
+  cobertura: number;
+  criadoEm: Date;
+  atualizadoEm: Date;
+  publicadoEm: Date;
+}
+
+/** O que o site mostra de uma notícia. Sem descricao_original, de propósito. */
+export interface MateriaPublica {
+  portal: string;
+  titulo: string;
+  url: string;
+  publicadaEm: Date;
+  exigeAssinatura: boolean;
+}

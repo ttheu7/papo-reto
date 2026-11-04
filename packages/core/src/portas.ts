@@ -1,9 +1,11 @@
 import type {
+  CardDeEvento,
   Categoria,
   ErroDeExecucao,
   EventoParaResumir,
   Fonte,
   ItemRss,
+  MateriaPublica,
   ModeloIa,
   NovaNoticia,
   NovoResumo,
@@ -69,4 +71,16 @@ export interface ServicoIa {
     categorias: string[];
     eventos: EventoParaResumir[];
   }): Promise<{ resumos: ResumoGerado[]; tokensEntrada: number; tokensSaida: number }>;
+}
+
+export interface RepositorioSite {
+  /** Cards cuja matéria mais recente saiu depois de `desde`, os mais recentes primeiro. */
+  cardsRecentes(opcoes: { desde: Date; limite: number }): Promise<CardDeEvento[]>;
+  /** Matérias de cada evento, sem nenhum campo de uso interno. */
+  materiasDosEventos(ids: string[]): Promise<Map<string, MateriaPublica[]>>;
+  categorias(): Promise<Categoria[]>;
+}
+
+export interface EscritorDeDados {
+  escrever(nome: string, dados: unknown): Promise<void>;
 }
