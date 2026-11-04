@@ -15,3 +15,12 @@ supabase/.branches/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Astro
+.astro/
+
+# Gerados pelo coletor antes do build
+apps/web/public/dados/
+
+# Arquivos de trabalho da skill de design
+.taste-skill/

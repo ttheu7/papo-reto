@@ -1,0 +1,6 @@
+{
+  "name": "@papo-reto/core",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts"
+}

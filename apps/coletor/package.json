@@ -1,0 +1,9 @@
+{
+  "name": "@papo-reto/coletor",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@papo-reto/core": "*",
+    "@papo-reto/infra": "*"
+  }
+}
