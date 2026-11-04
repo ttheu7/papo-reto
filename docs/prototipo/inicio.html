@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Papo Reto: início (protótipo)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&amp;family=Schibsted+Grotesk:wght@400;500;700;800;900&amp;display=swap">
+<style>
+body{margin:0;background:#F5F6F8}
+a{color:#2B4BF2}a:hover{color:#1A33B8}
+</style>
+</head>
+<body>
+<!-- Protótipo visual de referência: conteúdo ilustrativo, não são matérias reais. -->
+<div style="background: #F5F6F8; color: #16193A; font-family: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif">
+
+<header style="background: #FFFFFF; border-bottom: 2px solid #16193A">
+<div style="max-width: 1200px; margin: 0 auto; padding: 18px 40px 14px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="inicio.html" style="display: flex; flex-direction: column; gap: 5px; color: #16193A; text-decoration: none">
+<span style="font-size: 30px; font-weight: 900; letter-spacing: -0.035em; line-height: 1">papo reto</span>
+<span aria-hidden="true" style="display: block; height: 8px; background: #FFE45C; border: 2px solid #16193A; border-radius: 2px; box-sizing: border-box"></span>
+</a>
+<div style="display: flex; align-items: center; gap: 10px">
+<button type="button" aria-label="Buscar" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 12px; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+</button>
+<a href="#apoie" style="min-height: 44px; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; background: #2B4BF2; color: #FFFFFF; border: 2px solid #16193A; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none">Apoie o projeto</a>
+</div>
+</div>
+<nav aria-label="Categorias" style="max-width: 1200px; margin: 0 auto; padding: 0 40px 16px; box-sizing: border-box; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="#" aria-current="page" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #16193A; color: #FFFFFF; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 700; text-decoration: none">Tudo</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Brasil</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Mundo</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Política</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Economia</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Tecnologia</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Ciência</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Educação</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Pop</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 999px; font-size: 15px; font-weight: 500; text-decoration: none">Esportes</a>
+</nav>
+</header>
+
+<main>
+<section aria-labelledby="hoje" style="background: #FFE45C; border-bottom: 2px solid #16193A">
+<div style="max-width: 1200px; margin: 0 auto; padding: 48px 40px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 760px">
+<p style="margin: 0; font-size: 16px; font-weight: 500; color: #4B5068">Quarta, 28 de outubro</p>
+<h1 id="hoje" style="margin: 0; font-size: clamp(44px, 6vw, 72px); line-height: 1; font-weight: 900; letter-spacing: -0.04em">O que importa hoje</h1>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 21px; line-height: 1.45; color: #16193A">Os assuntos que mais portais estão cobrindo agora, cada um explicado em 1 minuto.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap: 28px; align-items: start">
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 18px; box-shadow: 6px 6px 0 #16193A; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #16193A; color: #FFE45C; border-radius: 10px; font-size: 18px; font-weight: 900">1</span>
+<span style="font-size: 14px; font-weight: 700; color: #16193A; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Ciência</span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px">
+<svg width="78" height="14" viewBox="0 0 78 14" aria-hidden="true"><rect x="0" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="8" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="16" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="24" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="32" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="40" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="48" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="56" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="64" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="72" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect></svg>
+<span style="font-size: 14px; font-weight: 700">8 portais</span>
+</div>
+</div>
+<h2 style="margin: 0; font-size: 34px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em"><a href="evento.html" style="color: #16193A; text-decoration: none">Ondas de calor: por que estão mais frequentes e como se proteger</a></h2>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 19px; line-height: 1.55; color: #16193A">Com o planeta mais quente, os dias de calor extremo ficam mais comuns e duram mais. O resumo junta o que os cientistas explicam sobre a causa e o que fazer na prática pra atravessar esses dias com segurança.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; color: #16193A; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">g1</span>
+<span style="font-size: 13px; font-weight: 700; color: #16193A; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">BBC News Brasil</span>
+<span style="font-size: 13px; font-weight: 700; color: #16193A; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Folha</span>
+<span style="font-size: 13px; font-weight: 700; color: #16193A; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+5</span>
+</div>
+<a href="evento.html" style="min-height: 44px; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; background: #2B4BF2; color: #FFFFFF; border: 2px solid #16193A; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none">Entender em 1 min</a>
+</div>
+<p style="margin: 0; font-size: 14px; line-height: 1.4; color: #4B5068">Resumo feito por IA a partir de 8 matérias, com link pra todas.</p>
+</article>
+
+<div style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 18px; overflow: hidden">
+<h2 style="margin: 0; padding: 20px 24px 12px; font-size: 20px; font-weight: 800; letter-spacing: -0.01em">Também em alta</h2>
+<ol style="list-style: none; margin: 0; padding: 0">
+<li style="border-top: 1.5px solid #D9DCE6">
+<a href="evento.html" style="display: flex; align-items: flex-start; gap: 16px; padding: 18px 24px; color: #16193A; text-decoration: none">
+<span style="min-width: 26px; font-size: 28px; font-weight: 900; line-height: 1; color: #2B4BF2">2</span>
+<span style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 19px; font-weight: 700; line-height: 1.25">Enem: o que pode e o que não pode levar no dia da prova</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: #4B5068">
+<span>Educação</span>
+<svg width="78" height="14" viewBox="0 0 78 14" aria-hidden="true"><rect x="0" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="8" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="16" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="24" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="32" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="40" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="48" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="56" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="64" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="72" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect></svg>
+<span style="font-weight: 700; color: #16193A">7 portais</span>
+</span>
+</span>
+</a>
+</li>
+<li style="border-top: 1.5px solid #D9DCE6">
+<a href="evento.html" style="display: flex; align-items: flex-start; gap: 16px; padding: 18px 24px; color: #16193A; text-decoration: none">
+<span style="min-width: 26px; font-size: 28px; font-weight: 900; line-height: 1; color: #2B4BF2">3</span>
+<span style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 19px; font-weight: 700; line-height: 1.25">Golpes no Pix: os truques mais comuns e como não cair</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: #4B5068">
+<span>Economia</span>
+<svg width="78" height="14" viewBox="0 0 78 14" aria-hidden="true"><rect x="0" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="8" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="16" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="24" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="32" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="40" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="48" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="56" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="64" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="72" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect></svg>
+<span style="font-weight: 700; color: #16193A">6 portais</span>
+</span>
+</span>
+</a>
+</li>
+<li style="border-top: 1.5px solid #D9DCE6">
+<a href="evento.html" style="display: flex; align-items: flex-start; gap: 16px; padding: 18px 24px; color: #16193A; text-decoration: none">
+<span style="min-width: 26px; font-size: 28px; font-weight: 900; line-height: 1; color: #2B4BF2">4</span>
+<span style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 19px; font-weight: 700; line-height: 1.25">IA no celular: o que já funciona e o que ainda é promessa</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: #4B5068">
+<span>Tecnologia</span>
+<svg width="78" height="14" viewBox="0 0 78 14" aria-hidden="true"><rect x="0" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="8" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="16" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="24" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="32" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="40" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="48" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="56" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="64" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="72" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect></svg>
+<span style="font-weight: 700; color: #16193A">5 portais</span>
+</span>
+</span>
+</a>
+</li>
+<li style="border-top: 1.5px solid #D9DCE6">
+<a href="evento.html" style="display: flex; align-items: flex-start; gap: 16px; padding: 18px 24px; color: #16193A; text-decoration: none">
+<span style="min-width: 26px; font-size: 28px; font-weight: 900; line-height: 1; color: #2B4BF2">5</span>
+<span style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 19px; font-weight: 700; line-height: 1.25">COP: o que é a conferência do clima e por que ela importa</span>
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: #4B5068">
+<span>Mundo</span>
+<svg width="78" height="14" viewBox="0 0 78 14" aria-hidden="true"><rect x="0" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="8" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="16" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="24" y="0" width="6" height="14" rx="2" fill="#16193A"></rect><rect x="32" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="40" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="48" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="56" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="64" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect><rect x="72" y="0" width="6" height="14" rx="2" fill="#16193A" fill-opacity="0.2"></rect></svg>
+<span style="font-weight: 700; color: #16193A">4 portais</span>
+</span>
+</span>
+</a>
+</li>
+</ol>
+</div>
+
+</div>
+</div>
+</section>
+
+<section aria-labelledby="mais" style="max-width: 1200px; margin: 0 auto; padding: 56px 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px">
+<h2 id="mais" style="margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -0.03em">Mais notícias</h2>
+<p style="margin: 0; font-size: 15px; color: #4B5068">Atualizado há 12 minutos</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 24px">
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Esportes</span>
+<span style="font-size: 14px; color: #4B5068">há 3 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">Brasileirão na reta final: o que está em jogo em cada ponta da tabela</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">Título, vaga na Libertadores e a briga contra o rebaixamento: o resumo junta o que a imprensa esportiva está dizendo sobre as últimas rodadas.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">ge</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Estadão</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+2</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">4 portais</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Pop</span>
+<span style="font-size: 14px; color: #4B5068">há 4 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">Por que os planos de streaming com anúncio estão ganhando espaço</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">Mais baratos e com propaganda no meio, esses planos viraram aposta das plataformas. Entenda o que muda pra quem assina.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Folha</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">CNN Brasil</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+1</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">3 portais</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Brasil</span>
+<span style="font-size: 14px; color: #4B5068">há 5 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">Primeiro emprego: o que conferir antes de assinar a carteira</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">Salário, jornada, benefícios e período de experiência: um checklist rápido do que olhar no contrato e de onde tirar dúvidas.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Agência Brasil</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">g1</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+1</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">3 portais</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Mundo</span>
+<span style="font-size: 14px; color: #4B5068">há 6 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">O que a ONU pode (e não pode) fazer</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">Ela não tem exército próprio nem manda nos países. O resumo explica quem decide o quê e por que o Conselho de Segurança trava tantas decisões.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">BBC News Brasil</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">DW</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+2</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">4 portais</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Tecnologia</span>
+<span style="font-size: 14px; color: #4B5068">há 7 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">Senha ou chave de acesso: o que protege melhor sua conta</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">As chaves de acesso usam o próprio celular pra confirmar que é você e resistem melhor a golpes de phishing. Veja como ativar.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Tecnoblog</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Canaltech</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+1</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">3 portais</span>
+</div>
+</article>
+
+<article style="background: #FFFFFF; border: 2px solid #16193A; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 14px; font-weight: 700; border: 1.5px solid #16193A; border-radius: 999px; padding: 3px 11px">Ciência</span>
+<span style="font-size: 14px; color: #4B5068">há 8 h</span>
+</div>
+<h3 style="margin: 0; font-size: 22px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em"><a href="evento.html" style="color: #16193A; text-decoration: none">Celular antes de dormir: o que a ciência diz sobre a tela e o sono</a></h3>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">Não é só a luz da tela: o conteúdo que prende a atenção também atrasa o sono. O resumo reúne o que os estudos dizem e dicas simples pra desligar.</p>
+<div style="margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Folha</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">Agência Brasil</span>
+<span style="font-size: 13px; font-weight: 700; background: #F5F6F8; border: 1px solid #C3C7D4; border-radius: 8px; padding: 4px 9px">+1</span>
+</div>
+<span style="font-size: 14px; font-weight: 700">3 portais</span>
+</div>
+</article>
+
+</div>
+</section>
+
+<section style="background: #FFFFFF; border-top: 2px solid #16193A">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 40px; box-sizing: border-box; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap: 28px; align-items: start">
+
+<div style="background: #F5F6F8; border: 2px solid #16193A; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 28px; line-height: 1.1; font-weight: 900; letter-spacing: -0.025em">O resumo do dia no seu email</h2>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 18px; line-height: 1.5">Toda manhã, os assuntos que importam num email de 5 minutos de leitura.</p>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="email-news" style="font-size: 15px; font-weight: 700">Seu email</label>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<input id="email-news" type="email" placeholder="voce@email.com" style="flex: 1 1 220px; min-height: 48px; padding: 0 14px; box-sizing: border-box; background: #FFFFFF; color: #16193A; border: 2px solid #16193A; border-radius: 12px; font-family: inherit; font-size: 16px">
+<button type="button" style="min-height: 48px; padding: 0 22px; background: #16193A; color: #FFFFFF; border: 2px solid #16193A; border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer">Assinar</button>
+</div>
+</div>
+</div>
+
+<div id="apoie" style="background: #FFE45C; border: 2px solid #16193A; border-radius: 18px; box-shadow: 6px 6px 0 #16193A; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 28px; line-height: 1.1; font-weight: 900; letter-spacing: -0.025em">Ler sempre vai ser de graça</h2>
+<p style="margin: 0; font-family: 'Newsreader', Georgia, 'Times New Roman', serif; font-size: 18px; line-height: 1.5">O Papo Reto se mantém com o apoio de quem lê. Qualquer valor ajuda a pagar o servidor e a IA que faz os resumos.</p>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<a href="#" style="min-height: 48px; display: flex; align-items: center; padding: 0 22px; box-sizing: border-box; background: #2B4BF2; color: #FFFFFF; border: 2px solid #16193A; border-radius: 12px; font-size: 16px; font-weight: 700; text-decoration: none">Apoiar com Pix</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #16193A; font-size: 16px; font-weight: 700">Ver mural de apoiadores</a>
+</div>
+</div>
+
+</div>
+</section>
+</main>
+
+<footer style="background: #16193A; color: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 40px; box-sizing: border-box; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 10px; max-width: 460px">
+<span style="font-size: 24px; font-weight: 900; letter-spacing: -0.035em; line-height: 1">papo reto</span>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #C9CDDA">Resumos feitos por IA a partir de matérias de portais jornalísticos, sempre com link pra matéria original.</p>
+</div>
+<nav aria-label="Rodapé" style="display: flex; flex-wrap: wrap; gap: 0 24px">
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 500">Como usamos IA</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 500">Nossas fontes</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 500">Para devs: MCP público</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 500">Sobre o projeto</a>
+<a href="#" style="min-height: 44px; display: flex; align-items: center; color: #FFFFFF; font-size: 15px; font-weight: 500">Privacidade</a>
+</nav>
+</div>
+</footer>
+
+</div>
+</body>
+</html>
