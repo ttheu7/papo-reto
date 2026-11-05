@@ -222,4 +222,18 @@ describe('ColetarNoticias', () => {
       expect(noticias.noticias[0]?.vetor).toBeNull();
     });
   });
+
+  it('descarta listas de vídeos e chamadas de programa', async () => {
+    const fontes = new FontesEmMemoria([fonte({ id: 1 })]);
+    const leitor = new LeitorRssFalso({
+      'https://fonte1.exemplo/rss': [
+        item('VÍDEOS: Bom Dia Goiás desta quinta-feira', 'https://g1.exemplo/1'),
+        item('Assista ao Bom Dia ES', 'https://g1.exemplo/2'),
+        item('Vídeo mostra o resgate de um cachorro', 'https://g1.exemplo/3'),
+      ],
+    });
+    const r = await coletor(fontes, leitor).executar();
+    expect(r.novasNoticias).toBe(1);
+    expect(noticias.noticias.map((n) => n.url)).toEqual(['https://g1.exemplo/3']);
+  });
 });

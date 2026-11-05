@@ -126,4 +126,17 @@ describe('GerarDadosDoSite', () => {
     await caso.executar();
     expect((escritor.arquivos.get('eventos.json') as EventosJson).eventos[0]).toMatchObject({ resumo: null, geradoPorIa: false, categoria: null });
   });
+
+  it('deixa de fora acontecimentos só com listas de vídeos ou chamadas de programa', async () => {
+    const m = (titulo: string): MateriaPublica => ({ portal: 'g1', titulo, url: `https://g1.exemplo/${titulo.length}`, publicadaEm: horasAtras(1), exigeAssinatura: false });
+    const { caso, escritor } = gerar(
+      [card('programa', 1), card('noticia', 2)],
+      new Map([
+        ['programa', [m('VÍDEOS: Bom Dia Goiás de quinta-feira'), m('Assista ao Bom Dia ES')]],
+        ['noticia', [m('Vídeo mostra o resgate de um cachorro')]],
+      ]),
+    );
+    await caso.executar();
+    expect((escritor.arquivos.get('eventos.json') as EventosJson).eventos.map((e) => e.id)).toEqual(['noticia']);
+  });
 });

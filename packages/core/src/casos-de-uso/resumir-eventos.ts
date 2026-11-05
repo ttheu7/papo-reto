@@ -1,3 +1,4 @@
+import { soProgramas } from '../agrupamento';
 import type { ErroDeExecucao, EventoParaResumir, ModeloIa, ResumoGerado } from '../entidades';
 import { ErroCotaIa, mensagemDe } from '../erros';
 import type { Registro, RepositorioExecucoes, RepositorioResumos, Relogio, ServicoIa } from '../portas';
@@ -74,10 +75,13 @@ export class ResumirEventos {
 
     const categorias = await d.resumos.categorias();
     const idDaCategoria = new Map(categorias.map((c) => [c.slug, c.id]));
-    const eventos = await d.resumos.eventosSemResumo({
-      limite: tamanhoDoLote * maximoDeChamadas,
-      desde: new Date(d.agora().getTime() - janela * 3_600_000),
-    });
+    // Listas de vídeos e chamadas de programa gravadas antes do filtro da coleta não gastam cota.
+    const eventos = (
+      await d.resumos.eventosSemResumo({
+        limite: tamanhoDoLote * maximoDeChamadas,
+        desde: new Date(d.agora().getTime() - janela * 3_600_000),
+      })
+    ).filter((e) => !soProgramas(e.materias.map((m) => m.titulo)));
 
     lotes: for (let i = 0; i < eventos.length && chamadas < maximoDeChamadas; i += tamanhoDoLote) {
       const lote = eventos.slice(i, i + tamanhoDoLote);

@@ -1,3 +1,4 @@
+import { soProgramas } from '../agrupamento';
 import type { CardDeEvento, MateriaPublica } from '../entidades';
 import type { EscritorDeDados, Registro, RepositorioSite, Relogio } from '../portas';
 
@@ -62,10 +63,13 @@ export class GerarDadosDoSite {
     const desdeHoje = agora.getTime() - (this.opcoes.janelaDeHojeEmHoras ?? 24) * HORA;
 
     // Busca uma margem a mais para o "hoje" não ficar de fora quando houver muitos eventos.
-    const cards = await d.site.cardsRecentes({
+    const recentes = await d.site.cardsRecentes({
       desde: new Date(agora.getTime() - (this.opcoes.janelaEmHoras ?? 48) * HORA),
       limite: maximo * 4,
     });
+    // Acontecimentos só com listas de vídeos ou chamadas de programa, gravados antes do filtro da coleta, ficam de fora.
+    const materias = await d.site.materiasDosEventos(recentes.map((c) => c.id));
+    const cards = recentes.filter((c) => !soProgramas((materias.get(c.id) ?? []).map((m) => m.titulo)));
 
     const hoje = cards
       .filter((c) => c.publicadoEm.getTime() >= desdeHoje)
@@ -75,7 +79,6 @@ export class GerarDadosDoSite {
     const mais = cards.filter((c) => !idsDeHoje.has(c.id)).slice(0, Math.max(0, maximo - hoje.length));
     const selecionados = [...hoje, ...mais].sort((a, b) => b.publicadoEm.getTime() - a.publicadoEm.getTime());
 
-    const materias = await d.site.materiasDosEventos(selecionados.map((c) => c.id));
     const paraJson = (c: CardDeEvento) => eventoJson(c, materias.get(c.id) ?? []);
     const geradoEm = agora.toISOString();
 

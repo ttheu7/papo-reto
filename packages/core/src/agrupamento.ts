@@ -63,13 +63,18 @@ export function semelhanca(a: Set<string>, b: Set<string>): number {
  */
 export const SEMELHANCA_MINIMA_VETOR = 0.88;
 
-// Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") não são um fato: são
-// parecidos entre si sem falar da mesma coisa, então nunca se agrupam.
+// Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") não são notícia: a coleta
+// os descarta, e os que já estavam no banco nunca se agrupam, não vão para o site nem para a IA.
 const PROGRAMA = /^\s*(v[íi]deos\b|assista\b)/i;
 
 /** Verdadeiro para títulos de programa ou de lista de vídeos, que nunca se agrupam. */
 export function ehTituloDePrograma(titulo: string): boolean {
   return PROGRAMA.test(titulo);
+}
+
+/** Verdadeiro quando há títulos e todos são de programa: o acontecimento não é notícia. */
+export function soProgramas(titulos: string[]): boolean {
+  return titulos.length > 0 && titulos.every(ehTituloDePrograma);
 }
 
 /** Semelhança de cosseno entre dois vetores, de -1 a 1 (0 se algum for vazio). */

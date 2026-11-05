@@ -191,4 +191,18 @@ describe('ResumirEventos com IA de reserva', () => {
     expect(reserva.chamadas).toHaveLength(0);
     expect(r).toMatchObject({ resumosGerados: 0, usouReserva: false });
   });
+
+  it('não manda para a IA acontecimentos só com listas de vídeos', async () => {
+    const execucoes = new ExecucoesEmMemoria();
+    const execucaoId = await execucoes.iniciar(AGORA);
+    const programa: EventoParaResumir = { id: 'p', materias: [{ portal: 'g1', titulo: 'VÍDEOS: Bom Dia PE', descricao: null }] };
+    const repo = new ResumosEmMemoria(MODELO, CATEGORIAS, [programa, evento('e1')]);
+    const ia = new IaFalsa(async ({ eventos }) => ({
+      resumos: eventos.map((e) => ({ eventoId: e.id, titulo: 'T', texto: 'Uma.', categoriaSlug: null })),
+      tokensEntrada: 1,
+      tokensSaida: 1,
+    }));
+    await new ResumirEventos({ resumos: repo, execucoes, ia, registro: new RegistroMudo(), agora: () => AGORA }).executar(execucaoId);
+    expect(ia.chamadas[0]?.eventos.map((e) => e.id)).toEqual(['e1']);
+  });
 });

@@ -1,7 +1,7 @@
 import type { ErroDeExecucao, Fonte, NovaNoticia, ParecidoPorVetor, ResultadoDaColeta } from '../entidades';
 import { mensagemDe } from '../erros';
 import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio, ServicoDeVetores } from '../portas';
-import { agruparNoticias, textoParaVetor } from '../agrupamento';
+import { agruparNoticias, ehTituloDePrograma, textoParaVetor } from '../agrupamento';
 import { normalizarUrl } from '../url';
 
 export interface DependenciasDaColeta {
@@ -153,7 +153,8 @@ export class ColetarNoticias {
     for (const item of itens) {
       const titulo = item.titulo.trim().slice(0, TAMANHO_MAXIMO_DO_TITULO);
       const url = normalizarUrl(item.link);
-      if (!titulo || !url || vistas.has(url)) continue;
+      // Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia...", "Assista...") não são notícia.
+      if (!titulo || !url || vistas.has(url) || ehTituloDePrograma(titulo)) continue;
 
       // Sem data, ou com data no futuro, vale o momento da coleta.
       const data = item.publicadaEm && item.publicadaEm.getTime() <= agora.getTime() ? item.publicadaEm : agora;
