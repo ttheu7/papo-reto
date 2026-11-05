@@ -30,7 +30,8 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 ## ✨ Funcionalidades
 
 ### Para quem lê:
-- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando, com o resumo e o link para a matéria (sem personalização e com fim)
+- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando (ou com a roda do mouse), com o resumo e o link para a matéria (sem personalização e com fim)
+- ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
 - ✅ Indicador de cobertura: barrinhas mostram quantos dos portais acompanhados noticiaram cada assunto
@@ -84,6 +85,9 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - **Groq** - Resumos de reserva; modelo de reserva lido da tabela `modelo_ia` (hoje `llama-3.3-70b-versatile`)
 - **Mistral** (`mistral-embed`) - Vetores do título e da descrição para o agrupamento
 - **pgvector** - Compara os vetores dentro do banco
+
+### Imagens (planos gratuitos):
+- **Pexels** e **Unsplash** - Imagens ilustrativas, buscadas com as palavras-chave que a IA sugere; a Pexels primeiro, o Unsplash de reserva
 
 ### Infraestrutura e qualidade:
 - **GitHub Actions** - Coleta agendada, migrations e publicação
@@ -229,6 +233,10 @@ GROQ_API_KEY=
 
 # Mistral. Opcional: vetores (título + descrição) para o agrupamento. Sem ela, o agrupamento compara as palavras.
 MISTRAL_API_KEY=
+
+# Pexels e Unsplash ("Access Key"). Opcionais: imagens ilustrativas. Sem as duas, o site segue só com texto.
+PEXELS_API_KEY=
+UNSPLASH_ACCESS_KEY=
 ```
 
 Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase.co`) só funciona em IPv6 e falha no GitHub Actions.
@@ -241,6 +249,8 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | GitHub Actions | `GEMINI_API_KEY` | Resumos (principal). Opcional |
 | GitHub Actions | `GROQ_API_KEY` | Resumos (reserva). Opcional: sem as duas, o coletor pula os resumos |
 | GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
+| GitHub Actions | `PEXELS_API_KEY` | Imagens ilustrativas (o primeiro acervo). Opcional |
+| GitHub Actions | `UNSPLASH_ACCESS_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
 | `.env` local | As mesmas variáveis | Rodar o coletor e o gerador na máquina |
 
 ### Dados do banco:
@@ -268,7 +278,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 |---|---|
 | `npm test` | Testes (Vitest) |
 | `npm run typecheck` | TypeScript estrito em todos os pacotes e `astro check` no site |
-| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos |
+| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos; com `PEXELS_API_KEY` ou `UNSPLASH_ACCESS_KEY`, procura as imagens ilustrativas |
 | `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento. Com `-- --banco`, usa as notícias recentes do banco e compara o vetor só do título com o do título + descrição (não grava nada) |
 | `npm run dados:site` | Gera `apps/web/public/dados/*.json` a partir do banco |
 | `npm run dev:web` | Servidor de desenvolvimento do site |
@@ -316,7 +326,11 @@ Acontecimentos das últimas 48 horas, até 80, os mais recentes primeiro.
       "criadoEm": "ISO", "atualizadoEm": "ISO", "publicadoEm": "ISO",
       "materias": [
         { "portal": "g1", "titulo": "…", "url": "https://…", "publicadaEm": "ISO", "exigeAssinatura": false }
-      ]
+      ],
+      "imagem": {                            // ilustrativa, ou null (notícia sensível ou sem imagem achada)
+        "url": "https://images.pexels.com/…", "largura": 1600, "altura": 1067, "cor": "#334455",
+        "provedor": "Pexels", "autor": "…", "urlAutor": "https://…", "urlPagina": "https://…"
+      }
     }
   ]
 }
@@ -403,6 +417,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
 - [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, só com texto
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
+- [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
 
 #### Depois da 1.0:
@@ -426,11 +441,14 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Público jovem e dados pessoais:
 - ✅ Sem anúncios, sem perfilamento e sem ferramentas de rastreamento (ECA Digital, Lei 15.211/2025)
 - ✅ Coleta mínima de dados pessoais (LGPD): o site não pede cadastro nem guarda nada de quem lê; só a escolha do tema fica no próprio navegador (`localStorage`)
+- ✅ As imagens vêm direto da Pexels ou do Unsplash, sem dizer de que página foram pedidas (`referrerpolicy="no-referrer"`); o acervo vê só o IP de quem carrega a imagem. Não há script nem cookie de terceiros
 - ✅ Nada de quem lê é enviado para as IAs: elas recebem só texto público dos feeds (o Google pode usar o que recebe no plano gratuito; a Mistral diz que os dados da API não treinam modelos)
 
 ### Conteúdo e direito autoral:
 - ✅ O site mostra só título, resumo próprio e link para a matéria original. Texto integral, com crédito, apenas de fontes que permitem republicação (Agência Brasil)
-- ✅ Sem imagens dos portais: o visual é tipográfico
+- ✅ Sem imagens dos portais (direito autoral: a foto é obra protegida, e o crédito não substitui a autorização)
+- ✅ Imagens só de acervos gratuitos com licença para isso (Pexels e Unsplash), marcadas como "Imagem ilustrativa", com crédito e link para o fotógrafo. A IA não sugere imagem para crimes, mortes, tragédias com vítimas nem para notícias sobre uma pessoa específica, porque ali uma foto ilustrativa pode enganar ou ferir
+- ✅ Sem posts de redes sociais por embed: o professor sugeriu, mas os scripts do Instagram, do X e do TikTok mandam à plataforma a visita de quem lê antes de qualquer clique, o que vai contra o ECA Digital e a LGPD
 - ✅ Todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e oferece um jeito de reportar erro
 - ✅ O resumo sai só dos títulos e descrições dos feeds, e a IA é instruída a não inventar fatos
 
@@ -477,6 +495,7 @@ Para dúvidas, problemas ou erros em resumos:
 - Aos portais que mantêm feeds RSS abertos: g1, Folha, Estadão, CNN Brasil, BBC, Agência Brasil e Tecnoblog
 - Às comunidades do Astro, do Supabase e das bibliotecas usadas no projeto
 - Às fundições das fontes Newsreader e Figtree, distribuídas pelo Fontsource
+- Aos fotógrafos que compartilham o trabalho na Pexels e no Unsplash
 
 ---
 
