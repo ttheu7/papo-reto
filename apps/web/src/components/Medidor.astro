@@ -1,0 +1,41 @@
+---
+// Indicador de cobertura: uma barrinha por portal acompanhado, cheia para cada portal que noticiou o assunto.
+import { totalDePortais } from '../lib/dados';
+
+interface Props { cobertura: number; grande?: boolean }
+const { cobertura, grande = false } = Astro.props;
+const total = Math.max(totalDePortais, cobertura);
+const rotulo = cobertura === 1 ? `Noticiado por 1 de ${total} portais acompanhados` : `Noticiado por ${cobertura} de ${total} portais acompanhados`;
+const barras = Array.from({ length: total }, (_, i) => i < cobertura);
+---
+{grande ? (
+  <figure class="medidor medidor--grande">
+    <span class="medidor__barras" aria-hidden="true">
+      {barras.map((cheia, i) => <span class:list={{ cheia }} style={`--i:${i}`} />)}
+    </span>
+    <figcaption>
+      <strong>{cobertura} de {total}</strong> portais acompanhados {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto
+    </figcaption>
+  </figure>
+) : (
+  <span class="medidor medidor--curto" role="img" aria-label={rotulo} title={rotulo}>
+    {barras.map((cheia) => <span class:list={{ cheia }} />)}
+  </span>
+)}
+
+<style>
+  .medidor--curto { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; flex: none; }
+  .medidor--curto > span { width: 5px; height: 100%; border-radius: var(--raio); background: var(--toque); }
+  .medidor--curto > span.cheia { background: currentColor; }
+
+  .medidor--grande { display: grid; gap: 12px; margin: 0; width: 100%; }
+  .medidor__barras { display: flex; gap: 6px; height: 48px; }
+  .medidor__barras > span { flex: 1; border-radius: var(--raio); background: var(--toque); }
+  .medidor__barras > span.cheia { background: var(--ink); }
+  .medidor--grande figcaption { font-size: var(--step-small); color: var(--muted); }
+  .medidor--grande strong { color: var(--ink); font-weight: 600; }
+  @media (prefers-reduced-motion: no-preference) {
+    .medidor__barras > span.cheia { transform-origin: bottom; animation: crescer 700ms var(--ease-expo) both; animation-delay: calc(var(--i) * 50ms + 150ms); }
+  }
+  @keyframes crescer { from { transform: scaleY(0.2); } }
+</style>

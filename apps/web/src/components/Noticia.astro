@@ -1,7 +1,8 @@
 ---
 // Uma notícia na lista: editoria, hora, manchete (o link) e o resumo, quando houver.
 import type { Evento } from '../lib/dados';
-import { caminho, quando, portaisDe, exigeAssinatura } from '../lib/formato';
+import { caminho, quando, quemNoticiou, exigeAssinatura } from '../lib/formato';
+import Medidor from './Medidor.astro';
 
 interface Props { evento: Evento; geradoEm: string; mostrarCategoria?: boolean; comResumo?: boolean }
 const { evento: e, geradoEm, mostrarCategoria = true, comResumo = true } = Astro.props;
@@ -11,7 +12,8 @@ const slug = e.categoria?.slug ?? 'geral';
   <h3 class="noticia__titulo"><a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
   <p class="noticia__meta">
     {mostrarCategoria && e.categoria && <span class="editoria">{e.categoria.nome}</span>}
-    <span>{portaisDe(e).join(', ')}</span>
+    <Medidor cobertura={e.cobertura} />
+    <span>{quemNoticiou(e)}</span>
     <span aria-hidden="true">·</span>
     <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time>
     {exigeAssinatura(e) && <span class="assinatura">· Exige assinatura</span>}

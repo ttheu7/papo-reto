@@ -1,8 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import ListaDeNoticias from '../components/ListaDeNoticias.astro';
+import Medidor from '../components/Medidor.astro';
 import { categorias, eventos, hoje, portaisAtuais } from '../lib/dados';
-import { caminho, exigeAssinatura, plural, portaisDe, quando, REPOSITORIO } from '../lib/formato';
+import { caminho, exigeAssinatura, plural, portaisDe, quando, quemNoticiou, REPOSITORIO } from '../lib/formato';
 
 const geradoEm = eventos.geradoEm;
 const doDia = hoje.eventos.length > 0 ? hoje.eventos : eventos.eventos.slice(0, 5);
@@ -25,6 +26,7 @@ const fonteDaManchete = manchete?.materias[0];
         <h3 class="manchete__titulo" id="manchete-titulo"><a href={caminho(`evento/${manchete.id}/`)}>{manchete.titulo}</a></h3>
         <p class="manchete__meta">
           {manchete.categoria && <a class="editoria editoria--papel" href={caminho(`categoria/${manchete.categoria.slug}/`)}>{manchete.categoria.nome}</a>}
+          <Medidor cobertura={manchete.cobertura} />
           <span>{portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
         </p>
         <p class="manchete__resumo">{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
@@ -48,7 +50,8 @@ const fonteDaManchete = manchete?.materias[0];
                 <h3><a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
                 <p class="tambem__meta">
                   {e.categoria && <span class="editoria">{e.categoria.nome}</span>}
-                  <span>{portaisDe(e)[0]} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
+                  <Medidor cobertura={e.cobertura} />
+                  <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </p>
               </li>
             ))}
@@ -72,7 +75,7 @@ const fonteDaManchete = manchete?.materias[0];
               {c.eventos.map((e) => (
                 <li>
                   <a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a>
-                  <span class="bloco__quando">{portaisDe(e)[0]} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
+                  <span class="bloco__quando"><Medidor cobertura={e.cobertura} /> {quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </li>
               ))}
             </ul>
@@ -167,7 +170,7 @@ const fonteDaManchete = manchete?.materias[0];
   .bloco__lista a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
   .bloco__lista a:focus-visible { outline: none; }
   .bloco__lista li:has(a:focus-visible) { outline: 3px solid var(--ink); outline-offset: -3px; }
-  .bloco__quando { font-size: var(--step-small); color: var(--muted); }
+  .bloco__quando { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: var(--step-small); color: var(--muted); }
   @media (hover: hover) and (pointer: fine) { .bloco__lista li:hover { background: color-mix(in srgb, var(--cat) 35%, var(--papel)); } }
 
   /* ---------- Sobre: a carta e como a edição é feita ---------- */

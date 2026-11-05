@@ -40,3 +40,6 @@ export function portaisAtuais(): { nome: string; exigeAssinatura: boolean; mater
     }
   return [...mapa.values()].sort((a, b) => b.materias - a.materias);
 }
+
+/** Quantos portais o site acompanha agora: a escala do indicador de cobertura. */
+export const totalDePortais = Math.max(1, portaisAtuais().length);

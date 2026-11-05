@@ -41,5 +41,11 @@ type ComMaterias = { materias: { portal: string; exigeAssinatura: boolean }[] };
 /** Portais distintos que noticiaram o acontecimento, na ordem em que aparecem. */
 export const portaisDe = (e: ComMaterias) => e.materias.map((m) => m.portal).filter((p, i, a) => a.indexOf(p) === i);
 
+/** Quem noticiou, curto: o nome do portal, se for um só, ou "3 portais". */
+export function quemNoticiou(e: ComMaterias): string {
+  const portais = portaisDe(e);
+  return portais.length === 1 ? portais[0]! : `${portais.length} portais`;
+}
+
 /** Verdadeiro quando todas as matérias do acontecimento são de portais com assinatura. */
 export const exigeAssinatura = (e: ComMaterias) => e.materias.length > 0 && e.materias.every((m) => m.exigeAssinatura);

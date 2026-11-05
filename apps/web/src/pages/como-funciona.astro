@@ -17,7 +17,8 @@ const portais = portaisAtuais();
       <h2 id="fontes-titulo">De onde vêm as notícias</h2>
       <div class="passo__texto" data-revela>
         <p>A cada 30 minutos, um programa lê os feeds RSS públicos dos portais: a lista de manchetes que eles mesmos publicam para outros sites e aplicativos. Guardamos o título, o link e a data de cada matéria.</p>
-        <p>Cada notícia mostra quantos portais diferentes falaram do assunto. Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>.</p>
+        <p>Quando portais diferentes publicam sobre o mesmo fato, o Papo Reto junta as matérias num assunto só, comparando as palavras dos títulos. As barrinhas ao lado de cada notícia mostram quantos dos portais acompanhados falaram dele: quanto mais cheias, mais gente noticiou.</p>
+        <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>.</p>
       </div>
       {portais.length > 0 && (
         <ul class="portais" aria-label="Portais com notícias nas últimas 48 horas">

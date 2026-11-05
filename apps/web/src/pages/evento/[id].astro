@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Cabecalho from '../../components/Cabecalho.astro';
 import ListaDeNoticias from '../../components/ListaDeNoticias.astro';
+import Medidor from '../../components/Medidor.astro';
 import { eventos, type Evento } from '../../lib/dados';
 import { caminho, dataPorExtenso, linkParaReportar, portaisDe, quando } from '../../lib/formato';
 
@@ -47,6 +48,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 
     <section class="quem card" aria-labelledby="quem-titulo">
       <h2 id="quem-titulo">Quem noticiou</h2>
+      <Medidor cobertura={e.cobertura} grande />
       <ul class="quem__lista" data-revela>
         {e.materias.map((m) => (
           <li>
