@@ -192,6 +192,24 @@ describe('ColetarNoticias', () => {
     expect(noticias.noticias).toHaveLength(1);
   });
 
+  it('deixa para o feed do dono a matéria de outro portal acompanhado (Folha no feed do UOL)', async () => {
+    const fontes = new FontesEmMemoria([
+      fonte({ id: 1, nome: 'UOL', urlSite: 'https://www.uol.com.br' }),
+      fonte({ id: 2, nome: 'Folha', urlSite: 'https://www.folha.uol.com.br', exigeAssinatura: true }),
+    ]);
+    const leitor = new LeitorRssFalso({
+      'https://fonte1.exemplo/rss': [
+        item('Notícia do UOL', 'https://noticias.uol.com.br/a.htm'),
+        item('Matéria da Folha republicada no feed do UOL', 'https://www1.folha.uol.com.br/b.shtml'),
+      ],
+      'https://fonte2.exemplo/rss': [],
+    });
+
+    await coletor(fontes, leitor).executar();
+
+    expect(noticias.noticias.map((n) => [n.fonteId, n.url])).toEqual([[1, 'https://noticias.uol.com.br/a.htm']]);
+  });
+
   it('fecha a execução com falha se não conseguir gravar as notícias', async () => {
     noticias.falharAoGravar = true;
     const fontes = new FontesEmMemoria([fonte({ id: 1 })]);

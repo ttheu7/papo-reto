@@ -17,7 +17,6 @@ const CANDIDATOS: [nome: string, url: string][] = [
   ['Fox News (mundo)', 'https://moxie.foxnews.com/google-publisher/world.xml'],
   ['HLTV (Counter-Strike)', 'https://www.hltv.org/rss/news'],
   ['VLR.gg (Valorant)', 'https://www.vlr.gg/rss'],
-  ['Dot Esports', 'https://dotesports.com/feed'],
 ];
 
 const HORA = 60 * 60 * 1000;

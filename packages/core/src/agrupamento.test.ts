@@ -122,6 +122,12 @@ describe('títulos de programa', () => {
     expect(ehTituloDePrograma('Cristiano Ronaldo anuncia aposentadoria')).toBe(false);
   });
 
+  it('reconhece a página de jogo ao vivo do ge, mas não a notícia que fala em "ao vivo"', () => {
+    expect(ehTituloDePrograma('São Paulo x Ceará - Copa do Brasil Sub-20 2026 - Ao vivo - globoesporte.com')).toBe(true);
+    expect(ehTituloDePrograma('Flamengo x Palmeiras – Ao vivo')).toBe(true);
+    expect(ehTituloDePrograma('Lula fala ao vivo sobre a reforma tributária')).toBe(false);
+  });
+
   it('nunca se agrupam, nem por vetor, nem por palavras, nem pela sugestão do banco', () => {
     const v = [1, 0];
     const grupos = agruparNoticias(

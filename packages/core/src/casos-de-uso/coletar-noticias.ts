@@ -2,7 +2,7 @@ import type { ErroDeExecucao, Fonte, NovaNoticia, ParecidoPorVetor, ResultadoDaC
 import { mensagemDe } from '../erros';
 import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio, ServicoDeVetores } from '../portas';
 import { agruparNoticias, ehTituloDePrograma, textoParaVetor } from '../agrupamento';
-import { normalizarUrl } from '../url';
+import { ehDeOutroPortal, normalizarUrl } from '../url';
 
 export interface DependenciasDaColeta {
   fontes: RepositorioFontes;
@@ -47,7 +47,7 @@ export class ColetarNoticias {
     }
 
     // Cada fonte é lida isolada: a falha de uma não derruba as outras.
-    const resultados = await Promise.all(fontes.map((fonte) => this.lerFonte(fonte, execucaoId)));
+    const resultados = await Promise.all(fontes.map((fonte) => this.lerFonte(fonte, fontes, execucaoId)));
     let falhas = 0;
     const porUrl = new Map<string, NovaNoticia>();
     for (const r of resultados) {
@@ -118,12 +118,13 @@ export class ColetarNoticias {
   /** Lê o feed e devolve só as notícias que ainda não estão no banco. */
   private async lerFonte(
     fonte: Fonte,
+    todas: Fonte[],
     execucaoId: string,
   ): Promise<{ ok: true; novas: NovaNoticia[] } | { ok: false; erro: ErroDeExecucao }> {
     const { d } = this;
     try {
       const itens = await d.leitor.ler(fonte.urlFeed);
-      const candidatas = this.prepararNoticias(fonte, itens);
+      const candidatas = this.prepararNoticias(fonte, todas, itens);
       const existentes = candidatas.length ? await d.noticias.urlsExistentes(candidatas.map((n) => n.url)) : new Set<string>();
       const novas = candidatas.filter((n) => !existentes.has(n.url));
 
@@ -142,8 +143,11 @@ export class ColetarNoticias {
     }
   }
 
-  /** Normaliza, descarta o que não serve e remove duplicadas dentro do próprio feed. */
-  private prepararNoticias(fonte: Fonte, itens: Awaited<ReturnType<LeitorRss['ler']>>): NovaNoticia[] {
+  /**
+   * Normaliza, descarta o que não serve e remove duplicadas dentro do próprio feed. Link de outro
+   * portal acompanhado (a Folha no feed do UOL) fica para o feed do dono.
+   */
+  private prepararNoticias(fonte: Fonte, todas: Fonte[], itens: Awaited<ReturnType<LeitorRss['ler']>>): NovaNoticia[] {
     const agora = this.d.agora();
     const limite = agora.getTime() - (this.opcoes.idadeMaximaEmHoras ?? 24 * 7) * 3_600_000;
     const tamanhoDescricao = this.opcoes.tamanhoMaximoDaDescricao ?? 1000;
@@ -154,7 +158,7 @@ export class ColetarNoticias {
       const titulo = item.titulo.trim().slice(0, TAMANHO_MAXIMO_DO_TITULO);
       const url = normalizarUrl(item.link);
       // Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia...", "Assista...") não são notícia.
-      if (!titulo || !url || vistas.has(url) || ehTituloDePrograma(titulo)) continue;
+      if (!titulo || !url || vistas.has(url) || ehTituloDePrograma(titulo) || ehDeOutroPortal(url, fonte.nome, todas)) continue;
 
       // Sem data, ou com data no futuro, vale o momento da coleta.
       const data = item.publicadaEm && item.publicadaEm.getTime() <= agora.getTime() ? item.publicadaEm : agora;

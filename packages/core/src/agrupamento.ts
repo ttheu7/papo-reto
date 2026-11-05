@@ -66,10 +66,13 @@ export const SEMELHANCA_MINIMA_VETOR = 0.88;
 // Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") não são notícia: a coleta
 // os descarta, e os que já estavam no banco nunca se agrupam, não vão para o site nem para a IA.
 const PROGRAMA = /^\s*(v[íi]deos\b|assista\b)/i;
+// Página de jogo em andamento do ge ("São Paulo x Ceará - Copa do Brasil Sub-20 - Ao vivo - globoesporte.com"):
+// "Ao vivo" entre separadores, como etiqueta do título. "Lula fala ao vivo..." é notícia e passa.
+const AO_VIVO = /(^|\s[-–|]\s)ao vivo(\s[-–|]\s|\s*$)/i;
 
-/** Verdadeiro para títulos de programa ou de lista de vídeos, que nunca se agrupam. */
+/** Verdadeiro para títulos de programa, de lista de vídeos ou de jogo ao vivo, que nunca se agrupam. */
 export function ehTituloDePrograma(titulo: string): boolean {
-  return PROGRAMA.test(titulo);
+  return PROGRAMA.test(titulo) || AO_VIVO.test(titulo);
 }
 
 /** Verdadeiro quando há títulos e todos são de programa: o acontecimento não é notícia. */
