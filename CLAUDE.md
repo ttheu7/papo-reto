@@ -4,7 +4,7 @@ Portal de notícias gratuito para o público jovem. Reúne o que os principais p
 
 Projeto acadêmico em grupo (Ciência da Computação, Unoesc Videira, disciplina PRATIC IV), com entrega de uma versão beta.
 
-**Idioma:** português do Brasil em tudo: textos da interface, nomes de tabelas, entidades, casos de uso, mensagens de commit e comentários.
+**Idioma:** os textos da interface são em português do Brasil.
 
 ## Arquitetura
 
@@ -121,7 +121,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 ## Fluxo de trabalho
 
 - Branch principal: `main`. Um push em `main` que mexe em `supabase/migrations/` é aplicado direto no banco de produção.
-- Commits pequenos, com mensagens em português.
+- Commits pequenos.
 - Antes de dar uma tarefa por concluída, rode os testes e a checagem de tipos.
 - Quando uma decisão mudar, atualize este arquivo e o README.
 - O README segue sempre a mesma estrutura de seções, nesta ordem, cada uma com o seu emoji: Funcionalidades, Tecnologias, Arquitetura, Instalação, Configuração, Uso, API (dados públicos), Deploy, Roadmap, Segurança e privacidade, Licença, Contribuindo, Suporte e Agradecimentos, com o índice no topo. Informação nova entra na seção certa, e não numa seção nova. Se faltar alguma definição (contato, nomes, prazos), pergunte em vez de inventar.

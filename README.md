@@ -425,12 +425,12 @@ Para contribuir:
 
 1. Leia o [`CLAUDE.md`](CLAUDE.md), que reúne as regras do projeto, e veja as tarefas em [`docs/tarefas/`](docs/tarefas/)
 2. Crie uma branch a partir da `main` (`git checkout -b nome-da-mudanca`)
-3. Faça commits pequenos, com mensagens em português
+3. Faça commits pequenos
 4. Antes de enviar, rode `npm test` e `npm run typecheck`
 5. Envie a branch e abra um Pull Request
 
 ### Diretrizes:
-- Português do Brasil em tudo: interface, tabelas, entidades, casos de uso, commits e comentários
+- Textos da interface em português do Brasil
 - `packages/core` não importa nada de infraestrutura; casos de uso são testados com falsos em memória, sem banco e sem rede
 - Mudou o banco? Nova migration. Nunca edite uma que já foi aplicada. Um push na `main` que mexe em `supabase/migrations/` vai direto para o banco de produção
 - Cor nova no site sempre como token, nos dois temas (claro e escuro)
