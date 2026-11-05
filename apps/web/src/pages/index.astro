@@ -27,7 +27,7 @@ const fotoDaManchete = imagemNaCapa(manchete);
         {manchete.categoria && <a class="chapeu" href={caminho(`categoria/${manchete.categoria.slug}/`)}>{manchete.categoria.nome}</a>}
         <h2 class="manchete__titulo" id="manchete-titulo"><a href={caminho(`evento/${manchete.id}/`)}>{manchete.titulo}</a></h2>
         {fotoDaManchete && <ImagemIlustrativa imagem={fotoDaManchete} prioridade class="manchete__foto" />}
-        <p class="manchete__resumo">{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
+        <p class="manchete__resumo">{manchete.resumo && <span class="selo" aria-hidden="true">Papo reto</span>}{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
         <p class="servico">
           <Medidor cobertura={manchete.cobertura} />
           <span>Noticiado por {portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
@@ -138,8 +138,11 @@ const fotoDaManchete = imagemNaCapa(manchete);
   .manchete :global(.manchete__foto) { justify-self: stretch; }
   .manchete :global(.manchete__foto img) { aspect-ratio: 2 / 1; }
   .manchete__resumo { font-size: var(--step-lead); line-height: 1.42; columns: 2 18em; column-gap: calc(var(--gutter) * 1.25); column-rule: 1px solid var(--fio-claro); }
-  /* Capitular: a primeira letra do resumo, como na abertura de matéria do jornal. */
-  .manchete__resumo::first-letter { float: left; font-size: 3.4em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
+  /* O selo "Papo reto" abre o resumo da manchete: é a marca do que o site faz, explicar sem enrolação. */
+  .selo {
+    display: inline-block; margin-right: 10px; padding: 5px 8px 4px; border: 2px solid var(--ink); transform: rotate(-2deg);
+    font: 600 var(--step-small) / 1 var(--sans); letter-spacing: 0.14em; text-transform: uppercase; vertical-align: 0.2em;
+  }
   .manchete__acoes { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; padding-top: 4px; }
   .manchete__fonte { display: inline-flex; align-items: center; min-height: 44px; font: 600 var(--step-small) var(--sans); text-decoration-color: currentColor; }
   .manchete__ia { font: 400 var(--step-small) var(--sans); color: var(--muted); }

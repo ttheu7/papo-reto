@@ -37,7 +37,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 
   <div class="moldura evento">
     <section class="minuto" aria-labelledby="minuto-titulo" data-revela>
-      <h2 class="rotulo" id="minuto-titulo">Em 1 minuto</h2>
+      <h2 class="rotulo minuto__rotulo" id="minuto-titulo">Em 1 minuto {e.resumo && <span class="carimbo-explicado" aria-hidden="true">Explicado</span>}</h2>
       {e.resumo ? (
         <>
           <p class="minuto__texto">{e.resumo}</p>
@@ -96,6 +96,9 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .minuto .rotulo, .quem .rotulo { justify-self: stretch; }
   .minuto__texto { font-size: var(--step-lead); line-height: 1.45; max-width: 40ch; }
   .minuto__texto::first-letter { float: left; font-size: 3.2em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
+  /* Carimbo "Explicado" batido no rótulo do resumo. */
+  .minuto__rotulo { display: flex; align-items: center; gap: 14px; }
+  .carimbo-explicado { display: inline-block; padding: 5px 8px 4px; border: 2px solid var(--ink); transform: rotate(-4deg); letter-spacing: 0.14em; }
   .minuto__aviso { font: 400 var(--step-small) / 1.45 var(--sans); color: var(--muted); max-width: 56ch; }
   .quem__item { display: grid; gap: 4px; padding: 12px 0 14px; border-bottom: 1px solid var(--fio-claro); }
   .quem__titulo { font: 650 var(--step-body) / 1.25 var(--serif); }

@@ -3,10 +3,14 @@
 // em versalete. Na capa o nome é o h1 e aparece grande; nas outras páginas ele é menor e leva à capa.
 import { categorias, eventos } from '../lib/dados';
 import { caminho, dataPorExtenso, horaDe } from '../lib/formato';
+import { textoDaEdicao } from '../lib/edicao';
+import Carimbo from './Carimbo.astro';
 
 interface Props { capa?: boolean }
 const { capa = false } = Astro.props;
 const geradoEm = eventos.geradoEm;
+// "quarta-feira, 4 de novembro": o dia da semana some nas telas mais estreitas.
+const [semana, diaDoMes] = dataPorExtenso(geradoEm).split(', ');
 const editorias = categorias.categorias.filter((c) => c.total > 0);
 // Onde estamos, para marcar o item do menu: o slug da editoria, "giro" ou "como-funciona".
 const partes = Astro.url.pathname.split('/').filter(Boolean);
@@ -14,8 +18,8 @@ const aqui = partes.at(-1) ?? '';
 ---
 <header class:list={['topo moldura', { 'topo--capa': capa }]}>
   <div class="topo__linha">
-    <p class="topo__data">{dataPorExtenso(geradoEm)}</p>
-    <p class="topo__edicao">Edição das {horaDe(geradoEm)}<span class="topo__ha" data-ha={geradoEm}></span></p>
+    <p class="topo__data"><span class="topo__semana">{semana}, </span>{diaDoMes}</p>
+    <p class="topo__edicao"><span class="topo__numero">{textoDaEdicao(geradoEm)} · </span>Edição das {horaDe(geradoEm)}<span class="topo__ha" data-ha={geradoEm}></span></p>
     <div class="topo__direita">
       <span class="topo__gratis">Grátis · sem anúncio</span>
       <button type="button" class="topo__tema" data-tema-botao aria-pressed="false" hidden><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="2" /><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" /></svg>Modo escuro</button>
@@ -24,6 +28,7 @@ const aqui = partes.at(-1) ?? '';
   {capa ? (
     <>
       <h1 class="topo__nome" translate="no">Papo Reto</h1>
+      <div class="topo__carimbo"><Carimbo /></div>
       <p class="topo__lema">As notícias do dia explicadas em poucas frases, com o link de quem noticiou</p>
     </>
   ) : (
@@ -76,13 +81,15 @@ const aqui = partes.at(-1) ?? '';
 </script>
 
 <style>
-  .topo { padding-top: 6px; }
+  .topo { padding-top: 6px; position: relative; }
+  /* O carimbo fica na margem direita do nome, como um carimbo batido na primeira página. */
+  .topo__carimbo { position: absolute; right: var(--margin); top: 60px; width: clamp(84px, 9vw, 128px); }
   .topo__linha {
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px 16px;
     padding: 6px 0; border-bottom: 1px solid var(--fio);
     font: 600 var(--step-small) / 1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase;
   }
-  .topo__data::first-letter { text-transform: uppercase; }
+  .topo__semana { text-transform: capitalize; }
   .topo__edicao { text-align: center; font-variant-numeric: tabular-nums; }
   .topo__ha { text-transform: none; letter-spacing: 0; color: var(--muted); }
   .topo__direita { display: flex; justify-content: flex-end; align-items: center; gap: 8px 16px; flex-wrap: wrap; }
@@ -111,10 +118,13 @@ const aqui = partes.at(-1) ?? '';
   }
   .topo__menu a[aria-current='page'] { border-bottom-color: var(--ink); }
   @media (hover: hover) and (pointer: fine) { .topo__menu a:hover { border-bottom-color: var(--ink); } }
+  @media (max-width: 380px) { .topo__semana { display: none; } }
   @media (max-width: 760px) {
     .topo__linha { grid-template-columns: 1fr auto; letter-spacing: 0.04em; font-size: 0.75rem; }
     .topo__edicao { text-align: right; }
     .topo__gratis { display: none; }
+    .topo__numero { display: none; }
+    .topo__carimbo { top: 46px; right: var(--margin); width: 54px; }
     .topo__direita { grid-column: 1 / -1; justify-content: flex-start; }
     .topo__tema { min-height: 32px; }
     .topo__menu ul { justify-content: flex-start; }
