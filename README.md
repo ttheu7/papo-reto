@@ -436,6 +436,7 @@ Para contribuir:
 - `packages/core` não importa nada de infraestrutura; casos de uso são testados com falsos em memória, sem banco e sem rede
 - Mudou o banco? Nova migration. Nunca edite uma que já foi aplicada. Um push na `main` que mexe em `supabase/migrations/` vai direto para o banco de produção
 - Cor nova no site sempre como token, nos dois temas (claro e escuro)
+- Mudou o visual? Confira com as skills taste-skill e web-design-guidelines; o comando e a lista de falhas esperadas estão em "Visual › Conferir", no `CLAUDE.md`
 - Quando uma decisão mudar, atualize o `CLAUDE.md` e este README, mantendo a estrutura de seções deste arquivo
 
 ---

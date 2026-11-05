@@ -98,7 +98,24 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - **Interação:** os botões de editoria em "Últimas notícias" filtram a lista ali mesmo e gravam a escolha no endereço (`?editoria=mundo`); a lista mostra 16 por vez ("Mostrar mais notícias"). Sem JavaScript, a lista aparece inteira.
 - **Imagens:** sem fotos dos portais. Só imagens de acervos de domínio público ou CC0, nunca ao lado de uma notícia específica. Hoje o site é 100% tipográfico e gráfico.
 - **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA, alvos de 44px, `prefers-reduced-motion`).
-- **Conferir:** `node ~/.claude/skills/design-taste-frontend/scripts/inspect.mjs http://localhost:4321/papo-reto/ --allow few-pictures,no-footage` com o `npm run preview -w @papo-reto/web` rodando. As manchetes longas de notícia passam de duas linhas (e por isso a página do acontecimento não tem um elemento dominante): é conteúdo de terceiros, não cortamos. A fonte diferente da sorteada também é aviso esperado.
+- **Conferir:** skills instaladas com `npx skills add Leonxlnx/taste-skill -g --agent claude-code -y` e `npx skills add vercel-labs/agent-skills --skill web-design-guidelines -g --agent claude-code -y`. A web-design-guidelines revisa os arquivos de `apps/web/src` (acessibilidade e boas práticas). A taste-skill 2.5 não tem mais o `inspect.mjs`: o verificador é o `consistency.mjs`, que lê o build. Como o site usa a base `/papo-reto/`, sirva o build dentro de uma pasta com esse nome (leva alguns minutos):
+
+  ```bash
+  npm run build:web
+  rm -rf /tmp/papo-reto-conferir && mkdir -p /tmp/papo-reto-conferir && cp -r apps/web/dist /tmp/papo-reto-conferir/papo-reto
+  cd /tmp/papo-reto-conferir && node ~/.claude/skills/design-taste-frontend/scripts/consistency.mjs papo-reto/index.html --root . --widths 1440,390 --page editorial
+  ```
+
+  Ele mede o site como página de empresa, então boa parte das falhas é **esperada** e não se corrige:
+  - **Sem fotos** (direito autoral): `no-visual`, `text-only`, `card-visual`.
+  - **Várias seções por tela**, como numa primeira página de jornal: `hero-screen`, `section-height`, `one-section`, `one-heading`, `section-gaps`, `section-air`, `flush`, `fold-*`.
+  - **Não é site de venda:** `nav` (o topo é o cabeçalho do jornal, sem ação principal), `cta`, `copy-headline` ("Papo Reto" é o nome), `copy-headings` e `copy-actions`/`copy-buttons` (manchetes são de terceiros).
+  - **Cor por editoria:** `button-styles` e `button-contrast` (as pílulas pastel são as editorias).
+  - **Grade de jornal:** `container-edges`, `off-grid`, `row-lines`, `row-gap` (blocos por editoria em número ímpar) e `heading-scale` (cinco tamanhos de letra só).
+  - **Movimento:** `scroll-reveal` e `hidden-content` (a entrada ao rolar só existe com JavaScript, sob `.js`; sem ele tudo aparece) e `hover-move` (o card muda de cor no hover, não sobe).
+  - **`text-contrast`:** pede 7:1 para a tinta fraca; a regra da casa é AA (4.5:1), e ela passa com 5.89:1.
+
+  Falha real é qualquer outra, principalmente `assets` (CSS sem carregar invalida tudo), `spill`, `off-viewport`, `cut-text`, `overlap-text`, `contrast`, `reduced-motion` e `links` apontando para página que não existe.
 
 ## Comandos
 
