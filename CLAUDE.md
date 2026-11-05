@@ -45,7 +45,8 @@ Regras:
 
 - Mudou o schema? Nova migration (`npm run db:nova -- nome`). Nunca edite uma migration já aplicada. O `banco.yml` aplica no push para `main`.
 - RLS ligado em todas as tabelas, sem políticas, de propósito. O navegador nunca lê o banco direto.
-- Antes de inserir notícias, filtre as URLs que já existem e só então crie evento e notícia (no MVP, um evento por notícia). Use `on conflict (url) do nothing` como rede de segurança.
+- Antes de inserir notícias, filtre as URLs que já existem. Depois, agrupe: cada notícia nova entra no acontecimento das últimas 48 horas com o título mais parecido ou abre um novo (`agruparNoticias`, em `packages/core/src/agrupamento.ts`, sem IA). Dois títulos são do mesmo fato com 3 ou mais palavras importantes em comum e pelo menos metade do título mais curto; acentos, plural simples, palavras vazias, datas e anos não contam. A gravação é uma transação só, com `on conflict (url) do nothing` como rede de segurança.
+- Um acontecimento que já tem resumo não é resumido de novo quando ganha matérias: o resumo continua o da primeira rodada.
 - Normalize as URLs antes de deduplicar. Os links da Folha vêm como `redir.folha.com.br/...*https://...`: use o trecho depois do `*`. Remova parâmetros de rastreio (`utm_*` e parecidos).
 - Plano gratuito: 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. Guarde só o necessário.
 
@@ -93,7 +94,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - **Cores:** neutras. Fundo `#efefed`, folhas `#ffffff`, folha interna `#f5f5f3`, rodapé `#e2e3e0`, tinta azul-marinho `#1f2b4d` (texto e botões), tinta fraca `#5d6479`. A única cor é a das editorias, em pastel e sempre com a tinta por cima: `data-cat="<slug>"` define `--cat` (tokens `--cat-*`). Notícia sem editoria fica em `--cat-geral`. Tudo em `apps/web/src/styles/global.css`.
 - **Fontes:** Newsreader (variável, títulos e textos de leitura) e Figtree 400/600 (interface: etiquetas, botões, metadados), servidas pelo próprio site via `@fontsource` (nenhuma chamada ao Google). A direção sorteou Erode; trocamos pela Newsreader porque ela existe no `@fontsource`.
 - **Modo escuro:** segue o aparelho (`prefers-color-scheme`) e tem o botão "Modo escuro" no topo, que grava a escolha em `localStorage` (`papo-reto:tema`) e marca `data-tema` no `<html>` antes de pintar. No escuro só os tokens mudam: papel `#1d2230`, fundo `#14171f`, tinta `#e9ebf1` e as editorias em tons fundos. Cor nova sempre como token, nos dois temas, nunca solta no componente.
-- **Regras da casa:** cinco tamanhos de letra (`--step-*`), um raio só (`--raio`, 22px) em cards, botões e etiquetas, sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título (editoria, portal e hora vêm abaixo da manchete). Cards da mesma linha têm a mesma altura, inclusive "Em 1 minuto" e "Quem noticiou" na página da notícia. Barra de rolagem com trilho transparente.
+- **Regras da casa:** cinco tamanhos de letra (`--step-*`), um raio só (`--raio`, 22px) em cards, botões e etiquetas, sem gradiente, sem sombra, sem linha fina, sem rótulo acima de título (editoria, portal e hora vêm abaixo da manchete). Indicador de cobertura (`components/Medidor.astro`): uma barrinha por portal acompanhado, cheia para cada portal que noticiou; curto nas listas e na capa, grande em "Quem noticiou". Cards da mesma linha têm a mesma altura, inclusive "Em 1 minuto" e "Quem noticiou" na página da notícia. Barra de rolagem com trilho transparente.
 - **Interação:** os botões de editoria em "Últimas notícias" filtram a lista ali mesmo e gravam a escolha no endereço (`?editoria=mundo`); a lista mostra 16 por vez ("Mostrar mais notícias"). Sem JavaScript, a lista aparece inteira.
 - **Imagens:** sem fotos dos portais. Só imagens de acervos de domínio público ou CC0, nunca ao lado de uma notícia específica. Hoje o site é 100% tipográfico e gráfico.
 - **Base:** mobile-first e acessível (HTML semântico, foco visível, contraste AA, alvos de 44px, `prefers-reduced-motion`).
@@ -112,7 +113,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 
 ## Código
 
-- `packages/core`: `ColetarNoticias`, `ResumirEventos`, `GerarDadosDoSite`, `normalizarUrl`, portas e o contrato dos JSONs (`casos-de-uso/gerar-dados-do-site.ts`). Falsos em memória para testes em `src/testes/falsos.ts`.
+- `packages/core`: `ColetarNoticias`, `ResumirEventos`, `GerarDadosDoSite`, `normalizarUrl`, `agruparNoticias`, portas e o contrato dos JSONs (`casos-de-uso/gerar-dados-do-site.ts`). Falsos em memória para testes em `src/testes/falsos.ts`.
 - `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`, prompt versionado em `gemini/prompt.ts`), logs JSON.
 - `apps/coletor`: `coletar.ts` e `dados-do-site.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.

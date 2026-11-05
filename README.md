@@ -32,6 +32,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### Para quem lê:
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
+- ✅ Indicador de cobertura: barrinhas mostram quantos dos portais acompanhados noticiaram cada assunto
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
 - ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop e Esportes
@@ -43,6 +44,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
+- ✅ Agrupamento das matérias sobre o mesmo fato, comparando as palavras dos títulos (sem IA)
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
 - ✅ Registro de cada rodada (novas notícias, resumos e erros) e, em cada resumo, do modelo, dos tokens e do custo
@@ -128,7 +130,7 @@ papo-reto/
 ```
 
 ### Como funciona:
-1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs e grava evento e notícia no Supabase.
+1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento (pelo título) e grava tudo no Supabase.
 2. Se houver `GEMINI_API_KEY`, o coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Sem chave, ou com a cota esgotada, essa etapa é pulada.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
@@ -381,7 +383,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
 
 #### Depois da 1.0:
-- [ ] **Agrupar matérias do mesmo acontecimento** - Hoje cada notícia vira um evento próprio
+- [ ] **Resumo atualizado quando o acontecimento cresce** - Hoje o resumo é feito uma vez só, com as matérias da primeira rodada
 - [ ] **MCP público** (`apps/mcp-publico`) - Os dados públicos como servidor MCP, no Cloudflare Workers
 - [ ] **MCP admin** (`apps/mcp-admin`) - Manutenção do banco pela máquina local
 - [ ] **Doações** - A tabela `doacao` já existe, mas ainda não é usada
