@@ -1,7 +1,7 @@
 import type { ErroDeExecucao, Fonte, NovaNoticia, ParecidoPorVetor, ResultadoDaColeta } from '../entidades';
 import { mensagemDe } from '../erros';
 import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio, ServicoDeVetores } from '../portas';
-import { agruparNoticias } from '../agrupamento';
+import { agruparNoticias, textoParaVetor } from '../agrupamento';
 import { normalizarUrl } from '../url';
 
 export interface DependenciasDaColeta {
@@ -88,7 +88,7 @@ export class ColetarNoticias {
   }
 
   /**
-   * Põe o vetor do título em cada notícia nova e pergunta ao banco o acontecimento gravado mais
+   * Põe o vetor (título + descrição) em cada notícia nova e pergunta ao banco o acontecimento gravado mais
    * parecido com cada uma. Se o serviço falhar, registra o erro e devolve vazio: o agrupamento
    * segue só com as palavras dos títulos.
    */
@@ -101,7 +101,8 @@ export class ColetarNoticias {
     const { d } = this;
     if (!d.vetores) return [];
     try {
-      const vetores = await d.vetores.vetorizar(novas.map((n) => n.titulo));
+      // Título com o começo da descrição: separa bem melhor o mesmo fato do mesmo assunto.
+      const vetores = await d.vetores.vetorizar(novas.map((n) => textoParaVetor(n.titulo, n.descricaoOriginal)));
       if (vetores.length !== novas.length) throw new Error(`recebi ${vetores.length} vetores para ${novas.length} títulos`);
       novas.forEach((n, i) => (n.vetor = vetores[i]!));
       return await d.noticias.parecidosPorVetor(vetores, desde);

@@ -1,5 +1,6 @@
 -- =====================================================================
--- Papo Reto: vetor do título (embedding da Mistral) para agrupar matérias
+-- Papo Reto: vetor da notícia (embedding da Mistral do título com o começo
+-- da descrição) para agrupar matérias
 -- O coletor grava o vetor de cada notícia nova e pergunta ao banco qual
 -- acontecimento recente tem o título mais parecido. A comparação roda aqui,
 -- para os vetores não trafegarem (5 GB de tráfego por mês no plano gratuito).
@@ -12,7 +13,7 @@ create extension if not exists vector with schema extensions;
 alter table public.noticia add column vetor extensions.vector;
 
 comment on column public.noticia.vetor is
-  'Embedding do título (uso interno do agrupamento). Apagado depois de 3 dias pela limpeza_diaria.';
+  'Embedding do título com o começo da descrição (uso interno do agrupamento). Apagado depois de 3 dias pela limpeza_diaria.';
 
 create or replace function public.limpeza_diaria()
 returns void
@@ -26,7 +27,7 @@ begin
    where descricao_original is not null
      and coletada_em < now() - interval '30 days';
 
-  -- O vetor do título só serve para agrupar nas primeiras 48 horas.
+  -- O vetor da notícia só serve para agrupar nas primeiras 48 horas.
   update public.noticia
      set vetor = null
    where vetor is not null

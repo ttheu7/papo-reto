@@ -32,7 +32,7 @@ O schema está em `supabase/migrations/`, e os dados iniciais em `supabase/seed.
 - `categoria(id, slug único, nome)`: lista fechada; a IA só classifica com esses slugs.
 - `fonte(id, nome, url_feed único, url_site, politica_uso, exige_assinatura, ativa, ultima_coleta_em, falhas_seguidas, ultimo_erro)`: um feed por linha. Feeds do mesmo portal usam o mesmo `nome`, porque a cobertura conta portais pelo nome.
 - `evento(id uuid, categoria_id, criado_em, atualizado_em)`: o acontecimento, que vira um card.
-- `noticia(id uuid, fonte_id, evento_id NOT NULL, titulo, url única e canônica, descricao_original, publicada_em, coletada_em, vetor)`. `vetor` (pgvector, schema `extensions`, sem dimensão fixa) é o embedding do título, de uso interno do agrupamento.
+- `noticia(id uuid, fonte_id, evento_id NOT NULL, titulo, url única e canônica, descricao_original, publicada_em, coletada_em, vetor)`. `vetor` (pgvector, schema `extensions`, sem dimensão fixa) é o embedding do título com o começo da descrição (`textoParaVetor`), de uso interno do agrupamento.
 - `resumo(id uuid, evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado, criado_em)`: o vigente é o mais recente do evento.
 - `modelo_ia(id, provedor, modelo, custo_entrada_1m, custo_saida_1m, ativo, reserva)`: no máximo um ativo (o principal dos resumos, hoje `gemini-3.5-flash-lite`) e no máximo um de reserva (hoje Groq `llama-3.3-70b-versatile`). O código lê o nome dos modelos daqui.
 - `execucao(id uuid, iniciada_em, finalizada_em, status, novas_noticias, resumos_gerados, erros jsonb)`: uma linha por rodada do coletor.
@@ -46,8 +46,9 @@ Regras:
 - Mudou o schema? Nova migration (`npm run db:nova -- nome`). Nunca edite uma migration já aplicada. O `banco.yml` aplica no push para `main`.
 - RLS ligado em todas as tabelas, sem políticas, de propósito. O navegador nunca lê o banco direto.
 - Antes de inserir notícias, filtre as URLs que já existem. Depois, agrupe: cada notícia nova entra no acontecimento das últimas 48 horas com o título mais parecido ou abre um novo (`agruparNoticias`, em `packages/core/src/agrupamento.ts`). Dois títulos são do mesmo fato por um de dois critérios:
-  - **Vetores (Mistral, `mistral-embed`):** cosseno de pelo menos `SEMELHANCA_MINIMA_VETOR` (0,90). Na calibragem só com títulos, matérias do mesmo assunto mas de fatos diferentes ficaram entre 0,83 e 0,88, e a mesma notícia em inglês e português ficou em 0,855: por isso o limite é alto e o vetor só decide o que é quase paráfrase. Os títulos novos são vetorizados numa chamada por rodada; a comparação com as notícias já gravadas roda no banco (`parecidosPorVetor`, operador `<=>` do pgvector), para os vetores não trafegarem. Calibre o limite com `npm run calibrar:agrupamento`.
-  - **Palavras (sempre, e reserva sem `MISTRAL_API_KEY` ou se a Mistral falhar):** 3 ou mais palavras importantes em comum e pelo menos metade do título mais curto; acentos, plural simples, palavras vazias, datas e anos não contam.
+  - **Vetores (Mistral, `mistral-embed`):** o vetor é do título com os primeiros 500 caracteres da descrição do feed (`textoParaVetor`), e o cosseno precisa ser de pelo menos `SEMELHANCA_MINIMA_VETOR` (0,88). Na calibragem com o banco (5/11/2026), o mesmo fato ficou de 0,884 para cima, inclusive inglês com português, e fatos diferentes do mesmo assunto ficaram até 0,872. Só com o título, os dois grupos se misturavam entre 0,83 e 0,89. As notícias novas são vetorizadas numa chamada por rodada; a comparação com as notícias já gravadas roda no banco (`parecidosPorVetor`, operador `<=>` do pgvector), para os vetores não trafegarem. Calibre o limite com `npm run calibrar:agrupamento`.
+  - **Palavras (sempre, e reserva sem `MISTRAL_API_KEY` ou se a Mistral falhar):** 3 ou mais palavras importantes em comum e pelo menos metade do título mais curto; acentos, plural simples, palavras vazias, datas e anos não contam. Limitação conhecida: notícias policiais de vocabulário genérico ("homem morto a tiros… motocicleta") podem se juntar sem ser o mesmo fato.
+  - **Títulos de programa** ("VÍDEOS: Bom Dia…", "Vídeos do g1…", "Assista…", `ehTituloDePrograma`) nunca se agrupam: são parecidos entre si sem ser o mesmo fato.
   A gravação é uma transação só, com `on conflict (url) do nothing` como rede de segurança. Falha da Mistral vira erro de etapa `agrupamento` na execução, sem mudar o status.
 - Um acontecimento que já tem resumo não é resumido de novo quando ganha matérias: o resumo continua o da primeira rodada.
 - Normalize as URLs antes de deduplicar. Os links da Folha vêm como `redir.folha.com.br/...*https://...`: use o trecho depois do `*`. Remova parâmetros de rastreio (`utm_*` e parecidos).
@@ -67,7 +68,7 @@ Três provedores, todos no plano gratuito, cada um com um papel:
 |---|---|---|---|
 | Gemini (`@google/genai`) | Resumos e editoria: o principal | `GEMINI_API_KEY` | A Groq assume |
 | Groq (API compatível com a da OpenAI, via `fetch`) | Resumos de reserva: assume o mesmo lote e o resto da rodada quando o Gemini falha ou fica sem cota | `GROQ_API_KEY` | Sem reserva |
-| Mistral (`mistral-embed`, via `fetch`) | Vetores dos títulos para o agrupamento | `MISTRAL_API_KEY` | Agrupamento só por palavras |
+| Mistral (`mistral-embed`, via `fetch`) | Vetores (título + descrição) para o agrupamento | `MISTRAL_API_KEY` | Agrupamento só por palavras |
 
 - Os três planos gratuitos têm cotas baixas, por minuto e por dia, que mudam sem aviso e só aparecem no painel de cada um (AI Studio, console da Groq e console da Mistral). Sem novas tentativas: insistir só gasta cota. HTTP 429 vira `ErroCotaIa`.
 - Processe em lote: vários eventos por chamada, com resposta em JSON.
@@ -135,7 +136,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `npm install`: dependências. No Windows, se o PowerShell bloquear scripts, use `npm.cmd` ou o Prompt de Comando.
 - `npm test`: testes (Vitest). `npm run typecheck`: TypeScript estrito em todos os pacotes e `astro check` no site.
 - `npm run coletar`: lê os feeds, agrupa (com vetores, se houver `MISTRAL_API_KEY`), grava no banco e, se houver `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos. Lê o `.env`.
-- `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Com `-- --banco [--horas 48] [--limite 120]`, lê as notícias recentes do banco (só leitura) e compara lado a lado o vetor só do título e o do título com a descrição (`textoParaVetor`). Precisa de `MISTRAL_API_KEY`; não grava nada. Hoje a coleta vetoriza só o título.
+- `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Com `-- --banco [--horas 48] [--limite 120]`, lê as notícias recentes do banco (só leitura) e compara lado a lado o vetor só do título e o do título com a descrição (`textoParaVetor`). Precisa de `MISTRAL_API_KEY`; não grava nada. A coleta usa título + descrição.
 - `npm run dados:site`: gera `apps/web/public/dados/*.json` a partir do banco.
 - `npm run build:web` / `npm run dev:web`: build e servidor de desenvolvimento do site. Sem `public/dados/`, fora do CI, o site usa `apps/web/src/dados-exemplo/`.
 - `npm run db:nova -- nome`: cria uma migration (se a CLI travar no fim, o arquivo já foi criado).

@@ -44,7 +44,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
-- ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido dos títulos (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
+- ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
 - ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
@@ -80,7 +80,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### IA (planos gratuitos):
 - **Gemini** (Google AI Studio) - Resumos e editoria; modelo principal lido da tabela `modelo_ia` (hoje `gemini-3.5-flash-lite`)
 - **Groq** - Resumos de reserva; modelo de reserva lido da tabela `modelo_ia` (hoje `llama-3.3-70b-versatile`)
-- **Mistral** (`mistral-embed`) - Vetores dos títulos para o agrupamento
+- **Mistral** (`mistral-embed`) - Vetores do título e da descrição para o agrupamento
 - **pgvector** - Compara os vetores dentro do banco
 
 ### Infraestrutura e qualidade:
@@ -134,7 +134,7 @@ papo-reto/
 ```
 
 ### Como funciona:
-1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, os títulos novos viram vetores e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
+1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, o título e o começo da descrição de cada notícia nova viram um vetor e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
 2. O coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Se o Gemini falhar ou ficar sem cota, a Groq resume o mesmo lote e o resto da rodada. Sem nenhuma das duas chaves, essa etapa é pulada e o site mostra a manchete original.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
@@ -225,7 +225,7 @@ GEMINI_API_KEY=
 # Groq. Opcional: IA de reserva dos resumos. Sem esta e sem a do Gemini, o site mostra a manchete original.
 GROQ_API_KEY=
 
-# Mistral. Opcional: vetores dos títulos para o agrupamento. Sem ela, o agrupamento compara as palavras.
+# Mistral. Opcional: vetores (título + descrição) para o agrupamento. Sem ela, o agrupamento compara as palavras.
 MISTRAL_API_KEY=
 ```
 
@@ -246,7 +246,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 - **Editorias** (`categoria`) - Lista fechada; a IA só classifica com esses slugs.
 - **Modelos de IA** (`modelo_ia`) - No máximo um ativo (o principal) e um de reserva (`reserva`); o código lê o nome dos modelos daqui.
 - **Prompt** - Versionado em `packages/infra/src/ia/prompt.ts` (atual: `resumo-v2-2026-11-04`), o mesmo para o Gemini e a Groq.
-- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,90) em `packages/core/src/agrupamento.ts`. Confira com `npm run calibrar:agrupamento`.
+- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,88) em `packages/core/src/agrupamento.ts`, calibrado com notícias reais. Confira com `npm run calibrar:agrupamento -- --banco`.
 
 ---
 
@@ -386,7 +386,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Limites do plano gratuito:
 - **Supabase:** 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. A limpeza diária (`pg_cron`, 6h UTC) apaga `descricao_original` depois de 30 dias, eventos parados há 180 dias, eventos órfãos e execuções com mais de 30 dias.
 - **Gemini, Groq e Mistral:** poucas requisições por minuto e por dia, e os limites aparecem só no painel de cada um. Por isso os resumos saem em lote, a Groq só entra como reserva e a Mistral recebe uma chamada por rodada, só com os títulos novos.
-- **Vetores:** cada título guarda um vetor de cerca de 4 KB, que a limpeza diária apaga depois de 3 dias.
+- **Vetores:** cada notícia guarda um vetor de cerca de 4 KB, que a limpeza diária apaga depois de 3 dias.
 
 ---
 

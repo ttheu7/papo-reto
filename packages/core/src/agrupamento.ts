@@ -56,11 +56,21 @@ export function semelhanca(a: Set<string>, b: Set<string>): number {
 }
 
 /**
- * Semelhança de cosseno mínima entre os vetores de dois títulos para serem do mesmo fato.
- * Calibrada com `npm run calibrar:agrupamento`: com o mistral-embed, títulos do mesmo assunto mas
- * de fatos diferentes ficam entre 0,83 e 0,88, então o vetor só decide acima de 0,90.
+ * Semelhança de cosseno mínima entre os vetores (título + descrição, ver `textoParaVetor`) de duas
+ * notícias para serem do mesmo fato. Calibrada com `npm run calibrar:agrupamento -- --banco`: com o
+ * mistral-embed, o mesmo fato ficou de 0,884 para cima (inclusive inglês com português) e fatos
+ * diferentes do mesmo assunto, até 0,872.
  */
-export const SEMELHANCA_MINIMA_VETOR = 0.9;
+export const SEMELHANCA_MINIMA_VETOR = 0.88;
+
+// Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") não são um fato: são
+// parecidos entre si sem falar da mesma coisa, então nunca se agrupam.
+const PROGRAMA = /^\s*(v[íi]deos\b|assista\b)/i;
+
+/** Verdadeiro para títulos de programa ou de lista de vídeos, que nunca se agrupam. */
+export function ehTituloDePrograma(titulo: string): boolean {
+  return PROGRAMA.test(titulo);
+}
 
 /** Semelhança de cosseno entre dois vetores, de -1 a 1 (0 se algum for vazio). */
 export function cosseno(a: number[], b: number[]): number {
@@ -78,6 +88,7 @@ export function cosseno(a: number[], b: number[]): number {
 interface Titulo {
   palavras: Set<string>;
   vetor: number[] | null;
+  programa: boolean;
 }
 
 interface Grupo {
@@ -88,6 +99,7 @@ interface Grupo {
 
 /** Nota de dois títulos: o cosseno, se os vetores bastarem, ou as palavras em comum. 0 se não forem do mesmo fato. */
 function nota(a: Titulo, b: Titulo): number {
+  if (a.programa || b.programa) return 0;
   if (a.vetor && b.vetor) {
     const c = cosseno(a.vetor, b.vetor);
     if (c >= SEMELHANCA_MINIMA_VETOR) return c;
@@ -111,7 +123,7 @@ export function agruparNoticias(
 ): GrupoDeNoticias[] {
   const grupos: Grupo[] = recentes.map((e) => ({
     eventoId: e.id,
-    titulos: e.titulos.map((t) => ({ palavras: palavrasDoTitulo(t), vetor: null })),
+    titulos: e.titulos.map((t) => ({ palavras: palavrasDoTitulo(t), vetor: null, programa: ehTituloDePrograma(t) })),
     noticias: [],
   }));
   const porEvento = new Map(grupos.map((g) => [g.eventoId, g]));
@@ -120,12 +132,13 @@ export function agruparNoticias(
   const ordenadas = [...novas].sort((a, b) => a.publicadaEm.getTime() - b.publicadaEm.getTime());
 
   for (const noticia of ordenadas) {
-    const titulo: Titulo = { palavras: palavrasDoTitulo(noticia.titulo), vetor: noticia.vetor ?? null };
+    const titulo: Titulo = { palavras: palavrasDoTitulo(noticia.titulo), vetor: noticia.vetor ?? null, programa: ehTituloDePrograma(noticia.titulo) };
     let melhor: Grupo | null = null;
     let melhorNota = 0;
 
     const parecido = parecidoDe.get(noticia);
-    const sugerido = parecido && parecido.semelhanca >= SEMELHANCA_MINIMA_VETOR ? porEvento.get(parecido.eventoId) : undefined;
+    const candidato = parecido && parecido.semelhanca >= SEMELHANCA_MINIMA_VETOR ? porEvento.get(parecido.eventoId) : undefined;
+    const sugerido = candidato && !titulo.programa && !candidato.titulos.some((t) => t.programa) ? candidato : undefined;
     if (sugerido) {
       melhor = sugerido;
       melhorNota = parecido!.semelhanca;

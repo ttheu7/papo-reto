@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agruparNoticias, cosseno, palavrasDoTitulo, semelhanca, textoParaVetor } from './agrupamento';
+import { agruparNoticias, cosseno, ehTituloDePrograma, palavrasDoTitulo, semelhanca, textoParaVetor } from './agrupamento';
 import type { NovaNoticia } from './entidades';
 
 const noticia = (titulo: string, url: string, hora = 0, vetor: number[] | null = null): NovaNoticia => ({
@@ -110,5 +110,29 @@ describe('textoParaVetor', () => {
     expect(textoParaVetor(' Terremoto no Japão ', '  Tremor de\n magnitude 7  ')).toBe('Terremoto no Japão. Tremor de magnitude 7');
     expect(textoParaVetor('Terremoto no Japão', '   ')).toBe('Terremoto no Japão');
     expect(textoParaVetor('T', 'x'.repeat(900))).toHaveLength(3 + 500);
+  });
+});
+
+describe('títulos de programa', () => {
+  it('reconhece listas de vídeos e chamadas para assistir', () => {
+    expect(ehTituloDePrograma('VÍDEOS: Bom Dia Goiás desta quinta-feira')).toBe(true);
+    expect(ehTituloDePrograma('Vídeos do g1 e TV Bahia - quinta-feira')).toBe(true);
+    expect(ehTituloDePrograma('Assista ao Bom Dia ES')).toBe(true);
+    expect(ehTituloDePrograma('Vídeo mostra o crime em parque aquático')).toBe(false);
+    expect(ehTituloDePrograma('Cristiano Ronaldo anuncia aposentadoria')).toBe(false);
+  });
+
+  it('nunca se agrupam, nem por vetor, nem por palavras, nem pela sugestão do banco', () => {
+    const v = [1, 0];
+    const grupos = agruparNoticias(
+      [
+        noticia('VÍDEOS: Bom Dia Goiás de quinta-feira, 5 de novembro', 'goias', 1, v),
+        noticia('VÍDEOS: Bom Dia Minas de quinta-feira, 5 de novembro', 'minas', 2, v),
+        noticia('Assista ao Bom Dia ES', 'es', 3, v),
+      ],
+      [{ id: 'gravado', titulos: ['VÍDEOS: Bom Dia PE de quinta-feira'] }],
+      [{ eventoId: 'gravado', semelhanca: 0.99 }, null, null],
+    );
+    expect(grupos.map((g) => [g.eventoId, g.noticias.length])).toEqual([[null, 1], [null, 1], [null, 1]]);
   });
 });

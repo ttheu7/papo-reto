@@ -202,10 +202,12 @@ describe('ColetarNoticias', () => {
 
   describe('com vetores', () => {
     it('grava o vetor e junta a matéria em inglês ao acontecimento já gravado pelo sentido', async () => {
-      const vetores = new VetoresFalsos({ 'Terremoto atinge o Japão': [1, 0, 0], 'Deadly earthquake strikes Japan': [0.97, 0.1, 0] });
+      // O texto vetorizado é o título com a descrição do feed (aqui, "texto").
+      const vetores = new VetoresFalsos({ 'Terremoto atinge o Japão. texto': [1, 0, 0], 'Deadly earthquake strikes Japan. texto': [0.97, 0.1, 0] });
       await coletor(new FontesEmMemoria([fonte({ id: 1 })]), new LeitorRssFalso({ 'https://fonte1.exemplo/rss': [item('Terremoto atinge o Japão', 'https://g1.exemplo/t', horasAtras(3))] }), vetores).executar();
       await coletor(new FontesEmMemoria([fonte({ id: 2 })]), new LeitorRssFalso({ 'https://fonte2.exemplo/rss': [item('Deadly earthquake strikes Japan', 'https://bbc.exemplo/t', horasAtras(1))] }), vetores).executar();
 
+      expect(vetores.chamadas).toEqual([['Terremoto atinge o Japão. texto'], ['Deadly earthquake strikes Japan. texto']]);
       const [pt, en] = noticias.noticias;
       expect(pt?.vetor).toEqual([1, 0, 0]);
       expect(en?.eventoId).toBe(pt?.eventoId);
