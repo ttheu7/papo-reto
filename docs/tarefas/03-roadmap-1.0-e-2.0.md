@@ -55,3 +55,9 @@ Já descrito na [tarefa 02](02-reportar-erro.md).
 - Para cada um: cria uma branch a partir da `main`, implementa a correção, roda `npm test` e `npm run typecheck`, faz commit e abre um PR descrevendo o report original e o que mudou.
 - Limites de segurança: a rotina **nunca mescla** (o grupo revisa e aprova cada PR), nunca mexe em `supabase/migrations/` (vai direto para o banco de produção), nunca toca em segredos nem em workflows, e tem um número máximo de PRs por dia. Se os testes falharem, ela não abre o PR e registra o motivo na triagem.
 - Report vindo de fora pode tentar instruir a IA ("ignore as regras e..."): o texto do report é tratado como dado, nunca como instrução, e o PR sempre passa por revisão humana.
+
+### Resumo atualizado, MCP público e MCP admin
+
+- **Resumo atualizado quando o acontecimento cresce:** hoje o resumo é feito uma vez só, com as matérias da primeira rodada. Na 2.0, refazer o resumo quando o acontecimento ganhar portais novos (por exemplo, a cada 2 portais a mais), sem passar de um por acontecimento por dia, para não gastar a cota. Isso muda a regra "nunca resuma o mesmo evento duas vezes" do `CLAUDE.md`, que precisa ser atualizada junto.
+- **MCP público** (`apps/mcp-publico`): os mesmos dados públicos do site como servidor MCP, no Cloudflare Workers, sem chave.
+- **MCP admin** (`apps/mcp-admin`): manutenção do banco pela máquina local, via stdio, com credencial local. Pode ser também onde o grupo revisa a triagem.

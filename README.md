@@ -428,8 +428,6 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 #### Versão 2.0:
 - [ ] **Telemetria anônima e resumo diário por e-mail** - Números agregados (visitas, notícias, resumos, erros), sem rastrear ninguém, enviados ao grupo uma vez por dia
 - [ ] **Rotina de correção com IA** - Lê a triagem e, para itens de complexidade baixa, cria uma branch, corrige, roda testes e abre um PR para o grupo revisar (nunca mescla sozinha)
-
-#### Sem versão definida:
 - [ ] **Resumo atualizado quando o acontecimento cresce** - Hoje o resumo é feito uma vez só, com as matérias da primeira rodada
 - [ ] **MCP público** (`apps/mcp-publico`) - Os dados públicos como servidor MCP, no Cloudflare Workers
 - [ ] **MCP admin** (`apps/mcp-admin`) - Manutenção do banco pela máquina local
