@@ -1,6 +1,6 @@
 // Ponto de entrada da coleta: monta as dependências e chama os casos de uso.
 // Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY, GROQ_API_KEY, MISTRAL_API_KEY,
-// PEXELS_API_KEY e UNSPLASH_ACCESS_KEY).
+// PEXELS_API_KEY e UNSPLASH_API_KEY).
 import { ColetarNoticias, IlustrarEventos, mensagemDe, ResumirEventos, type AcervoDeImagens } from '@papo-reto/core';
 import {
   AcervoPexels,
@@ -76,7 +76,7 @@ async function principal(): Promise<number> {
         registro.erro('etapa de imagens falhou', { execucaoId: coleta.execucaoId, erro: mensagemDe(erro) });
       }
     } else {
-      registro.info('PEXELS_API_KEY e UNSPLASH_ACCESS_KEY ausentes; imagens puladas', { execucaoId: coleta.execucaoId });
+      registro.info('PEXELS_API_KEY e UNSPLASH_API_KEY ausentes; imagens puladas', { execucaoId: coleta.execucaoId });
     }
 
     return coleta.status === 'falha' ? 1 : 0;

@@ -21,6 +21,6 @@ export function lerConfiguracao(env: NodeJS.ProcessEnv = process.env): Configura
     chaveGroq: env.GROQ_API_KEY?.trim() || null,
     chaveMistral: env.MISTRAL_API_KEY?.trim() || null,
     chavePexels: env.PEXELS_API_KEY?.trim() || null,
-    chaveUnsplash: env.UNSPLASH_ACCESS_KEY?.trim() || null,
+    chaveUnsplash: env.UNSPLASH_API_KEY?.trim() || null,
   };
 }
