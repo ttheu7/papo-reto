@@ -16,9 +16,12 @@ const VAZIAS = new Set(
     'disse ja nao sim seu sua seus suas ele ela eles elas isso esse essa este esta aqui ali onde quando quem qual ' +
     'quais porque pois mas tambem ainda muito muita muitos muitas todo toda todos todas outro outra outros outras ' +
     'ano anos dia dias hoje ontem amanha agora veja video videos fotos assista entenda saiba ao vivo novo nova ' +
-    'novos novas segundo apos contra durante desde ha the '+
+    'novos novas segundo contra durante desde analise ' +
+    // Datas: "nesta quarta-feira" aparece em assuntos sem relação nenhuma.
+    'nesta neste desta deste nessa nesse dessa desse segunda terca quarta quinta sexta sabado domingo feira ' +
+    'janeiro fevereiro marco abril maio junho julho agosto setembro outubro novembro dezembro semana mes ' +
     // Inglês (BBC News)
-    'and for with from that this are was were has have had will would can could not but its his her their ' +
+    'the and for with from that this are was were has have had will would can could not but its his her their ' +
     'they you who what when where why how after over into about says said new more than been out'
   ).split(/\s+/).filter(Boolean),
 );

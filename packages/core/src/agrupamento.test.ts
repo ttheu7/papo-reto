@@ -35,6 +35,10 @@ describe('semelhanca', () => {
     expect(parecidos('Lula diz que governo vai rever meta fiscal', 'Lula sanciona lei que amplia isenção do Imposto de Renda')).toBe(0);
     expect(parecidos('Flamengo vence o Palmeiras no Maracanã', 'Palmeiras contrata atacante do Flamengo')).toBe(0);
   });
+
+  it('não junta assuntos só porque saíram no mesmo dia da semana', () => {
+    expect(parecidos('Copom decide nesta quarta-feira se corta ou mantém a Taxa Selic', 'Mega-Sena sorteia prêmio acumulado de R$ 46 milhões nesta quarta-feira')).toBe(0);
+  });
 });
 
 describe('agruparNoticias', () => {
