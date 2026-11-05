@@ -6,6 +6,7 @@ import {
   LeitorRssFalso,
   NoticiasEmMemoria,
   RegistroMudo,
+  VetoresFalsos,
   fonte,
 } from '../testes/falsos';
 import { ColetarNoticias } from './coletar-noticias';
@@ -30,8 +31,8 @@ describe('ColetarNoticias', () => {
     registro = new RegistroMudo();
   });
 
-  function coletor(fontes: FontesEmMemoria, leitor: LeitorRssFalso) {
-    return new ColetarNoticias({ fontes, noticias, execucoes, leitor, registro, agora: () => AGORA });
+  function coletor(fontes: FontesEmMemoria, leitor: LeitorRssFalso, vetores: VetoresFalsos | null = null) {
+    return new ColetarNoticias({ fontes, noticias, execucoes, leitor, registro, agora: () => AGORA, vetores });
   }
 
   it('cria um evento por assunto diferente, com URL normalizada e a categoria do feed', async () => {
@@ -197,5 +198,26 @@ describe('ColetarNoticias', () => {
     const r = await coletor(fontes, new LeitorRssFalso({ 'https://fonte1.exemplo/rss': [item('A', 'https://a.exemplo/')] })).executar();
 
     expect(r).toMatchObject({ status: 'falha', novasNoticias: 0, erros: [{ etapa: 'coleta', mensagem: 'ao gravar as notícias: conexão perdida' }] });
+  });
+
+  describe('com vetores', () => {
+    it('grava o vetor e junta a matéria em inglês ao acontecimento já gravado pelo sentido', async () => {
+      const vetores = new VetoresFalsos({ 'Terremoto atinge o Japão': [1, 0, 0], 'Deadly earthquake strikes Japan': [0.97, 0.1, 0] });
+      await coletor(new FontesEmMemoria([fonte({ id: 1 })]), new LeitorRssFalso({ 'https://fonte1.exemplo/rss': [item('Terremoto atinge o Japão', 'https://g1.exemplo/t', horasAtras(3))] }), vetores).executar();
+      await coletor(new FontesEmMemoria([fonte({ id: 2 })]), new LeitorRssFalso({ 'https://fonte2.exemplo/rss': [item('Deadly earthquake strikes Japan', 'https://bbc.exemplo/t', horasAtras(1))] }), vetores).executar();
+
+      const [pt, en] = noticias.noticias;
+      expect(pt?.vetor).toEqual([1, 0, 0]);
+      expect(en?.eventoId).toBe(pt?.eventoId);
+    });
+
+    it('se o serviço de vetores falhar, agrupa só pelas palavras e registra o aviso sem mudar o status', async () => {
+      const vetores = new VetoresFalsos();
+      vetores.falhar = true;
+      const r = await coletor(new FontesEmMemoria([fonte({ id: 1 })]), new LeitorRssFalso({ 'https://fonte1.exemplo/rss': [item('A', 'https://a.exemplo/')] }), vetores).executar();
+
+      expect(r).toMatchObject({ status: 'sucesso', novasNoticias: 1, erros: [{ etapa: 'agrupamento', mensagem: 'agrupamento só por palavras: cota da Mistral esgotada' }] });
+      expect(noticias.noticias[0]?.vetor).toBeNull();
+    });
   });
 });

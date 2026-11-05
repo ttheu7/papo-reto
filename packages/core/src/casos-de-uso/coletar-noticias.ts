@@ -1,6 +1,6 @@
-import type { ErroDeExecucao, Fonte, NovaNoticia, ResultadoDaColeta } from '../entidades';
+import type { ErroDeExecucao, Fonte, NovaNoticia, ParecidoPorVetor, ResultadoDaColeta } from '../entidades';
 import { mensagemDe } from '../erros';
-import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio } from '../portas';
+import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio, ServicoDeVetores } from '../portas';
 import { agruparNoticias } from '../agrupamento';
 import { normalizarUrl } from '../url';
 
@@ -11,6 +11,8 @@ export interface DependenciasDaColeta {
   leitor: LeitorRss;
   registro: Registro;
   agora: Relogio;
+  /** Opcional: compara os títulos pelo sentido. Sem ele, o agrupamento usa só as palavras. */
+  vetores?: ServicoDeVetores | null;
 }
 
 export interface OpcoesDaColeta {
@@ -62,14 +64,18 @@ export class ColetarNoticias {
     if (porUrl.size > 0) {
       try {
         const janela = (this.opcoes.janelaDeAgrupamentoEmHoras ?? 48) * 3_600_000;
-        const recentes = await d.noticias.eventosRecentes(new Date(d.agora().getTime() - janela));
-        const grupos = agruparNoticias([...porUrl.values()], recentes);
+        const desde = new Date(d.agora().getTime() - janela);
+        const novas = [...porUrl.values()];
+        const recentes = await d.noticias.eventosRecentes(desde);
+        const parecidos = await this.compararPorVetor(novas, desde, execucaoId, erros);
+        const grupos = agruparNoticias(novas, recentes, parecidos);
         novasNoticias = await d.noticias.gravarGrupos(grupos);
         d.registro.info('notícias agrupadas', {
           execucaoId,
           noticias: porUrl.size,
           emAcontecimentosExistentes: grupos.filter((g) => g.eventoId).reduce((t, g) => t + g.noticias.length, 0),
           acontecimentosNovos: grupos.filter((g) => !g.eventoId).length,
+          porVetor: parecidos.length > 0,
         });
       } catch (erro) {
         erros.push({ etapa: 'coleta', mensagem: `ao gravar as notícias: ${mensagemDe(erro)}` });
@@ -79,6 +85,33 @@ export class ColetarNoticias {
 
     const status = fontes.length > 0 && falhas === fontes.length ? 'falha' : falhas > 0 ? 'parcial' : 'sucesso';
     return this.finalizar(execucaoId, status, novasNoticias, erros);
+  }
+
+  /**
+   * Põe o vetor do título em cada notícia nova e pergunta ao banco o acontecimento gravado mais
+   * parecido com cada uma. Se o serviço falhar, registra o erro e devolve vazio: o agrupamento
+   * segue só com as palavras dos títulos.
+   */
+  private async compararPorVetor(
+    novas: NovaNoticia[],
+    desde: Date,
+    execucaoId: string,
+    erros: ErroDeExecucao[],
+  ): Promise<(ParecidoPorVetor | null)[]> {
+    const { d } = this;
+    if (!d.vetores) return [];
+    try {
+      const vetores = await d.vetores.vetorizar(novas.map((n) => n.titulo));
+      if (vetores.length !== novas.length) throw new Error(`recebi ${vetores.length} vetores para ${novas.length} títulos`);
+      novas.forEach((n, i) => (n.vetor = vetores[i]!));
+      return await d.noticias.parecidosPorVetor(vetores, desde);
+    } catch (erro) {
+      for (const n of novas) n.vetor = null;
+      const mensagem = `agrupamento só por palavras: ${mensagemDe(erro)}`;
+      d.registro.aviso('falha ao comparar títulos por vetor', { execucaoId, erro: mensagemDe(erro) });
+      erros.push({ etapa: 'agrupamento', mensagem });
+      return [];
+    }
   }
 
   /** Lê o feed e devolve só as notícias que ainda não estão no banco. */

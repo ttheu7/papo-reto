@@ -15,6 +15,7 @@
     "typecheck": "tsc -p tsconfig.json && npm run typecheck -w @papo-reto/web",
     "coletar": "tsx --env-file-if-exists=.env apps/coletor/src/coletar.ts",
     "dados:site": "tsx --env-file-if-exists=.env apps/coletor/src/dados-do-site.ts",
+    "calibrar:agrupamento": "tsx --env-file-if-exists=.env apps/coletor/src/calibrar-agrupamento.ts",
     "build:web": "npm run build -w @papo-reto/web",
     "dev:web": "npm run dev -w @papo-reto/web",
     "db:nova": "supabase migration new",

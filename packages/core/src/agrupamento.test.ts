@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { agruparNoticias, palavrasDoTitulo, semelhanca } from './agrupamento';
+import { agruparNoticias, cosseno, palavrasDoTitulo, semelhanca } from './agrupamento';
 import type { NovaNoticia } from './entidades';
 
-const noticia = (titulo: string, url: string, hora = 0): NovaNoticia => ({
+const noticia = (titulo: string, url: string, hora = 0, vetor: number[] | null = null): NovaNoticia => ({
   fonteId: 1,
   categoriaId: null,
   titulo,
   url,
   descricaoOriginal: null,
   publicadaEm: new Date(Date.UTC(2026, 10, 4, hora)),
+  vetor,
 });
 
 const parecidos = (a: string, b: string) => semelhanca(palavrasDoTitulo(a), palavrasDoTitulo(b));
@@ -66,5 +67,40 @@ describe('agruparNoticias', () => {
       ],
     );
     expect(grupos).toEqual([{ eventoId: 'juros', noticias: [expect.objectContaining({ url: 'nova' })] }]);
+  });
+
+  it('com vetores, junta títulos de mesmo sentido mesmo sem palavras em comum, inclusive em outra língua', () => {
+    const grupos = agruparNoticias(
+      [
+        noticia('Terremoto atinge o Japão e deixa mortos', 'pt', 1, [1, 0.1, 0]),
+        noticia('Deadly earthquake strikes Japan', 'en', 2, [0.98, 0.12, 0.02]),
+        noticia('Selic fica em 15%', 'selic', 3, [0, 0, 1]),
+      ],
+      [],
+    );
+    expect(grupos.map((g) => g.noticias.map((n) => n.url))).toEqual([['pt', 'en'], ['selic']]);
+  });
+
+  it('com vetores pouco parecidos, ainda junta se as palavras bastarem', () => {
+    const grupos = agruparNoticias(
+      [noticia('Terremoto atinge o Japão e deixa mortos', 'a', 1, [1, 0]), noticia('Terremoto no Japão deixa mortos e feridos', 'b', 2, [0, 1])],
+      [],
+    );
+    expect(grupos).toHaveLength(1);
+  });
+
+  it('segue a sugestão do banco quando o acontecimento gravado é parecido o bastante', () => {
+    const recentes = [{ id: 'gravado', titulos: ['Deadly earthquake strikes Japan'] }];
+    const novas = [noticia('Tremor de terra no Japão', 'nova', 1, [1, 0])];
+    expect(agruparNoticias(novas, recentes, [{ eventoId: 'gravado', semelhanca: 0.93 }])[0]?.eventoId).toBe('gravado');
+    expect(agruparNoticias(novas, recentes, [{ eventoId: 'gravado', semelhanca: 0.7 }])[0]?.eventoId).toBeNull();
+  });
+});
+
+describe('cosseno', () => {
+  it('vale 1 para a mesma direção, 0 para perpendiculares e 0 para vetor vazio', () => {
+    expect(cosseno([1, 2], [2, 4])).toBeCloseTo(1);
+    expect(cosseno([1, 0], [0, 1])).toBe(0);
+    expect(cosseno([0, 0], [1, 1])).toBe(0);
   });
 });

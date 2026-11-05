@@ -34,6 +34,15 @@ export interface NovaNoticia {
   url: string;
   descricaoOriginal: string | null;
   publicadaEm: Date;
+  /** Vetor do título (embedding), quando o serviço de vetores está ligado. */
+  vetor?: number[] | null;
+}
+
+/** O acontecimento já gravado mais parecido com uma notícia nova, pelo vetor do título. */
+export interface ParecidoPorVetor {
+  eventoId: string;
+  /** Semelhança de cosseno, de -1 a 1. */
+  semelhanca: number;
 }
 
 /** Acontecimento recente, com os títulos das suas notícias, para o agrupamento. */
@@ -49,7 +58,7 @@ export interface GrupoDeNoticias {
 }
 
 export interface ErroDeExecucao {
-  etapa: 'fontes' | 'coleta' | 'resumos' | 'dados';
+  etapa: 'fontes' | 'coleta' | 'agrupamento' | 'resumos' | 'dados';
   mensagem: string;
   fonteId?: number;
 }

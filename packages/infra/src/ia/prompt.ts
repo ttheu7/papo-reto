@@ -1,4 +1,4 @@
-import type { EventoParaResumir } from '@papo-reto/core';
+import { ErroInfra, type EventoParaResumir, type ResumoGerado } from '@papo-reto/core';
 
 /** Mude a versão sempre que mudar o texto do prompt: ela vai para `resumo.versao_prompt`. */
 export const VERSAO_DO_PROMPT = 'resumo-v2-2026-11-04';
@@ -38,4 +38,15 @@ export function esquemaDaResposta(categorias: string[]) {
       required: ['id', 'titulo', 'texto', 'categoria'],
     },
   };
+}
+
+/** Lê a lista de resumos devolvida pela IA, descartando itens sem id, título ou texto. */
+export function interpretarResumos(dados: unknown, provedor: string): ResumoGerado[] {
+  if (!Array.isArray(dados)) throw new ErroInfra(`o ${provedor} não devolveu uma lista de resumos`);
+  return dados.flatMap((item): ResumoGerado[] => {
+    if (!item || typeof item !== 'object') return [];
+    const { id, titulo, texto, categoria } = item as Record<string, unknown>;
+    if (typeof id !== 'string' || typeof titulo !== 'string' || typeof texto !== 'string') return [];
+    return [{ eventoId: id, titulo, texto, categoriaSlug: typeof categoria === 'string' ? categoria : null }];
+  });
 }

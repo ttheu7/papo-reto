@@ -22,8 +22,10 @@ import type {
   RepositorioNoticias,
   RepositorioResumos,
   RepositorioSite,
+  ServicoDeVetores,
   ServicoIa,
 } from '../portas';
+import { cosseno } from '../agrupamento';
 
 export function fonte(parcial: Partial<Fonte> & Pick<Fonte, 'id'>): Fonte {
   return {
@@ -85,6 +87,36 @@ export class NoticiasEmMemoria implements RepositorioNoticias {
     }
     return gravadas;
   }
+  /** Como o banco: compara com as notícias gravadas com vetor, publicadas desde `desde`. */
+  async parecidosPorVetor(vetores: number[][], desde: Date) {
+    const comVetor = this.noticias.filter((n) => n.vetor && n.publicadaEm >= desde);
+    return vetores.map((v) => {
+      let melhor: { eventoId: string; semelhanca: number } | null = null;
+      for (const n of comVetor) {
+        const s = cosseno(v, n.vetor!);
+        if (!melhor || s > melhor.semelhanca) melhor = { eventoId: n.eventoId, semelhanca: s };
+      }
+      return melhor;
+    });
+  }
+}
+
+/** Vetores falsos: cada texto ganha o vetor registrado para ele, ou um vetor só seu. */
+export class VetoresFalsos implements ServicoDeVetores {
+  chamadas: string[][] = [];
+  falhar = false;
+  private proprios = 0;
+  constructor(private readonly conhecidos: Record<string, number[]> = {}) {}
+  async vetorizar(textos: string[]) {
+    this.chamadas.push(textos);
+    if (this.falhar) throw new Error('cota da Mistral esgotada');
+    return textos.map((t) => this.conhecidos[t] ?? this.unico());
+  }
+  /** Um vetor perpendicular a todos os outros: não se parece com nada. */
+  private unico() {
+    const eixo = 64 + this.proprios++;
+    return Array.from({ length: eixo + 1 }, (_, i) => (i === eixo ? 1 : 0));
+  }
 }
 
 export class ExecucoesEmMemoria implements RepositorioExecucoes {
@@ -137,6 +169,8 @@ export class ResumosEmMemoria implements RepositorioResumos {
   categoriaDoEvento = new Map<string, number | null>();
   pedidos: { limite: number; desde: Date }[] = [];
 
+  modeloDeReserva: ModeloIa | null = null;
+
   constructor(
     public modelo: ModeloIa | null,
     readonly listaDeCategorias: Categoria[],
@@ -145,6 +179,9 @@ export class ResumosEmMemoria implements RepositorioResumos {
 
   async modeloAtivo() {
     return this.modelo;
+  }
+  async modeloReserva() {
+    return this.modeloDeReserva;
   }
   async categorias() {
     return this.listaDeCategorias;

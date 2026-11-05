@@ -9,6 +9,7 @@ import type {
   ItemRss,
   MateriaPublica,
   ModeloIa,
+  ParecidoPorVetor,
   NovoResumo,
   ResumoGerado,
   StatusExecucao,
@@ -31,6 +32,18 @@ export interface RepositorioNoticias {
    * vazio). Devolve quantas notícias foram gravadas.
    */
   gravarGrupos(grupos: GrupoDeNoticias[]): Promise<number>;
+  /**
+   * Para cada vetor, o acontecimento (com notícia publicada desde `desde`) cuja notícia tem o
+   * vetor mais parecido, ou null se nenhuma notícia recente tiver vetor. A comparação roda no
+   * banco, para os vetores gravados não trafegarem.
+   */
+  parecidosPorVetor(vetores: number[][], desde: Date): Promise<(ParecidoPorVetor | null)[]>;
+}
+
+/** Transforma textos em vetores (embeddings) que se comparam pelo sentido. */
+export interface ServicoDeVetores {
+  /** Um vetor por texto, na mesma ordem. */
+  vetorizar(textos: string[]): Promise<number[][]>;
 }
 
 export interface RepositorioExecucoes {
@@ -57,6 +70,8 @@ export type Relogio = () => Date;
 
 export interface RepositorioResumos {
   modeloAtivo(): Promise<ModeloIa | null>;
+  /** Modelo de reserva, usado quando o principal falha ou fica sem cota. */
+  modeloReserva(): Promise<ModeloIa | null>;
   categorias(): Promise<Categoria[]>;
   /** Eventos recentes sem nenhum resumo, os de maior cobertura primeiro. */
   eventosSemResumo(opcoes: { limite: number; desde: Date }): Promise<EventoParaResumir[]>;
