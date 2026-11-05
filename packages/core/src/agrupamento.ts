@@ -55,8 +55,12 @@ export function semelhanca(a: Set<string>, b: Set<string>): number {
   return comuns / menor.size;
 }
 
-/** Semelhança de cosseno mínima entre os vetores de dois títulos para serem do mesmo fato. */
-export const SEMELHANCA_MINIMA_VETOR = 0.88;
+/**
+ * Semelhança de cosseno mínima entre os vetores de dois títulos para serem do mesmo fato.
+ * Calibrada com `npm run calibrar:agrupamento`: com o mistral-embed, títulos do mesmo assunto mas
+ * de fatos diferentes ficam entre 0,83 e 0,88, então o vetor só decide acima de 0,90.
+ */
+export const SEMELHANCA_MINIMA_VETOR = 0.9;
 
 /** Semelhança de cosseno entre dois vetores, de -1 a 1 (0 se algum for vazio). */
 export function cosseno(a: number[], b: number[]): number {

@@ -246,7 +246,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 - **Editorias** (`categoria`) - Lista fechada; a IA só classifica com esses slugs.
 - **Modelos de IA** (`modelo_ia`) - No máximo um ativo (o principal) e um de reserva (`reserva`); o código lê o nome dos modelos daqui.
 - **Prompt** - Versionado em `packages/infra/src/ia/prompt.ts` (atual: `resumo-v2-2026-11-04`), o mesmo para o Gemini e a Groq.
-- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,88) em `packages/core/src/agrupamento.ts`. Confira com `npm run calibrar:agrupamento`.
+- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,90) em `packages/core/src/agrupamento.ts`. Confira com `npm run calibrar:agrupamento`.
 
 ---
 
