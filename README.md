@@ -415,16 +415,24 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Agrupamento das matérias do mesmo fato** - Por palavras e por vetores da Mistral (título + descrição)
 - [x] **Indicador de cobertura** - Barrinhas com quantos portais noticiaram
 - [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
-- [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, só com texto
+- [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, com a imagem ilustrativa
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
 - [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
+- [ ] **Redesign com cara de jornal de papel** - Site de notícias de verdade, menos "cartões soltos" ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
+- [ ] **PWA para celular** - Instalar na tela inicial e ler a última edição sem internet
+- [ ] **Doações** - A tabela `doacao` já existe; só doação voluntária, sem dados de quem doa no site
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
+- [ ] **Pedidos de melhoria** - Formulário para sugerir funcionalidades, como o de reportar erro
+- [ ] **Triagem com IA** - Classifica cada report de erro e cada pedido de melhoria (tipo, prioridade, resumo) e dá uma nota de complexidade, para a rotina da 2.0
 
-#### Depois da 1.0:
+#### Versão 2.0:
+- [ ] **Telemetria anônima e resumo diário por e-mail** - Números agregados (visitas, notícias, resumos, erros), sem rastrear ninguém, enviados ao grupo uma vez por dia
+- [ ] **Rotina de correção com IA** - Lê a triagem e, para itens de complexidade baixa, cria uma branch, corrige, roda testes e abre um PR para o grupo revisar (nunca mescla sozinha)
+
+#### Sem versão definida:
 - [ ] **Resumo atualizado quando o acontecimento cresce** - Hoje o resumo é feito uma vez só, com as matérias da primeira rodada
 - [ ] **MCP público** (`apps/mcp-publico`) - Os dados públicos como servidor MCP, no Cloudflare Workers
 - [ ] **MCP admin** (`apps/mcp-admin`) - Manutenção do banco pela máquina local
-- [ ] **Doações** - A tabela `doacao` já existe, mas ainda não é usada
 
 ---
 
