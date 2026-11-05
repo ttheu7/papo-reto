@@ -65,7 +65,12 @@ async function principal(): Promise<number> {
     ];
     if (acervos.length > 0) {
       try {
-        await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }).executar(coleta.execucaoId);
+        // Só com o Unsplash (50 chamadas por hora no modo de teste, e cada imagem usada gasta duas: a busca e o
+        // aviso de uso), 8 por rodada mantêm as duas rodadas da hora abaixo do limite. Com a Pexels, 15.
+        const limite = config.chavePexels ? 15 : 8;
+        await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }, { limite }).executar(
+          coleta.execucaoId,
+        );
       } catch (erro) {
         // Sem imagem, o site mostra a notícia só com texto, como sempre.
         registro.erro('etapa de imagens falhou', { execucaoId: coleta.execucaoId, erro: mensagemDe(erro) });
