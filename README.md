@@ -30,7 +30,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 ## ✨ Funcionalidades
 
 ### Para quem lê:
-- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando (ou com a roda do mouse), com o resumo e o link para a matéria (sem personalização e com fim)
+- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando (ou com a roda do mouse); cada cartão traz a manchete, o medidor de cobertura e, quando há, a imagem ocupando pelo menos metade do cartão, e tocar abre a notícia (sem personalização e com fim)
 - ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
@@ -236,7 +236,7 @@ MISTRAL_API_KEY=
 
 # Pexels e Unsplash ("Access Key"). Opcionais: imagens ilustrativas. Sem as duas, o site segue só com texto.
 PEXELS_API_KEY=
-UNSPLASH_ACCESS_KEY=
+UNSPLASH_API_KEY=
 ```
 
 Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase.co`) só funciona em IPv6 e falha no GitHub Actions.
@@ -250,7 +250,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | GitHub Actions | `GROQ_API_KEY` | Resumos (reserva). Opcional: sem as duas, o coletor pula os resumos |
 | GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
 | GitHub Actions | `PEXELS_API_KEY` | Imagens ilustrativas (o primeiro acervo). Opcional |
-| GitHub Actions | `UNSPLASH_ACCESS_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
+| GitHub Actions | `UNSPLASH_API_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
 | `.env` local | As mesmas variáveis | Rodar o coletor e o gerador na máquina |
 
 ### Dados do banco:
@@ -269,7 +269,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 2. Leia a manchete e os destaques do dia, ou escolha uma editoria
 3. Abra um acontecimento para ver o resumo "Em 1 minuto" e a lista "Quem noticiou"
 4. Clique em uma matéria para ler no portal original
-5. Quer passar rápido pelas notícias? Abra o **Giro** no menu: uma manchete por tela, para deslizar (ou usar as setas e j/k no computador)
+5. Quer passar rápido pelas notícias? Abra o **Giro** no menu: uma manchete por tela, para deslizar (ou usar a roda do mouse, as setas e j/k no computador). Toque no cartão para abrir a notícia
 6. Achou um erro no resumo? Use "Reportar erro neste resumo". Na beta, ele abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na 1.0, vira um formulário próprio, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
 
 ### Comandos do projeto:
@@ -278,7 +278,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 |---|---|
 | `npm test` | Testes (Vitest) |
 | `npm run typecheck` | TypeScript estrito em todos os pacotes e `astro check` no site |
-| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos; com `PEXELS_API_KEY` ou `UNSPLASH_ACCESS_KEY`, procura as imagens ilustrativas |
+| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos; com `PEXELS_API_KEY` ou `UNSPLASH_API_KEY`, procura as imagens ilustrativas |
 | `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento. Com `-- --banco`, usa as notícias recentes do banco e compara o vetor só do título com o do título + descrição (não grava nada) |
 | `npm run dados:site` | Gera `apps/web/public/dados/*.json` a partir do banco |
 | `npm run dev:web` | Servidor de desenvolvimento do site |
