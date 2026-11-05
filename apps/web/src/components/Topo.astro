@@ -32,6 +32,7 @@ const aqui = partes.at(-1) ?? '';
         <div class="topo__sob">
           <p class="topo__lema">As notícias do dia explicadas em poucas frases, com o link de quem noticiou</p>
           <div class="topo__carimbo"><Carimbo /></div>
+          <p class="topo__faixa">Feito por estudantes · grátis</p>
         </div>
       </div>
     </>
@@ -90,6 +91,8 @@ const aqui = partes.at(-1) ?? '';
   .topo__titulo { --carimbo: clamp(84px, 8vw, 116px); position: relative; }
   .topo__carimbo { position: absolute; right: 0; top: 50%; width: var(--carimbo); translate: 0 -50%; }
   .topo__sob { padding-inline: calc(var(--carimbo) + 12px); }
+  /* No celular o carimbo vira uma faixa em versalete entre fios finos, abaixo do lema. */
+  .topo__faixa { display: none; }
   .topo__linha {
     display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px 16px;
     padding: 6px 0; border-bottom: 1px solid var(--fio);
@@ -131,15 +134,20 @@ const aqui = partes.at(-1) ?? '';
     .topo__tema svg { width: 18px; height: 18px; }
     .topo__tema-texto { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   }
-  /* No celular: data, edição e o ícone do tema numa linha só; o carimbo vai ao lado do lema. */
+  /* No celular: data, edição e o ícone do tema numa linha só; no lugar do carimbo, a faixa. */
   @media (max-width: 760px) {
     .topo__linha { grid-template-columns: 1fr auto auto; gap: 8px 10px; letter-spacing: 0.04em; font-size: 0.75rem; padding: 0; }
     .topo__edicao { text-align: right; }
     .topo__gratis { display: none; }
     .topo__numero, .topo__semana { display: none; }
-    .topo__sob { display: flex; align-items: center; gap: 14px; padding: 0 0 12px; }
-    .topo__sob .topo__lema { flex: 1; text-align: left; padding-bottom: 0; }
-    .topo__carimbo { position: static; flex: none; width: 66px; translate: none; }
+    .topo__sob { padding: 0 0 12px; }
+    .topo__sob .topo__lema { padding-bottom: 0; }
+    .topo__carimbo { display: none; }
+    .topo__faixa {
+      display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px;
+      font: 600 0.7rem / 1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; text-align: center;
+    }
+    .topo__faixa::before, .topo__faixa::after { content: ''; flex: 1; min-width: 14px; border-top: 1px solid var(--fio-claro); }
     .topo__menu ul { justify-content: flex-start; }
   }
 </style>
