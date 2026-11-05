@@ -46,7 +46,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
-- ✅ Na 1.0, mais sete feeds de seis portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV e VLR.gg
+- ✅ Na 1.0, mais oito feeds de sete portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
 - ✅ Matéria de outro portal acompanhado que aparece num feed (a Folha no feed do UOL) fica com o portal dono, com o nome e a etiqueta de assinatura certos; páginas de jogo ao vivo do ge ficam de fora
 - ✅ Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia…", "Assista…") ficam de fora: não são notícia
@@ -423,7 +423,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
 - [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
 - [x] **Redesign com cara de jornal de papel** - Direção "primeira página clássica": folha contínua, fios, gótica no nome, chapéu acima da manchete ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
-- [x] **Esporte e e-sports** - Editoria Games e feeds de UOL, ge, NPR, Fox News, HLTV e VLR.gg
+- [x] **Esporte e e-sports** - Editoria Games e feeds de UOL, ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
 - [ ] **PWA para celular** - Instalar na tela inicial e ler a última edição sem internet
 - [ ] **Doações** - A tabela `doacao` já existe; só doação voluntária, sem dados de quem doa no site
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
