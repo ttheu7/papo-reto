@@ -28,7 +28,7 @@ const id = (i: number) => `cena-${i + 1}`;
       {lista.map((e, i) => {
         const portais = portaisDe(e);
         return (
-          <li class="giro__cena" id={id(i)} data-cat={e.categoria?.slug ?? 'geral'} data-giro-cena={i + 1}>
+          <li class="giro__cena" id={id(i)} data-giro-cena={i + 1}>
             <article class:list={['giro__cartao', { 'giro__cartao--foto': e.imagem }]} aria-labelledby={`${id(i)}-titulo`}>
               {e.imagem && (
                 <img
@@ -66,7 +66,7 @@ const id = (i: number) => `cena-${i + 1}`;
           </li>
         );
       })}
-      <li class="giro__cena giro__cena--fim" id={id(total)} data-cat="geral" data-giro-cena={total + 1}>
+      <li class="giro__cena giro__cena--fim" id={id(total)} data-giro-cena={total + 1}>
         <article class="giro__cartao" aria-labelledby="giro-fim">
           <h2 class="giro__manchete" id="giro-fim">Você viu tudo desta edição</h2>
           <p class="giro__resumo">Foram {total} notícias das últimas 48 horas. A próxima edição sai em até 30 minutos, com o que os portais publicarem de novo.</p>
@@ -165,13 +165,14 @@ const id = (i: number) => `cena-${i + 1}`;
   }
   .giro__voltar {
     justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 10px;
-    border-radius: var(--raio); background: var(--papel); font-weight: 600; font-size: var(--step-small); text-decoration: none;
+    border: 1px solid var(--ink); background: transparent; font: 600 var(--step-small) / 1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
     transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
   }
   .giro__voltar:active { transform: scale(0.96); }
-  @media (hover: hover) and (pointer: fine) { .giro__voltar:hover { background: var(--papel-2); } }
-  .giro__nome { font-size: var(--step-lead); letter-spacing: -0.01em; }
+  @media (hover: hover) and (pointer: fine) { .giro__voltar:hover { background: var(--ink); color: var(--on-ink); } }
+  .giro__nome { font: 400 var(--step-lead) / 1 var(--gotica); letter-spacing: 0; }
   .giro__contador {
+    font-family: var(--sans);
     justify-self: end; font-size: var(--step-small); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums;
   }
 
@@ -189,7 +190,7 @@ const id = (i: number) => `cena-${i + 1}`;
     max-width: 640px; margin-inline: auto;
   }
   .giro__cartao {
-    position: relative; background: var(--cat); border-radius: var(--raio); padding: clamp(24px, 5vw, 48px);
+    position: relative; background: var(--papel-2); border-top: 3px solid var(--fio); padding: clamp(24px, 5vw, 48px);
     display: grid; align-content: center;
     transition: transform var(--t-press) var(--ease-out);
   }
@@ -207,7 +208,7 @@ const id = (i: number) => `cena-${i + 1}`;
   .giro__cartao:has(.giro__abrir:active) { transform: scale(0.99); }
   @media (hover: hover) and (pointer: fine) { .giro__cartao:hover .giro__abrir { text-decoration-color: currentColor; } }
   .giro__credito { position: relative; z-index: 2; }
-  .giro__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--step-small); font-weight: 600; }
+  .giro__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font: 600 var(--step-small) / 1.3 var(--sans); }
   .giro__resumo { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 38ch; }
   .giro__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-top: 4px; }
   .giro__fonte { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration-color: currentColor; }
@@ -215,22 +216,22 @@ const id = (i: number) => `cena-${i + 1}`;
   .giro__passos { display: flex; justify-content: space-between; gap: 12px; }
   .giro__passo {
     display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px;
-    border-radius: var(--raio); background: var(--papel); font-weight: 600; font-size: var(--step-small); text-decoration: none;
+    border: 1px solid var(--ink); background: transparent; font: 600 var(--step-small) / 1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
     transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
   }
   .giro__passo:active { transform: scale(0.96); }
   .giro__passo--proxima { margin-left: auto; }
-  @media (hover: hover) and (pointer: fine) { .giro__passo:hover { background: var(--papel-2); } }
+  @media (hover: hover) and (pointer: fine) { .giro__passo:hover { background: var(--ink); color: var(--on-ink); } }
 
-  .giro__cena--fim .giro__cartao { background: var(--papel); }
+  .giro__cena--fim .giro__cartao { background: var(--papel); border-bottom: 1px solid var(--fio); }
 
   /* Com imagem: a foto cobre o cartão e a metade de cima (pelo menos) fica só para ela; o texto fica embaixo,
      em branco. O véu escuro (a exceção à regra "sem gradiente") acompanha o próprio bloco de texto: começa um
      pouco acima dele, com um fade, e fica sólido atrás das letras, o que garante o contraste com qualquer foto. */
   .giro__cartao--foto {
-    isolation: isolate; overflow: hidden; padding: 0;
+    isolation: isolate; overflow: hidden; padding: 0; border-top: 0;
     grid-template-rows: minmax(0, 1fr) auto; align-content: stretch;
-    color: var(--sobre-foto); --toque: var(--toque-foto); background: var(--veu-foto);
+    color: var(--sobre-foto); --medidor-vazio: var(--toque-foto); background: var(--veu-foto);
   }
   /* Para a foto ficar com pelo menos metade do cartão, a manchete vai um degrau abaixo (--step-lead) e o bloco
      de texto é só manchete, medidor e crédito. A manchete nunca é cortada (é de terceiros). */
@@ -243,7 +244,7 @@ const id = (i: number) => `cena-${i + 1}`;
     padding: var(--fade) clamp(20px, 4vw, 40px) clamp(20px, 3.5vw, 32px);
     background: linear-gradient(to bottom, transparent, var(--veu-foto) var(--fade));
   }
-  .giro__credito { font-size: var(--step-small); }
+  .giro__credito { font: 400 var(--step-small) / 1.4 var(--sans); }
   .giro__credito a { color: inherit; font-weight: 600; text-decoration-color: currentColor; }
 
   /* Descarte: ao passar, o cartão que sai pelo topo encolhe e esmaece, e o próximo sobe para o lugar.

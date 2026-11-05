@@ -23,16 +23,15 @@ const fotoDaManchete = imagemNaCapa(manchete);
 <Base capa titulo="Papo Reto: as notícias do dia, explicadas" descricao="As notícias do dia explicadas em até quatro frases, com link para quem noticiou. Grátis, sem anúncio e sem cadastro.">
   {manchete && (
     <section class="capa moldura" aria-labelledby="manchete-titulo">
-      <h2 class="so-leitor">O que importa hoje</h2>
-      <article class="manchete" data-cat={manchete.categoria?.slug ?? 'geral'}>
-        <h3 class="manchete__titulo" id="manchete-titulo"><a href={caminho(`evento/${manchete.id}/`)}>{manchete.titulo}</a></h3>
-        <p class="manchete__meta">
-          {manchete.categoria && <a class="editoria editoria--papel" href={caminho(`categoria/${manchete.categoria.slug}/`)}>{manchete.categoria.nome}</a>}
-          <Medidor cobertura={manchete.cobertura} />
-          <span>{portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
-        </p>
+      <article class="manchete">
+        {manchete.categoria && <a class="chapeu" href={caminho(`categoria/${manchete.categoria.slug}/`)}>{manchete.categoria.nome}</a>}
+        <h2 class="manchete__titulo" id="manchete-titulo"><a href={caminho(`evento/${manchete.id}/`)}>{manchete.titulo}</a></h2>
         {fotoDaManchete && <ImagemIlustrativa imagem={fotoDaManchete} prioridade class="manchete__foto" />}
         <p class="manchete__resumo">{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
+        <p class="servico">
+          <Medidor cobertura={manchete.cobertura} />
+          <span>Noticiado por {portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
+        </p>
         <div class="manchete__acoes">
           <a class="botao" href={caminho(`evento/${manchete.id}/`)}>Entender o assunto</a>
           {fonteDaManchete && (
@@ -46,13 +45,13 @@ const fotoDaManchete = imagemNaCapa(manchete);
 
       {tambem.length > 0 && (
         <aside class="tambem" aria-labelledby="tambem-titulo">
-          <h2 id="tambem-titulo">Também hoje</h2>
+          <h2 class="rotulo" id="tambem-titulo">Também hoje</h2>
           <ol class="tambem__lista" data-revela>
             {tambem.map((e) => (
-              <li data-cat={e.categoria?.slug ?? 'geral'}>
-                <h3><a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
-                <p class="tambem__meta">
-                  {e.categoria && <span class="editoria">{e.categoria.nome}</span>}
+              <li class="item">
+                {e.categoria && <p class="chapeu">{e.categoria.nome}</p>}
+                <h3><a class="estica" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
+                <p class="servico">
                   <Medidor cobertura={e.cobertura} />
                   <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </p>
@@ -66,19 +65,16 @@ const fotoDaManchete = imagemNaCapa(manchete);
 
   {editorias.length > 0 && (
     <section class="secao moldura" aria-labelledby="editorias-titulo">
-      <div class="cabeca">
-        <h2 id="editorias-titulo">Por editoria</h2>
-        <p>{plural(editorias.length, 'editoria', 'editorias')} com notícia nas últimas 48 horas</p>
-      </div>
+      <h2 class="so-leitor" id="editorias-titulo">Por editoria</h2>
       <ul class="editorias" data-revela>
         {editorias.map((c) => (
-          <li class="bloco" data-cat={c.slug}>
-            <h3 class="bloco__nome"><a href={caminho(`categoria/${c.slug}/`)}>{c.nome}<span>{c.total}</span></a></h3>
-            <ul class="bloco__lista">
+          <li class="bloco">
+            <h3 class="rotulo bloco__nome"><a href={caminho(`categoria/${c.slug}/`)}>{c.nome}</a><span>{c.total}</span></h3>
+            <ul>
               {c.eventos.map((e) => (
-                <li>
-                  <a href={caminho(`evento/${e.id}/`)}>{e.titulo}</a>
-                  <span class="bloco__quando"><Medidor cobertura={e.cobertura} /> {quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
+                <li class="item bloco__item">
+                  <h4><a class="estica" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h4>
+                  <p class="servico"><Medidor cobertura={e.cobertura} /> <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span></p>
                 </li>
               ))}
             </ul>
@@ -89,108 +85,95 @@ const fotoDaManchete = imagemNaCapa(manchete);
   )}
 
   <section class="secao moldura" id="ultimas" aria-labelledby="ultimas-titulo">
-    <div class="cabeca">
+    <div class="secao__titulo">
       <h2 id="ultimas-titulo">Últimas notícias</h2>
       <p>{plural(ultimas.length, 'notícia', 'notícias')} das últimas 48 horas</p>
     </div>
     <ListaDeNoticias eventos={ultimas} geradoEm={geradoEm} filtro porVez={16} />
   </section>
 
-  <section class="secao moldura sobre" aria-labelledby="sobre-titulo">
-    <div class="carta card" data-revela>
-      <h2 id="sobre-titulo">Grátis, sem anúncio e sem cadastro</h2>
-      <p>A gente é uma turma de Ciência da Computação da Unoesc Videira, em Santa Catarina. Fizemos o Papo Reto porque notícia boa existe, mas chega espalhada em dez portais e escrita para quem já sabe do assunto.</p>
-      <p>Aqui cada notícia vem explicada em até quatro frases e sempre com o link de quem apurou. Para ler a matéria inteira, você vai até o portal: o trabalho é deles.</p>
-      <p>O código é aberto. Se um resumo estiver errado, cada notícia tem um botão para avisar, e a correção fica registrada no GitHub.</p>
-      <p class="carta__assinatura">Turma de PRATIC IV, Unoesc Videira</p>
-      <a class="botao" href={REPOSITORIO}>Ver o código</a>
-    </div>
-    <div class="feita card" data-revela>
-      <h2>Como a edição é feita</h2>
-      <div>
-        <h3>A cada 30 minutos</h3>
-        <p>Um programa lê as manchetes que {plural(portais.length, 'portal publica', 'portais publicam')} nos seus feeds: {portais.slice(0, 4).map((p) => p.nome).join(', ')} e outros.</p>
+  <section class="secao moldura" aria-labelledby="sobre-titulo">
+    <div class="sobre">
+      <div class="carta" data-revela>
+        <p class="chapeu">Carta ao leitor</p>
+        <h2 id="sobre-titulo">Grátis, sem anúncio e sem cadastro</h2>
+        <p>A gente é uma turma de Ciência da Computação da Unoesc Videira, em Santa Catarina. Fizemos o Papo Reto porque notícia boa existe, mas chega espalhada em dez portais e escrita para quem já sabe do assunto.</p>
+        <p>Aqui cada notícia vem explicada em até quatro frases e sempre com o link de quem apurou. Para ler a matéria inteira, você vai até o portal: o trabalho é deles.</p>
+        <p>O código é aberto. Se um resumo estiver errado, cada notícia tem um botão para avisar, e a correção fica registrada no GitHub.</p>
+        <p class="carta__assinatura">Turma de PRATIC IV, Unoesc Videira</p>
+        <a class="botao botao--papel" href={REPOSITORIO}>Ver o código</a>
       </div>
-      <div>
-        <h3>A IA explica</h3>
-        <p>Um modelo de IA escreve até quatro frases usando só o título e a descrição dos portais, sem inventar nada.</p>
+      <div class="feita" data-revela>
+        <p class="chapeu">Expediente</p>
+        <h2>Como a edição é feita</h2>
+        <div>
+          <h3>A cada 30 minutos</h3>
+          <p>Um programa lê as manchetes que {plural(portais.length, 'portal publica', 'portais publicam')} nos seus feeds: {portais.slice(0, 4).map((p) => p.nome).join(', ')} e outros.</p>
+        </div>
+        <div>
+          <h3>A IA explica</h3>
+          <p>Um modelo de IA escreve até quatro frases usando só o título e a descrição dos portais, sem inventar nada.</p>
+        </div>
+        <div>
+          <h3>Você vai à fonte</h3>
+          <p>Cada notícia mostra quem publicou e leva até a matéria original.</p>
+        </div>
+        <a class="link feita__mais" href={caminho('como-funciona/')}>Ver como funciona</a>
       </div>
-      <div>
-        <h3>Você vai à fonte</h3>
-        <p>Cada notícia mostra quem publicou e leva até a matéria original.</p>
-      </div>
-      <a class="botao botao--papel" href={caminho('como-funciona/')}>Ver como funciona</a>
     </div>
   </section>
 </Base>
 
 <style>
-  /* ---------- Capa: a manchete grande e a coluna "também hoje" ---------- */
-  .capa { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--gutter); padding-top: var(--gutter); align-items: stretch; }
-  .manchete {
-    background: var(--cat); border-radius: var(--raio); padding: clamp(24px, 4vw, 56px);
-    display: grid; gap: 22px; align-content: start; justify-items: start;
+  /* ---------- Capa: a manchete e a coluna "Também hoje", separadas por um fio ---------- */
+  .capa {
+    display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    padding-top: var(--gutter); padding-bottom: 0;
   }
-  .manchete__meta { margin-top: -6px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: var(--step-small); font-weight: 600; }
-  .manchete__titulo { font-size: var(--step-head); line-height: 1; }
-  .manchete :global(.manchete__foto) { justify-self: stretch; }
-  .manchete :global(.manchete__foto img) { aspect-ratio: 21 / 9; }
-  .manchete :global(.manchete__foto figcaption) { color: var(--ink); }
-  .manchete__titulo a { text-decoration: underline; text-decoration-thickness: 0.05em; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
+  .capa > * { padding-bottom: var(--gutter); }
+  .manchete { display: grid; gap: 14px; align-content: start; justify-items: start; padding-right: calc(var(--gutter) * 1.25); border-right: 1px solid var(--fio-claro); }
+  .manchete__titulo { font-size: var(--step-head); font-weight: 740; line-height: 1.02; letter-spacing: -0.02em; }
+  .manchete__titulo a { text-decoration: underline; text-decoration-thickness: 0.04em; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
   @media (hover: hover) and (pointer: fine) { .manchete__titulo a:hover { text-decoration-color: currentColor; } }
-  .manchete__resumo { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 40ch; }
-  .manchete__acoes { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; }
-  .manchete__fonte { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration-color: currentColor; }
-  .manchete__ia { font-size: var(--step-small); }
+  .manchete :global(.manchete__foto) { justify-self: stretch; }
+  .manchete :global(.manchete__foto img) { aspect-ratio: 2 / 1; }
+  .manchete__resumo { font-size: var(--step-lead); line-height: 1.42; columns: 2 18em; column-gap: calc(var(--gutter) * 1.25); column-rule: 1px solid var(--fio-claro); }
+  /* Capitular: a primeira letra do resumo, como na abertura de matéria do jornal. */
+  .manchete__resumo::first-letter { float: left; font-size: 3.4em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
+  .manchete__acoes { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; padding-top: 4px; }
+  .manchete__fonte { display: inline-flex; align-items: center; min-height: 44px; font: 600 var(--step-small) var(--sans); text-decoration-color: currentColor; }
+  .manchete__ia { font: 400 var(--step-small) var(--sans); color: var(--muted); }
 
-  .tambem { background: var(--papel); border-radius: var(--raio); padding: var(--dentro); display: grid; gap: 16px; align-content: start; }
-  .tambem > h2 { font-size: var(--step-lead); font-family: var(--sans); font-weight: 600; letter-spacing: 0; }
-  .tambem__lista { display: grid; gap: 8px; }
-  .tambem__lista li {
-    position: relative; display: grid; gap: 8px; padding: 14px 16px 16px; border-radius: calc(var(--raio) - 6px);
-    background: var(--papel-2); transition: background-color var(--t-hover) ease;
-  }
-  .tambem__meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: var(--step-small); font-weight: 600; color: var(--muted); }
-  .tambem__lista h3 { font-size: var(--step-lead); line-height: 1.15; }
-  .tambem__lista a { text-decoration: none; }
-  .tambem__lista a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
-  .tambem__lista a:focus-visible { outline: none; }
-  .tambem__lista li:has(a:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
-  @media (hover: hover) and (pointer: fine) {
-    .tambem__lista li:hover { background: color-mix(in srgb, var(--cat) 50%, var(--papel)); }
-  }
+  .tambem { padding-left: calc(var(--gutter) * 1.25); }
+  .tambem__lista li { display: grid; gap: 6px; padding: 14px 0 16px; border-bottom: 1px solid var(--fio-claro); }
+  .tambem__lista h3 { font-size: var(--step-lead); font-weight: 650; line-height: 1.15; }
 
-  /* ---------- Por editoria: um bloco por editoria, com a cor dela ---------- */
-  .editorias { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--gutter); }
-  .bloco { background: var(--papel); border-radius: var(--raio); padding: 8px; display: grid; gap: 4px; align-content: start; }
-  .bloco__nome a {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 64px; padding: 8px 18px;
-    background: var(--cat); border-radius: calc(var(--raio) - 6px); text-decoration: none; font-size: var(--step-lead);
-    transition: filter var(--t-hover) ease;
-  }
-  .bloco__nome span { font-family: var(--sans); font-size: var(--step-small); font-weight: 600; font-variant-numeric: tabular-nums; }
-  @media (hover: hover) and (pointer: fine) { .bloco__nome a:hover { filter: brightness(0.96); } }
-  .bloco__lista { display: grid; }
-  .bloco__lista li { position: relative; display: grid; gap: 4px; padding: 14px 14px 12px; border-radius: calc(var(--raio) - 6px); transition: background-color var(--t-hover) ease; }
-  .bloco__lista a { font-weight: 600; line-height: 1.3; text-decoration: none; }
-  .bloco__lista a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
-  .bloco__lista a:focus-visible { outline: none; }
-  .bloco__lista li:has(a:focus-visible) { outline: 3px solid var(--ink); outline-offset: -3px; }
-  .bloco__quando { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: var(--step-small); color: var(--muted); }
-  @media (hover: hover) and (pointer: fine) { .bloco__lista li:hover { background: color-mix(in srgb, var(--cat) 35%, var(--papel)); } }
+  /* ---------- Por editoria: colunas com fio entre elas ---------- */
+  .editorias { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); }
+  .bloco__nome { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .bloco__nome span { font-variant-numeric: tabular-nums; letter-spacing: 0; color: var(--muted); }
+  .bloco__item { display: grid; gap: 4px; padding: 12px 0 14px; border-bottom: 1px solid var(--fio-claro); }
+  .bloco__item:last-child { border-bottom: 0; }
+  .bloco__item h4 { margin: 0; font: 650 var(--step-body) / 1.22 var(--serif); }
 
-  /* ---------- Sobre: a carta e como a edição é feita ---------- */
-  .sobre { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); align-items: stretch; }
-  .carta, .feita { display: grid; gap: 18px; align-content: start; justify-items: start; }
-  .carta h2, .feita > h2 { font-size: var(--step-head); margin-bottom: 8px; }
-  .carta p { max-width: 58ch; }
-  .carta__assinatura { font-family: var(--serif); font-style: italic; font-size: var(--step-lead); }
-  .feita { background: var(--cat-geral); }
-  .feita > div { display: grid; gap: 4px; }
-  .feita h3 { font-size: var(--step-lead); }
+  /* ---------- Carta e expediente ---------- */
+  .sobre { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); }
+  .carta, .feita { display: grid; gap: 14px; align-content: start; justify-items: start; padding: var(--dentro) 0; }
+  .carta { padding-right: calc(var(--gutter) * 1.5); }
+  .feita { padding-left: calc(var(--gutter) * 1.5); border-left: 1px solid var(--fio-claro); }
+  .carta h2, .feita > h2 { font-size: var(--step-lead); font-weight: 720; }
+  .carta p { max-width: 62ch; }
+  .carta__assinatura { font-style: italic; }
+  .feita > div { display: grid; gap: 2px; }
+  .feita h3 { font: 600 var(--step-small) / 1.3 var(--sans); letter-spacing: 0.1em; text-transform: uppercase; }
+  .feita__mais { display: inline-flex; align-items: center; min-height: 44px; font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }
 
-  @media (max-width: 960px) {
+  @media (max-width: 900px) {
     .capa { grid-template-columns: 1fr; }
-    .sobre { grid-template-columns: 1fr; gap: var(--respiro); }
+    .manchete { padding-right: 0; border-right: 0; border-bottom: 1px solid var(--fio-claro); }
+    .tambem { padding-left: 0; padding-top: var(--gutter); }
+    .sobre { grid-template-columns: 1fr; }
+    .carta { padding-right: 0; }
+    .feita { padding-left: 0; border-left: 0; border-top: 1px solid var(--fio-claro); }
   }
 </style>

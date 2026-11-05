@@ -6,18 +6,19 @@ import { caminho, REPOSITORIO } from '../lib/formato';
 
 const portais = portaisAtuais();
 ---
-<Base titulo="Como funciona | Papo Reto" descricao="De onde vêm as notícias do Papo Reto, onde entra a IA, direitos autorais e o que acontece com os seus dados.">
+<Base titulo="Como funciona | Papo Reto" descricao="De onde vêm as notícias do Papo Reto, onde entra a IA, as imagens, direitos autorais e o que acontece com os seus dados.">
   <Cabecalho grande>
+    <p class="chapeu">Expediente</p>
     <h1 id="pagina-titulo">Como funciona</h1>
     <p class="abre__apoio">O Papo Reto não escreve notícia. Ele junta o que os portais publicaram, explica em poucas palavras e te leva até a matéria original.</p>
   </Cabecalho>
 
   <div class="moldura passos">
-    <section class="passo card passo--largo" aria-labelledby="fontes-titulo">
-      <h2 id="fontes-titulo">De onde vêm as notícias</h2>
+    <section class="passo" aria-labelledby="fontes-titulo">
+      <h2 class="rotulo" id="fontes-titulo">De onde vêm as notícias</h2>
       <div class="passo__texto" data-revela>
         <p>A cada 30 minutos, um programa lê os feeds RSS públicos dos portais: a lista de manchetes que eles mesmos publicam para outros sites e aplicativos. Guardamos o título, o link e a data de cada matéria.</p>
-        <p>Quando portais diferentes publicam sobre o mesmo fato, o Papo Reto junta as matérias num assunto só, comparando as palavras dos títulos. As barrinhas ao lado de cada notícia mostram quantos dos portais acompanhados falaram dele: quanto mais cheias, mais gente noticiou.</p>
+        <p>Quando portais diferentes publicam sobre o mesmo fato, o Papo Reto junta as matérias num assunto só, comparando o sentido dos títulos e das descrições. As barrinhas ao lado de cada notícia mostram quantos dos portais acompanhados falaram dele: quanto mais cheias, mais gente noticiou.</p>
         <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>.</p>
       </div>
       {portais.length > 0 && (
@@ -27,46 +28,53 @@ const portais = portaisAtuais();
       )}
     </section>
 
-    <section class="passo card" aria-labelledby="ia-titulo">
-      <h2 id="ia-titulo">Onde entra a IA</h2>
+    <section class="passo" aria-labelledby="ia-titulo">
+      <h2 class="rotulo" id="ia-titulo">Onde entra a IA</h2>
       <div class="passo__texto" data-revela>
-        <p>Um modelo de IA (Gemini, do Google) recebe só as manchetes e as descrições curtas dos feeds e escreve um título e até quatro frases. Ele não lê a matéria inteira e foi instruído a não inventar nada que não esteja ali.</p>
+        <p>Um modelo de IA (o Gemini, do Google; se ele falhar, o da Groq) recebe só as manchetes e as descrições curtas dos feeds e escreve um título e até quatro frases. Ele não lê a matéria inteira e foi instruído a não inventar nada que não esteja ali.</p>
         <p>Mesmo assim, IA erra. Por isso todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e tem um botão para reportar erro. Quando não há resumo, você vê a manchete original.</p>
         <p>Nenhum dado seu é enviado para a IA: ela só recebe texto público dos portais.</p>
       </div>
     </section>
 
-    <section class="passo card" aria-labelledby="editorias-titulo">
-      <h2 id="editorias-titulo">As cores das editorias</h2>
+    <section class="passo" aria-labelledby="imagens-titulo">
+      <h2 class="rotulo" id="imagens-titulo">As imagens</h2>
       <div class="passo__texto" data-revela>
-        <p>A IA classifica cada assunto numa editoria fechada, e cada editoria tem a sua cor. É a única cor do site: o resto é papel e tinta.</p>
+        <p>As fotos não são dos portais nem mostram o fato: são imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), escolhidas pelo assunto, sempre com o nome de quem fotografou.</p>
+        <p>Notícias sobre crime, morte, tragédia ou sobre uma pessoa específica ficam sem imagem, porque ali uma foto ilustrativa poderia enganar ou ferir.</p>
       </div>
-      <ul class="cores">
-        {categorias.categorias.map((c) => <li><a class="editoria" data-cat={c.slug} href={caminho(`categoria/${c.slug}/`)}>{c.nome}</a></li>)}
-      </ul>
-      <p>Enquanto a IA não classifica uma notícia, ela aparece sem editoria, só no papel.</p>
     </section>
 
-    <section class="passo card" aria-labelledby="direitos-titulo">
-      <h2 id="direitos-titulo">Direitos autorais</h2>
+    <section class="passo" aria-labelledby="editorias-titulo">
+      <h2 class="rotulo" id="editorias-titulo">As editorias</h2>
+      <div class="passo__texto" data-revela>
+        <p>A IA classifica cada assunto numa editoria de uma lista fechada. Enquanto ela não classifica, a notícia aparece sem editoria.</p>
+      </div>
+      <ul class="editorias-lista">
+        {categorias.categorias.map((c) => <li><a class="link" href={caminho(`categoria/${c.slug}/`)}>{c.nome}</a></li>)}
+      </ul>
+    </section>
+
+    <section class="passo" aria-labelledby="direitos-titulo">
+      <h2 class="rotulo" id="direitos-titulo">Direitos autorais</h2>
       <div class="passo__texto" data-revela>
         <p>As matérias pertencem aos portais. Aqui aparecem só o título, um resumo escrito por nós e o link para a matéria completa, que é onde vale a pena ler.</p>
-        <p>Não usamos fotos dos portais. Por isso o visual do site é feito só de letras, papel e cor.</p>
+        <p>Não usamos fotos dos portais nem posts de redes sociais.</p>
       </div>
     </section>
 
-    <section class="passo card" aria-labelledby="dados-titulo">
-      <h2 id="dados-titulo">Seus dados</h2>
+    <section class="passo" aria-labelledby="dados-titulo">
+      <h2 class="rotulo" id="dados-titulo">Seus dados</h2>
       <div class="passo__texto" data-revela>
         <p>Não tem cadastro, anúncio, nem cookie de rastreamento. As fontes de letra vêm do próprio site, sem chamar serviços de terceiros.</p>
-        <p>Newsletter e doações via Pix chegam em breve. Quando chegarem, vamos pedir só o necessário e explicar aqui antes.</p>
-        <a class="botao" href={REPOSITORIO}>Ver o código no GitHub</a>
+        <p>As imagens ilustrativas vêm direto da Pexels ou do Unsplash: eles veem o endereço de internet de quem carrega a imagem, mas não de que página ela foi pedida.</p>
+        <a class="botao botao--papel" href={REPOSITORIO}>Ver o código no GitHub</a>
       </div>
     </section>
   </div>
 
   <section class="secao moldura" aria-labelledby="fim-titulo">
-    <div class="fim card">
+    <div class="fim">
       <h2 id="fim-titulo">Bora ler?</h2>
       <a class="botao" href={caminho()}>Ver as notícias do dia</a>
     </div>
@@ -74,25 +82,18 @@ const portais = portaisAtuais();
 </Base>
 
 <style>
-  .passos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); padding-top: var(--gutter); }
-  .passo { display: grid; gap: 20px; align-content: start; justify-items: start; }
-  .passo--largo { grid-column: 1 / -1; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px var(--gutter); }
-  .passo--largo .portais { grid-column: 2; }
-  .passo h2 { font-size: var(--step-head); }
-  .passo__texto { display: grid; gap: 14px; max-width: 60ch; justify-items: start; }
-  .portais, .cores { display: flex; flex-wrap: wrap; gap: 8px; }
-  .portais li {
-    display: inline-flex; gap: 8px; align-items: center; min-height: 44px; padding: 0 16px; border-radius: var(--raio);
-    background: var(--papel-2); font-weight: 600; font-size: var(--step-small);
-  }
-  .portais__nota { color: var(--muted); }
-  .cores .editoria { min-height: 44px; padding: 0 16px; font-size: var(--step-body); }
-  .cores .editoria::before { content: none; }
-  .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; background: var(--cat-geral); }
+  /* Três colunas de texto, com fio entre elas, como uma página de jornal. */
+  .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); padding-top: var(--gutter); }
+  .passo { display: grid; gap: 14px; align-content: start; justify-items: start; }
+  .passo .rotulo { justify-self: stretch; }
+  .passo__texto { display: grid; gap: 12px; justify-items: start; }
+  .portais { display: grid; width: 100%; }
+  .portais li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--fio-claro); font: 600 var(--step-small) var(--sans); }
+  .portais__nota { color: var(--muted); font-weight: 400; }
+  .editorias-lista { columns: 2; column-gap: 24px; width: 100%; }
+  .editorias-lista a { display: inline-flex; min-height: 40px; align-items: center; font-weight: 600; }
+  .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: var(--dentro) 0; border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); }
   .fim h2 { font-size: var(--step-head); }
-  @media (max-width: 900px) {
-    .passos { grid-template-columns: 1fr; gap: var(--respiro); }
-    .passo--largo { grid-template-columns: 1fr; }
-    .passo--largo .portais { grid-column: 1; }
-  }
+  @media (max-width: 1000px) { .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .passos { grid-template-columns: 1fr; } }
 </style>

@@ -25,14 +25,14 @@ const barras = Array.from({ length: total }, (_, i) => i < cobertura);
 
 <style>
   .medidor--curto { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; flex: none; }
-  .medidor--curto > span { width: 5px; height: 100%; border-radius: var(--raio); background: var(--toque); }
+  .medidor--curto > span { width: 5px; height: 100%; border-radius: var(--raio); background: var(--medidor-vazio, var(--fio-claro)); }
   .medidor--curto > span.cheia { background: currentColor; }
 
   .medidor--grande { display: grid; gap: 12px; margin: 0; width: 100%; }
   .medidor__barras { display: flex; gap: 6px; height: 48px; }
-  .medidor__barras > span { flex: 1; border-radius: var(--raio); background: var(--toque); }
+  .medidor__barras > span { flex: 1; border-radius: var(--raio); background: var(--medidor-vazio, var(--fio-claro)); }
   .medidor__barras > span.cheia { background: var(--ink); }
-  .medidor--grande figcaption { font-size: var(--step-small); color: var(--muted); }
+  .medidor--grande figcaption { font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); }
   .medidor--grande strong { color: var(--ink); font-weight: 600; }
   @media (prefers-reduced-motion: no-preference) {
     .medidor__barras > span.cheia { transform-origin: bottom; animation: crescer 700ms var(--ease-expo) both; animation-delay: calc(var(--i) * 50ms + 150ms); }

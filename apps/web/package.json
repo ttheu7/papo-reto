@@ -15,6 +15,7 @@
   "dependencies": {
     "@fontsource-variable/newsreader": "5.3.0",
     "@fontsource/figtree": "5.3.0",
+    "@fontsource/unifrakturmaguntia": "5.2.8",
     "@papo-reto/core": "*",
     "astro": "7.4.5"
   }

@@ -14,7 +14,8 @@ const lista = eventosDaCategoria(slug);
 const outras = categorias.categorias.filter((c) => c.slug !== slug);
 ---
 <Base titulo={`${nome} | Papo Reto`} descricao={`Notícias de ${nome.toLowerCase()} das últimas 48 horas, explicadas em até quatro frases.`}>
-  <Cabecalho grande cat={slug}>
+  <Cabecalho grande>
+    <p class="chapeu">Editoria</p>
     <h1 id="pagina-titulo">{nome}</h1>
     <p class="abre__apoio">
       {lista.length > 0 ? `${plural(lista.length, 'notícia', 'notícias')} de ${nome.toLowerCase()} nas últimas 48 horas, explicadas em até quatro frases.` : `Nada de ${nome.toLowerCase()} nas últimas 48 horas.`}
@@ -26,15 +27,15 @@ const outras = categorias.categorias.filter((c) => c.slug !== slug);
     {lista.length > 0 ? (
       <ListaDeNoticias eventos={lista} geradoEm={eventos.geradoEm} mostrarCategoria={false} />
     ) : (
-      <p class="vazio card">Enquanto isso, veja <a class="link" href={caminho()}>as notícias do dia</a> ou outra editoria logo abaixo.</p>
+      <p class="vazio">Enquanto isso, veja <a class="link" href={caminho()}>as notícias do dia</a> ou outra editoria logo abaixo.</p>
     )}
   </section>
 
   <section class="secao moldura" aria-labelledby="outras-titulo">
-    <div class="cabeca"><h2 id="outras-titulo">Outras editorias</h2></div>
+    <h2 class="rotulo" id="outras-titulo">Outras editorias</h2>
     <ul class="outras" data-revela>
       {outras.map((c) => (
-        <li data-cat={c.slug}>
+        <li>
           <a href={caminho(`categoria/${c.slug}/`)}>
             <span>{c.nome}</span>
             <span class="outras__total">{plural(c.total, 'notícia', 'notícias')}</span>
@@ -46,16 +47,14 @@ const outras = categorias.categorias.filter((c) => c.slug !== slug);
 </Base>
 
 <style>
-  .lista { padding-top: var(--gutter); }
-  .vazio { font-size: var(--step-lead); }
-  .outras { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 12px; }
+  .lista { padding-top: 4px; }
+  .vazio { font-size: var(--step-lead); padding: var(--gutter) 0; }
+  .outras { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); column-gap: calc(var(--gutter) * 2); }
   .outras a {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 72px; padding: 0 22px;
-    background: var(--cat); border-radius: var(--raio); text-decoration: none;
-    font-family: var(--serif); font-weight: 560; font-size: var(--step-lead);
-    transition: filter var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px; min-height: 52px; padding: 12px 0;
+    border-bottom: 1px solid var(--fio-claro); text-decoration: none;
+    font: 680 var(--step-lead) / 1.2 var(--serif);
   }
-  .outras a:active { transform: scale(0.98); }
-  @media (hover: hover) and (pointer: fine) { .outras a:hover { filter: brightness(0.95); } }
-  .outras__total { font-family: var(--sans); font-size: var(--step-small); font-weight: 600; font-variant-numeric: tabular-nums; }
+  @media (hover: hover) and (pointer: fine) { .outras a:hover span:first-child { text-decoration: underline; } }
+  .outras__total { font: 600 var(--step-small) var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
 </style>
