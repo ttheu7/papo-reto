@@ -124,4 +124,6 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - Commits pequenos, com mensagens em português.
 - Antes de dar uma tarefa por concluída, rode os testes e a checagem de tipos.
 - Quando uma decisão mudar, atualize este arquivo e o README.
+- O README segue sempre a mesma estrutura de seções, nesta ordem, cada uma com o seu emoji: Funcionalidades, Tecnologias, Arquitetura, Instalação, Configuração, Uso, API (dados públicos), Deploy, Roadmap, Segurança e privacidade, Licença, Contribuindo, Suporte e Agradecimentos, com o índice no topo. Informação nova entra na seção certa, e não numa seção nova. Se faltar alguma definição (contato, nomes, prazos), pergunte em vez de inventar.
+- Licença MIT (`LICENSE`), só para o código. As matérias pertencem aos portais.
 - As tarefas ficam em `docs/tarefas/`.
