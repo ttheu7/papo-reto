@@ -13,6 +13,8 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 
 Se a coleta falhar, o site é publicado mesmo assim com o que já está no banco. Se o banco não responder, a publicação para e o site anterior continua no ar.
 
+**Reportar erro:** na beta, o botão "Reportar erro neste resumo" abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na versão 1.0, ele vira um formulário próprio do site, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
+
 ## Organização
 
 Monorepo com npm workspaces, TypeScript estrito e Clean Architecture.

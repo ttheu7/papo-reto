@@ -72,7 +72,7 @@ Regras:
 - `descricao_original` é de uso interno: nunca vai para JSON público, página, MCP ou view.
 - Sem imagens dos portais (direito autoral). O visual é tipográfico.
 - Matérias de fontes com `exige_assinatura` levam a etiqueta "Exige assinatura".
-- Todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e oferece um jeito de reportar erro.
+- Todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e oferece um jeito de reportar erro. Na beta, o botão abre uma issue no GitHub já preenchida (`linkParaReportar`, em `apps/web/src/lib/formato.ts`): exige conta no GitHub e o report fica público. Na 1.0, isso vira um formulário próprio, sem conta (`docs/tarefas/02-reportar-erro.md`).
 - Público jovem: nada de anúncio com perfilamento (ECA Digital, Lei 15.211/2025) e coleta mínima de dados pessoais (LGPD).
 
 ## Segredos
