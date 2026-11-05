@@ -1,0 +1,187 @@
+---
+// Giro: as manchetes em tela cheia, uma de cada vez, como nos vídeos curtos, mas só com texto.
+// A ordem é a mesma para todo mundo e a lista acaba: nada de rolagem infinita nem de personalização.
+// Sem JavaScript, funciona com a rolagem que encaixa e os links "Próxima" e "Anterior".
+import Base from '../layouts/Base.astro';
+import Medidor from '../components/Medidor.astro';
+import { eventos, eventosDoGiro } from '../lib/dados';
+import { caminho, exigeAssinatura, lerNo, portaisDe, quando } from '../lib/formato';
+
+const geradoEm = eventos.geradoEm;
+const lista = eventosDoGiro();
+const total = lista.length;
+const id = (i: number) => `cena-${i + 1}`;
+---
+<Base imersivo titulo="Giro | Papo Reto" descricao="As manchetes do dia em tela cheia, uma de cada vez, com o resumo e o link para quem noticiou.">
+  <div class="giro">
+    <header class="giro__barra">
+      <a class="giro__voltar" href={caminho()} aria-label="Voltar para a capa do Papo Reto">
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <span translate="no">Papo Reto</span>
+      </a>
+      <h1 class="giro__nome">Giro</h1>
+      <p class="giro__contador" aria-hidden="true"><span data-giro-atual>1</span> de {total}</p>
+    </header>
+
+    <ol class="giro__lista" data-giro-lista tabindex="0" aria-label={`Giro: ${total} notícias. Use as setas para passar.`}>
+      {lista.map((e, i) => {
+        const portais = portaisDe(e);
+        const fonte = e.materias[0];
+        return (
+          <li class="giro__cena" id={id(i)} data-cat={e.categoria?.slug ?? 'geral'} data-giro-cena={i + 1}>
+            <article class="giro__cartao" aria-labelledby={`${id(i)}-titulo`}>
+              <p class="so-leitor">Notícia {i + 1} de {total}</p>
+              <h2 class="giro__manchete" id={`${id(i)}-titulo`}>{e.titulo}</h2>
+              <p class="giro__meta">
+                {e.categoria && <span class="editoria editoria--papel">{e.categoria.nome}</span>}
+                <Medidor cobertura={e.cobertura} />
+                <span>{portais.length === 1 ? portais[0] : `${portais.length} portais`} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
+              </p>
+              <p class="giro__resumo">{e.resumo ?? 'Ainda sem resumo. Toque para ver quem noticiou e ler direto na fonte.'}</p>
+              {e.resumo && <p class="giro__ia">Resumo feito por IA a partir das manchetes dos portais.</p>}
+              <div class="giro__acoes">
+                <a class="botao" href={caminho(`evento/${e.id}/`)}>Entender o assunto</a>
+                {fonte && (
+                  <a class="link giro__fonte" href={fonte.url} rel="noopener">
+                    {lerNo(fonte.portal)}{exigeAssinatura(e) ? ' (exige assinatura)' : ''}
+                  </a>
+                )}
+              </div>
+            </article>
+            <nav class="giro__passos" aria-label="Passar notícia">
+              {i > 0 && <a class="giro__passo" href={`#${id(i - 1)}`} data-giro-passo="-1">Anterior</a>}
+              <a class="giro__passo giro__passo--proxima" href={`#${id(i + 1)}`} data-giro-passo="1">{i + 1 < total ? 'Próxima' : 'Fim'}</a>
+            </nav>
+          </li>
+        );
+      })}
+      <li class="giro__cena giro__cena--fim" id={id(total)} data-cat="geral" data-giro-cena={total + 1}>
+        <article class="giro__cartao" aria-labelledby="giro-fim">
+          <h2 class="giro__manchete" id="giro-fim">Você viu tudo desta edição</h2>
+          <p class="giro__resumo">Foram {total} notícias das últimas 48 horas. A próxima edição sai em até 30 minutos, com o que os portais publicarem de novo.</p>
+          <div class="giro__acoes">
+            <a class="botao" href={caminho()}>Voltar para a capa</a>
+            <a class="link giro__fonte" href={`#${id(0)}`} data-giro-inicio>Ver de novo do começo</a>
+          </div>
+        </article>
+      </li>
+    </ol>
+  </div>
+</Base>
+
+<script>
+  // Com JavaScript: contador da notícia na tela, setas e teclas j/k para passar, e o foco segue a notícia.
+  const lista = document.querySelector<HTMLElement>('[data-giro-lista]');
+  const atual = document.querySelector<HTMLElement>('[data-giro-atual]');
+  if (lista && atual) {
+    const cenas = Array.from(lista.querySelectorAll<HTMLElement>('[data-giro-cena]'));
+    const total = cenas.length - 1;
+    let indice = 0;
+    const suave = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+    const ir = (i: number) => {
+      const alvo = cenas[Math.max(0, Math.min(cenas.length - 1, i))];
+      // Rola só a lista (scrollIntoView rolaria a página também).
+      if (alvo) lista.scrollTo({ top: alvo.offsetTop, behavior: suave() });
+    };
+
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entradas) => {
+          for (const e of entradas) {
+            if (!e.isIntersecting) continue;
+            indice = cenas.indexOf(e.target as HTMLElement);
+            atual.textContent = String(Math.min(indice + 1, total));
+          }
+        },
+        { root: lista, threshold: 0.6 },
+      );
+      cenas.forEach((c) => io.observe(c));
+    }
+
+    // Os links "Próxima" e "Anterior" funcionam sem JavaScript; com ele, rolam dentro da lista sem mudar o endereço.
+    lista.addEventListener('click', (ev) => {
+      const passo = (ev.target as HTMLElement).closest<HTMLAnchorElement>('[data-giro-passo], [data-giro-inicio]');
+      if (!passo) return;
+      ev.preventDefault();
+      ir(passo.dataset.giroInicio !== undefined ? 0 : indice + Number(passo.dataset.giroPasso));
+    });
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      const alvo = ev.target as HTMLElement;
+      if (alvo.closest('input, textarea, select')) return;
+      if (ev.key === 'j' || ev.key === 'ArrowDown' || ev.key === 'PageDown') { ev.preventDefault(); ir(indice + 1); }
+      else if (ev.key === 'k' || ev.key === 'ArrowUp' || ev.key === 'PageUp') { ev.preventDefault(); ir(indice - 1); }
+      else if (ev.key === 'Home') { ev.preventDefault(); ir(0); }
+      else if (ev.key === 'End') { ev.preventDefault(); ir(cenas.length - 1); }
+    });
+  }
+</script>
+
+<style>
+  /* A página inteira é o Giro: uma barra fina em cima e a lista de cenas, cada uma do tamanho da tela. */
+  :global(body.imersivo) { background: var(--chao); height: 100svh; overflow: hidden; }
+  .giro { --barra-altura: 64px; height: 100svh; display: grid; grid-template-rows: var(--barra-altura) minmax(0, 1fr); }
+
+  .giro__barra {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+    padding-inline: var(--margin);
+  }
+  .giro__voltar {
+    justify-self: start; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px 0 10px;
+    border-radius: var(--raio); background: var(--papel); font-weight: 600; font-size: var(--step-small); text-decoration: none;
+    transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  .giro__voltar:active { transform: scale(0.96); }
+  @media (hover: hover) and (pointer: fine) { .giro__voltar:hover { background: var(--papel-2); } }
+  .giro__nome { font-size: var(--step-lead); letter-spacing: -0.01em; }
+  .giro__contador {
+    justify-self: end; font-size: var(--step-small); font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums;
+  }
+
+  .giro__lista {
+    position: relative; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory;
+    padding-inline: var(--margin);
+  }
+  .giro__lista:focus-visible { outline-offset: -3px; }
+  @media (prefers-reduced-motion: no-preference) { .giro__lista { scroll-behavior: smooth; } }
+
+  /* Cada cena ocupa a altura visível; a manchete nunca é cortada (conteúdo de terceiros), então a cena pode crescer. */
+  .giro__cena {
+    min-height: 100%; scroll-snap-align: start; scroll-snap-stop: always;
+    display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; padding-block: 4px 16px;
+    max-width: 640px; margin-inline: auto;
+  }
+  .giro__cartao {
+    background: var(--cat); border-radius: var(--raio); padding: clamp(24px, 5vw, 48px);
+    display: grid; align-content: center; gap: 20px; justify-items: start;
+  }
+  .giro__manchete { font-size: var(--step-head); line-height: 1.02; letter-spacing: -0.025em; }
+  .giro__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--step-small); font-weight: 600; }
+  .giro__resumo { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 38ch; }
+  .giro__ia { font-size: var(--step-small); }
+  .giro__acoes { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; padding-top: 4px; }
+  .giro__fonte { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; text-decoration-color: currentColor; }
+
+  .giro__passos { display: flex; justify-content: space-between; gap: 12px; }
+  .giro__passo {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 20px;
+    border-radius: var(--raio); background: var(--papel); font-weight: 600; font-size: var(--step-small); text-decoration: none;
+    transition: background-color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  .giro__passo:active { transform: scale(0.96); }
+  .giro__passo--proxima { margin-left: auto; }
+  @media (hover: hover) and (pointer: fine) { .giro__passo:hover { background: var(--papel-2); } }
+
+  .giro__cena--fim .giro__cartao { background: var(--papel); }
+  @media (max-width: 640px) {
+    .giro__cartao { gap: 16px; }
+    .giro__resumo { font-size: var(--step-body); line-height: 1.45; }
+  }
+
+  /* Na tela de toque, passar é deslizar: os botões só ocupariam espaço. */
+  @media (pointer: coarse) {
+    .giro__passos { display: none; }
+    .giro__cena { grid-template-rows: minmax(0, 1fr); }
+  }
+</style>

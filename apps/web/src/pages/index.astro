@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import ListaDeNoticias from '../components/ListaDeNoticias.astro';
 import Medidor from '../components/Medidor.astro';
 import { categorias, eventos, hoje, portaisAtuais } from '../lib/dados';
-import { caminho, exigeAssinatura, plural, portaisDe, quando, quemNoticiou, REPOSITORIO } from '../lib/formato';
+import { caminho, exigeAssinatura, lerNo, plural, portaisDe, quando, quemNoticiou, REPOSITORIO } from '../lib/formato';
 
 const geradoEm = eventos.geradoEm;
 const doDia = hoje.eventos.length > 0 ? hoje.eventos : eventos.eventos.slice(0, 5);
@@ -34,7 +34,7 @@ const fonteDaManchete = manchete?.materias[0];
           <a class="botao" href={caminho(`evento/${manchete.id}/`)}>Entender o assunto</a>
           {fonteDaManchete && (
             <a class="link manchete__fonte" href={fonteDaManchete.url} rel="noopener">
-              Ler no {fonteDaManchete.portal}{exigeAssinatura(manchete) ? ' (exige assinatura)' : ''}
+              {lerNo(fonteDaManchete.portal)}{exigeAssinatura(manchete) ? ' (exige assinatura)' : ''}
             </a>
           )}
         </div>

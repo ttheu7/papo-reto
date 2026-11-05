@@ -49,3 +49,9 @@ export function quemNoticiou(e: ComMaterias): string {
 
 /** Verdadeiro quando todas as matérias do acontecimento são de portais com assinatura. */
 export const exigeAssinatura = (e: ComMaterias) => e.materias.length > 0 && e.materias.every((m) => m.exigeAssinatura);
+
+// Portais de nome feminino ("a Folha", "a CNN Brasil"); os demais levam "no" ("no g1", "no Estadão").
+const FEMININOS = /^(folha|cnn|bbc|agência|agencia)/i;
+
+/** "Ler na Folha", "Ler no g1": a chamada para a matéria original com o artigo certo. */
+export const lerNo = (portal: string) => `Ler ${FEMININOS.test(portal.trim()) ? 'na' : 'no'} ${portal}`;

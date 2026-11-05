@@ -31,6 +31,7 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
     <nav class="topo__editorias" aria-label="Editorias">
       <ul>
         <li><a class="editoria editoria--todas" href={caminho('#ultimas')}>Últimas</a></li>
+        <li><a class="editoria editoria--giro" href={caminho('giro/')}>Giro</a></li>
         {editorias.map((c) => (
           <li><a class="editoria" data-cat={c.slug} href={caminho(`categoria/${c.slug}/`)}>{c.nome}</a></li>
         ))}
@@ -108,6 +109,7 @@ const editorias = categorias.categorias.filter((c) => c.total > 0);
   }
   .topo__editorias .editoria::before { content: none; }
   .topo__editorias .editoria--todas { background: var(--papel-2); }
+  .topo__editorias .editoria--giro { background: var(--ink); color: var(--on-ink); }
   .topo__editorias .editoria:active { transform: scale(0.96); }
   @media (hover: hover) and (pointer: fine) {
     .topo__editorias .editoria:hover { filter: brightness(0.95); }

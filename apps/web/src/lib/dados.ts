@@ -43,3 +43,13 @@ export function portaisAtuais(): { nome: string; exigeAssinatura: boolean; mater
 
 /** Quantos portais o site acompanha agora: a escala do indicador de cobertura. */
 export const totalDePortais = Math.max(1, portaisAtuais().length);
+
+/**
+ * A ordem do Giro, a mesma para todo mundo (nada é personalizado): primeiro os de "hoje", com mais
+ * portais noticiando, depois os demais das últimas 48 horas, dos mais novos para os mais antigos.
+ */
+export function eventosDoGiro(): Evento[] {
+  const deHoje = hoje.eventos;
+  const ids = new Set(deHoje.map((e) => e.id));
+  return [...deHoje, ...eventos.eventos.filter((e) => !ids.has(e.id))];
+}

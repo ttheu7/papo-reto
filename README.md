@@ -4,7 +4,7 @@
 
 Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini, com a Groq de reserva), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal, sem anúncios e sem coleta de dados de quem lê.
 
-No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
+No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este README descreve a versão 1.0, em desenvolvimento. Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
 
 ---
 
@@ -30,6 +30,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ## ✨ Funcionalidades
 
 ### Para quem lê:
+- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando, com o resumo e o link para a matéria (sem personalização e com fim)
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
 - ✅ Indicador de cobertura: barrinhas mostram quantos dos portais acompanhados noticiaram cada assunto
@@ -258,7 +259,8 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 2. Leia a manchete e os destaques do dia, ou escolha uma editoria
 3. Abra um acontecimento para ver o resumo "Em 1 minuto" e a lista "Quem noticiou"
 4. Clique em uma matéria para ler no portal original
-5. Achou um erro no resumo? Use "Reportar erro neste resumo". Na beta, ele abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na 1.0, vira um formulário próprio, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
+5. Quer passar rápido pelas notícias? Abra o **Giro** no menu: uma manchete por tela, para deslizar (ou usar as setas e j/k no computador)
+6. Achou um erro no resumo? Use "Reportar erro neste resumo". Na beta, ele abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na 1.0, vira um formulário próprio, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
 
 ### Comandos do projeto:
 
@@ -396,6 +398,11 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Implementações futuras:
 
 #### Versão 1.0:
+- [x] **Agrupamento das matérias do mesmo fato** - Por palavras e por vetores da Mistral (título + descrição)
+- [x] **Indicador de cobertura** - Barrinhas com quantos portais noticiaram
+- [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
+- [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, só com texto
+- [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
 
 #### Depois da 1.0:
