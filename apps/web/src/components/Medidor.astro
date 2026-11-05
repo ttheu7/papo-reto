@@ -1,17 +1,26 @@
 ---
-// Indicador de cobertura: uma barrinha por portal acompanhado, cheia para cada portal que noticiou o assunto.
+// Indicador de cobertura: um anel que enche conforme a parte dos portais acompanhados que noticiou o
+// assunto, com o número de portais no meio. Curto nas listas; grande, com "de N", em "Quem noticiou".
 import { totalDePortais } from '../lib/dados';
 
 interface Props { cobertura: number; grande?: boolean }
 const { cobertura, grande = false } = Astro.props;
 const total = Math.max(totalDePortais, cobertura);
 const rotulo = cobertura === 1 ? `Noticiado por 1 de ${total} portais acompanhados` : `Noticiado por ${cobertura} de ${total} portais acompanhados`;
-const barras = Array.from({ length: total }, (_, i) => i < cobertura);
+// O traço usa pathLength 100: o quanto falta para fechar o anel é 100 menos a porcentagem.
+const falta = 100 - Math.round((cobertura / total) * 100);
+const tamanho = grande ? 96 : 24;
+const espessura = grande ? 8 : 2.5;
+const raio = (tamanho - espessura) / 2;
 ---
 {grande ? (
   <figure class="medidor medidor--grande">
-    <span class="medidor__barras" aria-hidden="true">
-      {barras.map((cheia, i) => <span class:list={{ cheia }} style={`--i:${i}`} />)}
+    <span class="medidor__anel" aria-hidden="true">
+      <svg width={tamanho} height={tamanho} viewBox={`0 0 ${tamanho} ${tamanho}`}>
+        <circle class="medidor__trilho" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} />
+        <circle class="medidor__cheio" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} pathLength="100" style={`--falta:${falta}`} />
+      </svg>
+      <span class="medidor__meio"><b>{cobertura}</b><small>de {total}</small></span>
     </span>
     <figcaption>
       <strong>{cobertura} de {total}</strong> portais acompanhados {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto
@@ -19,23 +28,41 @@ const barras = Array.from({ length: total }, (_, i) => i < cobertura);
   </figure>
 ) : (
   <span class="medidor medidor--curto" role="img" aria-label={rotulo} title={rotulo}>
-    {barras.map((cheia) => <span class:list={{ cheia }} />)}
+    <svg width={tamanho} height={tamanho} viewBox={`0 0 ${tamanho} ${tamanho}`} aria-hidden="true">
+      <circle class="medidor__trilho" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} />
+      <circle class="medidor__cheio" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} pathLength="100" style={`--falta:${falta}`} />
+    </svg>
+    <b aria-hidden="true">{cobertura}</b>
   </span>
 )}
 
 <style>
-  .medidor--curto { display: inline-flex; align-items: flex-end; gap: 2px; height: 14px; flex: none; }
-  .medidor--curto > span { width: 5px; height: 100%; border-radius: var(--raio); background: var(--medidor-vazio, var(--fio-claro)); }
-  .medidor--curto > span.cheia { background: currentColor; }
+  .medidor svg { display: block; transform: rotate(-90deg); }
+  .medidor circle { fill: none; }
+  .medidor__trilho { stroke: var(--medidor-vazio, var(--fio-claro)); }
+  .medidor__cheio { stroke: currentColor; stroke-dasharray: 100; stroke-dashoffset: var(--falta); }
 
-  .medidor--grande { display: grid; gap: 12px; margin: 0; width: 100%; }
-  .medidor__barras { display: flex; gap: 6px; height: 48px; }
-  .medidor__barras > span { flex: 1; border-radius: var(--raio); background: var(--medidor-vazio, var(--fio-claro)); }
-  .medidor__barras > span.cheia { background: var(--ink); }
-  .medidor--grande figcaption { font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); }
-  .medidor--grande strong { color: var(--ink); font-weight: 600; }
-  @media (prefers-reduced-motion: no-preference) {
-    .medidor__barras > span.cheia { transform-origin: bottom; animation: crescer 700ms var(--ease-expo) both; animation-delay: calc(var(--i) * 50ms + 150ms); }
+  /* Curto: o número de portais no meio do anel. */
+  .medidor--curto { position: relative; display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; vertical-align: middle; }
+  .medidor--curto b {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font: 600 0.6875rem / 1 var(--sans); letter-spacing: 0; font-variant-numeric: tabular-nums;
   }
-  @keyframes crescer { from { transform: scaleY(0.2); } }
+
+  /* Grande: o número e o "de N" empilhados, os dois centrados no anel; a frase ao lado. */
+  .medidor--grande { display: flex; align-items: center; gap: 20px; margin: 0; }
+  .medidor__anel { position: relative; flex: none; color: var(--ink); }
+  .medidor__meio {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    text-align: center; line-height: 1;
+  }
+  .medidor__meio b { font: 700 1.75rem / 1 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
+  .medidor__meio small { font: 600 0.6875rem / 1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .medidor--grande figcaption { font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); max-width: 32ch; }
+  .medidor--grande strong { color: var(--ink); font-weight: 600; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .medidor--grande .medidor__cheio { animation: encher 900ms var(--ease-expo) 150ms both; }
+  }
+  @keyframes encher { from { stroke-dashoffset: 100; } }
 </style>

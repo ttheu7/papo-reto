@@ -34,7 +34,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
-- ✅ Indicador de cobertura: barrinhas mostram quantos dos portais acompanhados noticiaram cada assunto
+- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos dos portais acompanhados noticiaram cada assunto
 - ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
@@ -417,7 +417,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 
 #### Versão 1.0:
 - [x] **Agrupamento das matérias do mesmo fato** - Por palavras e por vetores da Mistral (título + descrição)
-- [x] **Indicador de cobertura** - Barrinhas com quantos portais noticiaram
+- [x] **Indicador de cobertura** - Anel com quantos portais noticiaram (no lugar das barrinhas da beta)
 - [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
 - [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, com a imagem ilustrativa
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
