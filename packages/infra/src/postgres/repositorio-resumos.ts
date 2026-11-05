@@ -49,9 +49,9 @@ export class RepositorioResumosPg implements RepositorioResumos {
     return this.sql.begin(async (tx) => {
       const inseridos = await tx`
         insert into public.resumo
-          (evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado)
+          (evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado, busca_imagem)
         select ${r.eventoId}, ${r.modeloIaId}, ${r.titulo}, ${r.texto}, ${r.versaoPrompt},
-               ${r.tokensEntrada}, ${r.tokensSaida}, ${r.custoEstimado}
+               ${r.tokensEntrada}, ${r.tokensSaida}, ${r.custoEstimado}, ${r.buscaImagem}
          where not exists (select 1 from public.resumo where evento_id = ${r.eventoId})
         returning id`;
       if (inseridos.length === 0) return false;

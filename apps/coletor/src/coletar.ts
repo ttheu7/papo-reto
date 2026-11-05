@@ -1,13 +1,17 @@
 // Ponto de entrada da coleta: monta as dependências e chama os casos de uso.
-// Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY, GROQ_API_KEY e MISTRAL_API_KEY).
-import { ColetarNoticias, mensagemDe, ResumirEventos } from '@papo-reto/core';
+// Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY, GROQ_API_KEY, MISTRAL_API_KEY,
+// PEXELS_API_KEY e UNSPLASH_ACCESS_KEY).
+import { ColetarNoticias, IlustrarEventos, mensagemDe, ResumirEventos, type AcervoDeImagens } from '@papo-reto/core';
 import {
+  AcervoPexels,
+  AcervoUnsplash,
   conectar,
   LeitorRssHttp,
   lerConfiguracao,
   RegistroJson,
   RepositorioExecucoesPg,
   RepositorioFontesPg,
+  RepositorioImagensPg,
   RepositorioNoticiasPg,
   RepositorioResumosPg,
   ServicoDeVetoresMistral,
@@ -52,6 +56,22 @@ async function principal(): Promise<number> {
       }
     } else {
       registro.info('GEMINI_API_KEY e GROQ_API_KEY ausentes; resumos pulados', { execucaoId: coleta.execucaoId });
+    }
+
+    // Imagens ilustrativas dos acontecimentos já resumidos: a Pexels primeiro, o Unsplash de reserva.
+    const acervos: AcervoDeImagens[] = [
+      ...(config.chavePexels ? [new AcervoPexels({ chave: config.chavePexels })] : []),
+      ...(config.chaveUnsplash ? [new AcervoUnsplash({ chave: config.chaveUnsplash })] : []),
+    ];
+    if (acervos.length > 0) {
+      try {
+        await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }).executar(coleta.execucaoId);
+      } catch (erro) {
+        // Sem imagem, o site mostra a notícia só com texto, como sempre.
+        registro.erro('etapa de imagens falhou', { execucaoId: coleta.execucaoId, erro: mensagemDe(erro) });
+      }
+    } else {
+      registro.info('PEXELS_API_KEY e UNSPLASH_ACCESS_KEY ausentes; imagens puladas', { execucaoId: coleta.execucaoId });
     }
 
     return coleta.status === 'falha' ? 1 : 0;

@@ -15,6 +15,18 @@ export interface MateriaJson {
   exigeAssinatura: boolean;
 }
 
+/** Imagem ilustrativa de acervo: exibida direto do acervo, sempre com o crédito. */
+export interface ImagemJson {
+  url: string;
+  largura: number;
+  altura: number;
+  cor: string | null;
+  provedor: string;
+  autor: string;
+  urlAutor: string;
+  urlPagina: string;
+}
+
 export interface EventoJson {
   id: string;
   titulo: string;
@@ -26,6 +38,8 @@ export interface EventoJson {
   atualizadoEm: string;
   publicadoEm: string;
   materias: MateriaJson[];
+  /** Ilustrativa (não mostra o fato). Null para notícias sensíveis ou sem imagem achada. */
+  imagem: ImagemJson | null;
 }
 
 export interface EventosJson {
@@ -114,5 +128,17 @@ function eventoJson(c: CardDeEvento, materias: MateriaPublica[]): EventoJson {
       publicadaEm: m.publicadaEm.toISOString(),
       exigeAssinatura: m.exigeAssinatura,
     })),
+    imagem: c.imagem
+      ? {
+          url: c.imagem.url,
+          largura: c.imagem.largura,
+          altura: c.imagem.altura,
+          cor: c.imagem.cor,
+          provedor: c.imagem.provedor,
+          autor: c.imagem.autor,
+          urlAutor: c.imagem.urlAutor,
+          urlPagina: c.imagem.urlPagina,
+        }
+      : null,
   };
 }

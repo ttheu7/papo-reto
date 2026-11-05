@@ -66,6 +66,7 @@ describe('GerarDadosDoSite', () => {
         { portal: 'g1', titulo: 'Manchete g1', url: 'https://g1.exemplo/x', publicadaEm: horasAtras(2).toISOString(), exigeAssinatura: false },
         { portal: 'Folha', titulo: 'Manchete Folha', url: 'https://Folha.exemplo/x', publicadaEm: horasAtras(2).toISOString(), exigeAssinatura: true },
       ],
+      imagem: null,
     });
   });
 
@@ -138,5 +139,14 @@ describe('GerarDadosDoSite', () => {
     );
     await caso.executar();
     expect((escritor.arquivos.get('eventos.json') as EventosJson).eventos.map((e) => e.id)).toEqual(['noticia']);
+  });
+
+  it('leva a imagem ilustrativa com o crédito, e null quando não há', async () => {
+    const imagem = { provedor: 'Pexels', url: 'https://img/1.jpg', largura: 1600, altura: 900, cor: '#123456', autor: 'Ana', urlAutor: 'https://p/@ana', urlPagina: 'https://p/1' };
+    const { caso, escritor } = gerar([card('com', 1, 1, { imagem }), card('sem', 2)]);
+    await caso.executar();
+    const eventos = (escritor.arquivos.get('eventos.json') as EventosJson).eventos;
+    expect(eventos.find((e) => e.id === 'com')?.imagem).toEqual(imagem);
+    expect(eventos.find((e) => e.id === 'sem')?.imagem).toBeNull();
   });
 });

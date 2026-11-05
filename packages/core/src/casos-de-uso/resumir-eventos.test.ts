@@ -60,7 +60,23 @@ describe('ResumirEventos', () => {
       tokensSaida: 100,
       custoEstimado: (500 * 0.1 + 100 * 0.4) / 1_000_000,
       categoriaId: 5,
+      buscaImagem: null,
     });
+  });
+
+  it('grava as palavras-chave da imagem limpas, e null quando a IA não quer imagem', async () => {
+    const repo = new ResumosEmMemoria(MODELO, CATEGORIAS, eventos(3));
+    const ia = new IaFalsa(async () => ({
+      resumos: [
+        { eventoId: 'e1', titulo: 'T', texto: 'Uma.', categoriaSlug: null, buscaImagem: '  soccer   stadium; <night> ' },
+        { eventoId: 'e2', titulo: 'T', texto: 'Uma.', categoriaSlug: null, buscaImagem: null },
+        { eventoId: 'e3', titulo: 'T', texto: 'Uma.', categoriaSlug: null, buscaImagem: '   ' },
+      ],
+      tokensEntrada: 1,
+      tokensSaida: 1,
+    }));
+    await resumidor(repo, ia).executar(execucaoId);
+    expect(repo.gravados.map((g) => g.buscaImagem)).toEqual(['soccer stadium night', null, null]);
   });
 
   it('descarta ids inventados e repetidos, ignora slug desconhecido e corta o texto em quatro frases', async () => {

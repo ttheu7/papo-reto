@@ -3,8 +3,10 @@ import type {
   CardDeEvento,
   Categoria,
   ErroDeExecucao,
+  EventoParaIlustrar,
   EventoParaResumir,
   Fonte,
+  ImagemDeAcervo,
   GrupoDeNoticias,
   ItemRss,
   MateriaPublica,
@@ -22,6 +24,8 @@ import type {
   RepositorioNoticias,
   RepositorioResumos,
   RepositorioSite,
+  AcervoDeImagens,
+  RepositorioImagens,
   ServicoDeVetores,
   ServicoIa,
 } from '../portas';
@@ -235,5 +239,42 @@ export class EscritorEmMemoria implements EscritorDeDados {
   arquivos = new Map<string, unknown>();
   async escrever(nome: string, dados: unknown) {
     this.arquivos.set(nome, JSON.parse(JSON.stringify(dados)));
+  }
+}
+
+export class ImagensEmMemoria implements RepositorioImagens {
+  gravadas = new Map<string, { busca: string; imagem: ImagemDeAcervo | null }>();
+  pedidos: { desde: Date; limite: number }[] = [];
+  constructor(readonly pendentes: EventoParaIlustrar[]) {}
+  async eventosParaIlustrar(opcoes: { desde: Date; limite: number }) {
+    this.pedidos.push(opcoes);
+    return this.pendentes.filter((p) => !this.gravadas.has(p.eventoId)).slice(0, opcoes.limite);
+  }
+  async gravarImagem(eventoId: string, busca: string, imagem: ImagemDeAcervo | null) {
+    this.gravadas.set(eventoId, { busca, imagem });
+  }
+}
+
+export const imagemDeTeste = (provedor: string, busca: string): ImagemDeAcervo => ({
+  provedor,
+  url: `https://img.${provedor.toLowerCase()}.exemplo/${encodeURIComponent(busca)}`,
+  largura: 1600,
+  altura: 1067,
+  cor: '#888888',
+  autor: 'Fotógrafa',
+  urlAutor: `https://${provedor.toLowerCase()}.exemplo/@fotografa`,
+  urlPagina: `https://${provedor.toLowerCase()}.exemplo/foto`,
+});
+
+/** Acervo falso: responde pela função dada e guarda as buscas. */
+export class AcervoFalso implements AcervoDeImagens {
+  buscas: string[] = [];
+  constructor(
+    readonly nome: string,
+    private readonly responder: (termos: string) => Promise<ImagemDeAcervo | null>,
+  ) {}
+  async buscar(termos: string) {
+    this.buscas.push(termos);
+    return this.responder(termos);
   }
 }

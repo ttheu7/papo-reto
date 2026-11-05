@@ -2,10 +2,12 @@ import type {
   CardDeEvento,
   Categoria,
   ErroDeExecucao,
+  EventoParaIlustrar,
   EventoParaResumir,
   EventoRecente,
   Fonte,
   GrupoDeNoticias,
+  ImagemDeAcervo,
   ItemRss,
   MateriaPublica,
   ModeloIa,
@@ -102,4 +104,18 @@ export interface RepositorioSite {
 
 export interface EscritorDeDados {
   escrever(nome: string, dados: unknown): Promise<void>;
+}
+
+/** Um acervo de imagens gratuitas (Pexels, Unsplash). */
+export interface AcervoDeImagens {
+  readonly nome: string;
+  /** A melhor imagem para as palavras-chave, ou null se não houver. Lança `ErroCotaIa` sem cota. */
+  buscar(termos: string): Promise<ImagemDeAcervo | null>;
+}
+
+export interface RepositorioImagens {
+  /** Acontecimentos recentes com palavras-chave de imagem e sem imagem procurada, os de maior cobertura primeiro. */
+  eventosParaIlustrar(opcoes: { desde: Date; limite: number }): Promise<EventoParaIlustrar[]>;
+  /** Grava a imagem escolhida, ou null para "procurou e não achou" (não procura de novo). */
+  gravarImagem(eventoId: string, busca: string, imagem: ImagemDeAcervo | null): Promise<void>;
 }

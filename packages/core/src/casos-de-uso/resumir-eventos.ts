@@ -40,6 +40,15 @@ interface Opcao {
 const TAMANHO_MAXIMO_DO_TITULO = 120;
 const FRASES_NO_TEXTO = 4;
 
+/**
+ * Limpa as palavras-chave de imagem que a IA devolveu: só letras, números, espaço e hífen, no máximo
+ * 60 caracteres. Vazio vira null (sem imagem).
+ */
+export function limparBuscaDeImagem(busca: string | null | undefined): string | null {
+  const limpa = busca?.replace(/[^\p{L}\p{N} -]+/gu, ' ').replace(/\s+/g, ' ').trim().slice(0, 60).trim();
+  return limpa ? limpa : null;
+}
+
 /** Corta o texto em até quatro frases. */
 export function limitarFrases(texto: string, maximo = FRASES_NO_TEXTO): string {
   const frases = texto.trim().match(/[^.!?…]+(?:[.!?…]+["”')\]]*|$)/g) ?? [];
@@ -152,6 +161,7 @@ export class ResumirEventos {
         tokensSaida,
         custoEstimado,
         categoriaId: r.categoriaSlug ? (idDaCategoria.get(r.categoriaSlug) ?? null) : null,
+        buscaImagem: limparBuscaDeImagem(r.buscaImagem),
       });
       if (gravou) gravados++;
     }

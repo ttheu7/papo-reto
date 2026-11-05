@@ -31,12 +31,12 @@ describe('ServicoIaGroq', () => {
     expect(pedido?.auth).toBe('Bearer segredo');
     expect(pedido?.corpo).toMatchObject({ model: 'llama-x', response_format: { type: 'json_object' } });
     expect(JSON.stringify(pedido?.corpo)).toContain('brasil, pop');
-    expect(r).toEqual({ resumos: [{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: 'pop' }], tokensEntrada: 300, tokensSaida: 40 });
+    expect(r).toEqual({ resumos: [{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: 'pop', buscaImagem: null }], tokensEntrada: 300, tokensSaida: 40 });
   });
 
   it('aceita também uma lista no topo', async () => {
     const ia = new ServicoIaGroq({ chave: 'k', buscar: responder(200, { choices: [{ message: { content: '[{"id":"e1","titulo":"T","texto":"X.","categoria":null}]' } }] }) });
-    expect((await ia.resumir(entrada)).resumos).toEqual([{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: null }]);
+    expect((await ia.resumir(entrada)).resumos).toEqual([{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: null, buscaImagem: null }]);
   });
 
   it('HTTP 429 vira ErroCotaIa; outros erros e respostas sem JSON viram ErroInfra', async () => {

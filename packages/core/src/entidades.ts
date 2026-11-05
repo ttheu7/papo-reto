@@ -90,6 +90,8 @@ export interface ResumoGerado {
   titulo: string;
   texto: string;
   categoriaSlug: string | null;
+  /** Palavras-chave (em inglês) para buscar a imagem ilustrativa, ou null para não ter imagem. */
+  buscaImagem?: string | null;
 }
 
 export interface NovoResumo {
@@ -103,6 +105,30 @@ export interface NovoResumo {
   custoEstimado: number;
   /** Só é aplicada se o evento ainda não tiver categoria. */
   categoriaId: number | null;
+  /** Palavras-chave da imagem ilustrativa, ou null para o acontecimento não ter imagem. */
+  buscaImagem: string | null;
+}
+
+/**
+ * Imagem ilustrativa de acervo gratuito (Pexels, Unsplash). Não mostra o fato: só ilustra o assunto.
+ * É exibida direto do acervo, sempre com o crédito ao fotógrafo e o link para a foto.
+ */
+export interface ImagemDeAcervo {
+  provedor: string;
+  url: string;
+  largura: number;
+  altura: number;
+  /** Cor média da foto, para pintar o espaço enquanto ela carrega. */
+  cor: string | null;
+  autor: string;
+  urlAutor: string;
+  urlPagina: string;
+}
+
+/** Acontecimento com resumo, palavras-chave de imagem e ainda sem imagem procurada. */
+export interface EventoParaIlustrar {
+  eventoId: string;
+  busca: string;
 }
 
 /** Linha da vw_evento_card, com a data da matéria mais recente. */
@@ -116,6 +142,7 @@ export interface CardDeEvento {
   criadoEm: Date;
   atualizadoEm: Date;
   publicadoEm: Date;
+  imagem?: ImagemDeAcervo | null;
 }
 
 /** O que o site mostra de uma notícia. Sem descricao_original, de propósito. */

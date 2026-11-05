@@ -5,7 +5,7 @@ import { INSTRUCOES, interpretarResumos, montarPedido, VERSAO_DO_PROMPT } from '
 const ENDERECO = 'https://api.groq.com/openai/v1/chat/completions';
 
 // O modo JSON da Groq exige um objeto no topo (não uma lista) e a palavra JSON no pedido.
-const FORMATO = `\n\nResponda só com um objeto JSON no formato {"resumos": [{"id": "...", "titulo": "...", "texto": "...", "categoria": "slug ou null"}]}.`;
+const FORMATO = `\n\nResponda só com um objeto JSON no formato {"resumos": [{"id": "...", "titulo": "...", "texto": "...", "categoria": "slug ou null", "imagem": "palavras-chave ou null"}]}.`;
 
 interface RespostaGroq {
   choices?: { message?: { content?: string | null } }[];

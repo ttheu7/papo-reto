@@ -14,7 +14,7 @@ describe('ServicoIaGemini', () => {
       gerar: async (p) => {
         pedido = p;
         return {
-          text: JSON.stringify([{ id: 'e1', titulo: 'T', texto: 'X.', categoria: 'pop' }, { lixo: true }]),
+          text: JSON.stringify([{ id: 'e1', titulo: 'T', texto: 'X.', categoria: 'pop', imagem: 'concert stage lights' }, { lixo: true }]),
           usageMetadata: { promptTokenCount: 120, candidatesTokenCount: 30 },
         };
       },
@@ -26,7 +26,8 @@ describe('ServicoIaGemini', () => {
     expect(pedido?.contents).toContain('"manchete":"Manchete"');
     expect(pedido?.contents).toContain('brasil, pop');
     expect(pedido?.config).toMatchObject({ responseMimeType: 'application/json' });
-    expect(r).toEqual({ resumos: [{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: 'pop' }], tokensEntrada: 120, tokensSaida: 30 });
+    expect(r).toEqual({ resumos: [{ eventoId: 'e1', titulo: 'T', texto: 'X.', categoriaSlug: 'pop', buscaImagem: 'concert stage lights' }], tokensEntrada: 120, tokensSaida: 30 });
+    expect(JSON.stringify(pedido?.config)).toContain('"imagem"');
   });
 
   it('transforma HTTP 429 em ErroCotaIa', async () => {

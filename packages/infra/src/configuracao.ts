@@ -5,6 +5,9 @@ export interface Configuracao {
   chaveGroq: string | null;
   /** Vetores dos títulos para o agrupamento. */
   chaveMistral: string | null;
+  /** Imagens ilustrativas (a Pexels primeiro, o Unsplash de reserva). */
+  chavePexels: string | null;
+  chaveUnsplash: string | null;
 }
 
 /** Lê as variáveis de ambiente. Os valores nunca aparecem em mensagens de erro. */
@@ -17,5 +20,7 @@ export function lerConfiguracao(env: NodeJS.ProcessEnv = process.env): Configura
     chaveGemini: env.GEMINI_API_KEY?.trim() || null,
     chaveGroq: env.GROQ_API_KEY?.trim() || null,
     chaveMistral: env.MISTRAL_API_KEY?.trim() || null,
+    chavePexels: env.PEXELS_API_KEY?.trim() || null,
+    chaveUnsplash: env.UNSPLASH_ACCESS_KEY?.trim() || null,
   };
 }
