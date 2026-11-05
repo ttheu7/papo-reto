@@ -150,3 +150,15 @@ export function agruparNoticias(
 
   return grupos.filter((g) => g.noticias.length > 0).map((g) => ({ eventoId: g.eventoId, noticias: g.noticias }));
 }
+
+/** Tamanho máximo da descrição que entra no texto do vetor. */
+const DESCRICAO_NO_VETOR = 500;
+
+/**
+ * O texto que vira vetor: o título e, se houver, o começo da descrição do feed, que traz nomes,
+ * lugares e o que aconteceu. A descrição é de uso interno (só vai para a IA, nunca para o site).
+ */
+export function textoParaVetor(titulo: string, descricao?: string | null): string {
+  const extra = descricao?.replace(/\s+/g, ' ').trim().slice(0, DESCRICAO_NO_VETOR);
+  return extra ? `${titulo.trim()}. ${extra}` : titulo.trim();
+}

@@ -266,7 +266,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | `npm test` | Testes (Vitest) |
 | `npm run typecheck` | TypeScript estrito em todos os pacotes e `astro check` no site |
 | `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos |
-| `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento (não grava nada) |
+| `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento. Com `-- --banco`, usa as notícias recentes do banco e compara o vetor só do título com o do título + descrição (não grava nada) |
 | `npm run dados:site` | Gera `apps/web/public/dados/*.json` a partir do banco |
 | `npm run dev:web` | Servidor de desenvolvimento do site |
 | `npm run build:web` | Build do site (veja com `npm run preview -w @papo-reto/web`) |

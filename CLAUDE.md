@@ -135,7 +135,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `npm install`: dependências. No Windows, se o PowerShell bloquear scripts, use `npm.cmd` ou o Prompt de Comando.
 - `npm test`: testes (Vitest). `npm run typecheck`: TypeScript estrito em todos os pacotes e `astro check` no site.
 - `npm run coletar`: lê os feeds, agrupa (com vetores, se houver `MISTRAL_API_KEY`), grava no banco e, se houver `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos. Lê o `.env`.
-- `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Precisa de `MISTRAL_API_KEY`; não grava nada.
+- `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Com `-- --banco [--horas 48] [--limite 120]`, lê as notícias recentes do banco (só leitura) e compara lado a lado o vetor só do título e o do título com a descrição (`textoParaVetor`). Precisa de `MISTRAL_API_KEY`; não grava nada. Hoje a coleta vetoriza só o título.
 - `npm run dados:site`: gera `apps/web/public/dados/*.json` a partir do banco.
 - `npm run build:web` / `npm run dev:web`: build e servidor de desenvolvimento do site. Sem `public/dados/`, fora do CI, o site usa `apps/web/src/dados-exemplo/`.
 - `npm run db:nova -- nome`: cria uma migration (se a CLI travar no fim, o arquivo já foi criado).

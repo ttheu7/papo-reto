@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { agruparNoticias, cosseno, palavrasDoTitulo, semelhanca } from './agrupamento';
+import { agruparNoticias, cosseno, palavrasDoTitulo, semelhanca, textoParaVetor } from './agrupamento';
 import type { NovaNoticia } from './entidades';
 
 const noticia = (titulo: string, url: string, hora = 0, vetor: number[] | null = null): NovaNoticia => ({
@@ -102,5 +102,13 @@ describe('cosseno', () => {
     expect(cosseno([1, 2], [2, 4])).toBeCloseTo(1);
     expect(cosseno([1, 0], [0, 1])).toBe(0);
     expect(cosseno([0, 0], [1, 1])).toBe(0);
+  });
+});
+
+describe('textoParaVetor', () => {
+  it('junta o título ao começo da descrição, sem espaços repetidos, e usa só o título sem descrição', () => {
+    expect(textoParaVetor(' Terremoto no Japão ', '  Tremor de\n magnitude 7  ')).toBe('Terremoto no Japão. Tremor de magnitude 7');
+    expect(textoParaVetor('Terremoto no Japão', '   ')).toBe('Terremoto no Japão');
+    expect(textoParaVetor('T', 'x'.repeat(900))).toHaveLength(3 + 500);
   });
 });

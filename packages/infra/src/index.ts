@@ -11,4 +11,5 @@ export * from './gemini/servico-ia-gemini';
 export * from './groq/servico-ia-groq';
 export * from './mistral/servico-de-vetores-mistral';
 export * from './postgres/repositorio-site';
+export * from './postgres/repositorio-calibragem';
 export * from './escritor-de-dados';
