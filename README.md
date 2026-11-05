@@ -35,6 +35,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
 - ✅ Indicador de cobertura: barrinhas mostram quantos dos portais acompanhados noticiaram cada assunto
+- ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
 - ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop e Esportes
