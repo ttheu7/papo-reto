@@ -26,7 +26,7 @@ export interface ItemRss {
   publicadaEm: Date | null;
 }
 
-/** Notícia pronta para gravar. Cada uma vira um evento novo (MVP). */
+/** Notícia pronta para gravar. Entra num acontecimento recente parecido ou abre um novo. */
 export interface NovaNoticia {
   fonteId: number;
   categoriaId: number | null;
@@ -34,6 +34,18 @@ export interface NovaNoticia {
   url: string;
   descricaoOriginal: string | null;
   publicadaEm: Date;
+}
+
+/** Acontecimento recente, com os títulos das suas notícias, para o agrupamento. */
+export interface EventoRecente {
+  id: string;
+  titulos: string[];
+}
+
+/** Notícias que vão para o mesmo acontecimento. `eventoId` nulo cria um acontecimento novo. */
+export interface GrupoDeNoticias {
+  eventoId: string | null;
+  noticias: NovaNoticia[];
 }
 
 export interface ErroDeExecucao {

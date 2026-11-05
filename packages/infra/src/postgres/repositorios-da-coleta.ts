@@ -1,7 +1,8 @@
 import type {
   ErroDeExecucao,
+  EventoRecente,
   Fonte,
-  NovaNoticia,
+  GrupoDeNoticias,
   PoliticaUso,
   RepositorioExecucoes,
   RepositorioFontes,
@@ -56,24 +57,45 @@ export class RepositorioNoticiasPg implements RepositorioNoticias {
     return new Set(linhas.map((l) => l.url));
   }
 
-  async criarEventosComNoticias(noticias: NovaNoticia[]): Promise<number> {
-    if (noticias.length === 0) return 0;
+  async eventosRecentes(desde: Date): Promise<EventoRecente[]> {
+    const linhas = await this.sql<{ id: string; titulos: string[] }[]>`
+      select n.evento_id as id, array_agg(n.titulo order by n.publicada_em) as titulos
+        from public.noticia n
+        join public.evento e on e.id = n.evento_id
+       where e.atualizado_em >= ${desde}
+       group by n.evento_id
+      having max(n.publicada_em) >= ${desde}`;
+    return linhas.map((l) => ({ id: l.id, titulos: l.titulos }));
+  }
+
+  async gravarGrupos(grupos: GrupoDeNoticias[]): Promise<number> {
+    if (grupos.length === 0) return 0;
     return this.sql.begin(async (tx) => {
       let gravadas = 0;
-      for (const n of noticias) {
-        const [evento] = await tx<{ id: string }[]>`
-          insert into public.evento (categoria_id) values (${n.categoriaId}) returning id`;
-        const inseridas = await tx`
-          insert into public.noticia (fonte_id, evento_id, titulo, url, descricao_original, publicada_em)
-          values (${n.fonteId}, ${evento!.id}, ${n.titulo}, ${n.url}, ${n.descricaoOriginal}, ${n.publicadaEm})
-          on conflict (url) do nothing
-          returning id`;
-        if (inseridas.length === 0) {
-          // Outra rodada gravou a mesma URL antes: não deixa evento órfão.
-          await tx`delete from public.evento where id = ${evento!.id}`;
-        } else {
-          gravadas++;
+      for (const g of grupos) {
+        // Acontecimento novo herda a categoria do primeiro feed de seção do grupo.
+        const categoria = g.noticias.find((n) => n.categoriaId !== null)?.categoriaId ?? null;
+        let eventoId = g.eventoId;
+        if (!eventoId) {
+          const [evento] = await tx<{ id: string }[]>`
+            insert into public.evento (categoria_id) values (${categoria}) returning id`;
+          eventoId = evento!.id;
+        } else if (categoria !== null) {
+          await tx`update public.evento set categoria_id = ${categoria} where id = ${eventoId} and categoria_id is null`;
         }
+
+        let doGrupo = 0;
+        for (const n of g.noticias) {
+          const inseridas = await tx`
+            insert into public.noticia (fonte_id, evento_id, titulo, url, descricao_original, publicada_em)
+            values (${n.fonteId}, ${eventoId}, ${n.titulo}, ${n.url}, ${n.descricaoOriginal}, ${n.publicadaEm})
+            on conflict (url) do nothing
+            returning id`;
+          doGrupo += inseridas.length;
+        }
+        // Outra rodada gravou as mesmas URLs antes: não deixa acontecimento vazio.
+        if (doGrupo === 0 && !g.eventoId) await tx`delete from public.evento where id = ${eventoId}`;
+        gravadas += doGrupo;
       }
       return gravadas;
     });

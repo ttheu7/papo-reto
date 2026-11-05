@@ -3,11 +3,12 @@ import type {
   Categoria,
   ErroDeExecucao,
   EventoParaResumir,
+  EventoRecente,
   Fonte,
+  GrupoDeNoticias,
   ItemRss,
   MateriaPublica,
   ModeloIa,
-  NovaNoticia,
   NovoResumo,
   ResumoGerado,
   StatusExecucao,
@@ -22,11 +23,14 @@ export interface RepositorioFontes {
 export interface RepositorioNoticias {
   /** Das URLs informadas, devolve as que já estão no banco. */
   urlsExistentes(urls: string[]): Promise<Set<string>>;
+  /** Acontecimentos com alguma notícia publicada desde `desde`, com os títulos das notícias. */
+  eventosRecentes(desde: Date): Promise<EventoRecente[]>;
   /**
-   * Cria um evento por notícia. URLs que entrarem em conflito são ignoradas
-   * (sem deixar evento órfão). Devolve quantas notícias foram gravadas.
+   * Grava cada grupo no seu acontecimento, ou num novo quando `eventoId` é nulo, numa
+   * transação só. URLs que entrarem em conflito são ignoradas (sem deixar acontecimento
+   * vazio). Devolve quantas notícias foram gravadas.
    */
-  criarEventosComNoticias(noticias: NovaNoticia[]): Promise<number>;
+  gravarGrupos(grupos: GrupoDeNoticias[]): Promise<number>;
 }
 
 export interface RepositorioExecucoes {

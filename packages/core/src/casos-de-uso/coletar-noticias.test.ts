@@ -34,7 +34,7 @@ describe('ColetarNoticias', () => {
     return new ColetarNoticias({ fontes, noticias, execucoes, leitor, registro, agora: () => AGORA });
   }
 
-  it('cria um evento por notícia nova, com URL normalizada e a categoria do feed', async () => {
+  it('cria um evento por assunto diferente, com URL normalizada e a categoria do feed', async () => {
     const fontes = new FontesEmMemoria([fonte({ id: 1, categoriaId: 5 })]);
     const leitor = new LeitorRssFalso({
       'https://fonte1.exemplo/rss': [
@@ -52,8 +52,11 @@ describe('ColetarNoticias', () => {
   });
 
   it('descarta URLs que já existem e repetidas no mesmo feed', async () => {
-    await noticias.criarEventosComNoticias([
-      { fonteId: 1, categoriaId: null, titulo: 'Velha', url: 'https://site.exemplo/velha', descricaoOriginal: null, publicadaEm: horasAtras(5) },
+    await noticias.gravarGrupos([
+      {
+        eventoId: null,
+        noticias: [{ fonteId: 1, categoriaId: null, titulo: 'Velha', url: 'https://site.exemplo/velha', descricaoOriginal: null, publicadaEm: horasAtras(5) }],
+      },
     ]);
     const fontes = new FontesEmMemoria([fonte({ id: 1 })]);
     const leitor = new LeitorRssFalso({
@@ -137,5 +140,62 @@ describe('ColetarNoticias', () => {
   it('sem fontes ativas, termina com sucesso e zero notícias', async () => {
     const r = await coletor(new FontesEmMemoria([]), new LeitorRssFalso({})).executar();
     expect(r).toMatchObject({ status: 'sucesso', novasNoticias: 0 });
+  });
+
+  it('junta no mesmo acontecimento matérias de portais diferentes sobre o mesmo fato', async () => {
+    const fontes = new FontesEmMemoria([fonte({ id: 1, nome: 'g1' }), fonte({ id: 2, nome: 'Folha' }), fonte({ id: 3, nome: 'CNN' })]);
+    const leitor = new LeitorRssFalso({
+      'https://fonte1.exemplo/rss': [item('Lula sanciona lei que amplia isenção do Imposto de Renda', 'https://g1.exemplo/ir', horasAtras(3))],
+      'https://fonte2.exemplo/rss': [item('Presidente Lula sanciona isenção do Imposto de Renda para quem ganha até R$ 5 mil', 'https://folha.exemplo/ir', horasAtras(2))],
+      'https://fonte3.exemplo/rss': [item('Flamengo vence o Palmeiras no Maracanã', 'https://cnn.exemplo/fla', horasAtras(1))],
+    });
+
+    const r = await coletor(fontes, leitor).executar();
+
+    expect(r.novasNoticias).toBe(3);
+    const evento = (url: string) => noticias.noticias.find((n) => n.url === url)!.eventoId;
+    expect(evento('https://folha.exemplo/ir')).toBe(evento('https://g1.exemplo/ir'));
+    expect(evento('https://cnn.exemplo/fla')).not.toBe(evento('https://g1.exemplo/ir'));
+  });
+
+  it('põe a matéria nova num acontecimento das últimas 48 horas, mas não num mais velho', async () => {
+    await noticias.gravarGrupos([
+      { eventoId: null, noticias: [{ fonteId: 9, categoriaId: null, titulo: 'Terremoto atinge o Japão e deixa mortos', url: 'https://a.exemplo/1', descricaoOriginal: null, publicadaEm: horasAtras(10) }] },
+      { eventoId: null, noticias: [{ fonteId: 9, categoriaId: null, titulo: 'Eleição na Argentina tem segundo turno marcado', url: 'https://a.exemplo/2', descricaoOriginal: null, publicadaEm: horasAtras(72) }] },
+    ]);
+    const fontes = new FontesEmMemoria([fonte({ id: 1 })]);
+    const leitor = new LeitorRssFalso({
+      'https://fonte1.exemplo/rss': [
+        item('Terremoto no Japão deixa mortos e feridos', 'https://b.exemplo/1'),
+        item('Argentina marca segundo turno da eleição', 'https://b.exemplo/2'),
+      ],
+    });
+
+    await coletor(fontes, leitor).executar();
+
+    const evento = (url: string) => noticias.noticias.find((n) => n.url === url)!.eventoId;
+    expect(evento('https://b.exemplo/1')).toBe(evento('https://a.exemplo/1'));
+    expect(evento('https://b.exemplo/2')).not.toBe(evento('https://a.exemplo/2'));
+  });
+
+  it('grava só uma vez a mesma URL vinda de dois feeds do mesmo portal', async () => {
+    const fontes = new FontesEmMemoria([fonte({ id: 1, nome: 'g1' }), fonte({ id: 2, nome: 'g1' })]);
+    const leitor = new LeitorRssFalso({
+      'https://fonte1.exemplo/rss': [item('Mesma matéria', 'https://g1.exemplo/a')],
+      'https://fonte2.exemplo/rss': [item('Mesma matéria', 'https://g1.exemplo/a?utm_source=rss')],
+    });
+
+    const r = await coletor(fontes, leitor).executar();
+
+    expect(r.novasNoticias).toBe(1);
+    expect(noticias.noticias).toHaveLength(1);
+  });
+
+  it('fecha a execução com falha se não conseguir gravar as notícias', async () => {
+    noticias.falharAoGravar = true;
+    const fontes = new FontesEmMemoria([fonte({ id: 1 })]);
+    const r = await coletor(fontes, new LeitorRssFalso({ 'https://fonte1.exemplo/rss': [item('A', 'https://a.exemplo/')] })).executar();
+
+    expect(r).toMatchObject({ status: 'falha', novasNoticias: 0, erros: [{ etapa: 'coleta', mensagem: 'ao gravar as notícias: conexão perdida' }] });
   });
 });

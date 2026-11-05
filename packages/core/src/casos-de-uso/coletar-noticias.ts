@@ -1,6 +1,7 @@
 import type { ErroDeExecucao, Fonte, NovaNoticia, ResultadoDaColeta } from '../entidades';
 import { mensagemDe } from '../erros';
 import type { LeitorRss, Registro, RepositorioExecucoes, RepositorioFontes, RepositorioNoticias, Relogio } from '../portas';
+import { agruparNoticias } from '../agrupamento';
 import { normalizarUrl } from '../url';
 
 export interface DependenciasDaColeta {
@@ -17,6 +18,8 @@ export interface OpcoesDaColeta {
   idadeMaximaEmHoras?: number;
   /** Corta a descrição do feed (uso interno da IA). Padrão: 1000 caracteres. */
   tamanhoMaximoDaDescricao?: number;
+  /** Até quantas horas atrás um acontecimento ainda recebe matérias novas. Padrão: 48. */
+  janelaDeAgrupamentoEmHoras?: number;
 }
 
 const TAMANHO_MAXIMO_DO_TITULO = 300;
@@ -41,14 +44,36 @@ export class ColetarNoticias {
       return this.finalizar(execucaoId, 'falha', 0, erros);
     }
 
-    // Cada fonte roda isolada: a falha de uma não derruba as outras.
-    const resultados = await Promise.all(fontes.map((fonte) => this.coletarFonte(fonte, execucaoId)));
+    // Cada fonte é lida isolada: a falha de uma não derruba as outras.
+    const resultados = await Promise.all(fontes.map((fonte) => this.lerFonte(fonte, execucaoId)));
     let falhas = 0;
+    const porUrl = new Map<string, NovaNoticia>();
     for (const r of resultados) {
-      if (r.ok) novasNoticias += r.novas;
-      else {
+      if (!r.ok) {
         falhas++;
         erros.push(r.erro);
+        continue;
+      }
+      // Feeds do mesmo portal podem trazer a mesma matéria: fica a primeira.
+      for (const n of r.novas) if (!porUrl.has(n.url)) porUrl.set(n.url, n);
+    }
+
+    // O agrupamento roda com todas as fontes juntas, para matérias da mesma rodada se encontrarem.
+    if (porUrl.size > 0) {
+      try {
+        const janela = (this.opcoes.janelaDeAgrupamentoEmHoras ?? 48) * 3_600_000;
+        const recentes = await d.noticias.eventosRecentes(new Date(d.agora().getTime() - janela));
+        const grupos = agruparNoticias([...porUrl.values()], recentes);
+        novasNoticias = await d.noticias.gravarGrupos(grupos);
+        d.registro.info('notícias agrupadas', {
+          execucaoId,
+          noticias: porUrl.size,
+          emAcontecimentosExistentes: grupos.filter((g) => g.eventoId).reduce((t, g) => t + g.noticias.length, 0),
+          acontecimentosNovos: grupos.filter((g) => !g.eventoId).length,
+        });
+      } catch (erro) {
+        erros.push({ etapa: 'coleta', mensagem: `ao gravar as notícias: ${mensagemDe(erro)}` });
+        return this.finalizar(execucaoId, 'falha', 0, erros);
       }
     }
 
@@ -56,21 +81,21 @@ export class ColetarNoticias {
     return this.finalizar(execucaoId, status, novasNoticias, erros);
   }
 
-  private async coletarFonte(
+  /** Lê o feed e devolve só as notícias que ainda não estão no banco. */
+  private async lerFonte(
     fonte: Fonte,
     execucaoId: string,
-  ): Promise<{ ok: true; novas: number } | { ok: false; erro: ErroDeExecucao }> {
+  ): Promise<{ ok: true; novas: NovaNoticia[] } | { ok: false; erro: ErroDeExecucao }> {
     const { d } = this;
     try {
       const itens = await d.leitor.ler(fonte.urlFeed);
       const candidatas = this.prepararNoticias(fonte, itens);
       const existentes = candidatas.length ? await d.noticias.urlsExistentes(candidatas.map((n) => n.url)) : new Set<string>();
       const novas = candidatas.filter((n) => !existentes.has(n.url));
-      const gravadas = novas.length ? await d.noticias.criarEventosComNoticias(novas) : 0;
 
       await d.fontes.registrarSucesso(fonte.id, d.agora());
-      d.registro.info('fonte coletada', { execucaoId, fonteId: fonte.id, fonte: fonte.nome, itens: itens.length, novas: gravadas });
-      return { ok: true, novas: gravadas };
+      d.registro.info('fonte coletada', { execucaoId, fonteId: fonte.id, fonte: fonte.nome, itens: itens.length, novas: novas.length });
+      return { ok: true, novas };
     } catch (erro) {
       const mensagem = mensagemDe(erro);
       d.registro.aviso('falha ao coletar fonte', { execucaoId, fonteId: fonte.id, fonte: fonte.nome, erro: mensagem });

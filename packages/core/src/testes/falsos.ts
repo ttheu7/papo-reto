@@ -5,6 +5,7 @@ import type {
   ErroDeExecucao,
   EventoParaResumir,
   Fonte,
+  GrupoDeNoticias,
   ItemRss,
   MateriaPublica,
   ModeloIa,
@@ -58,18 +59,29 @@ export class FontesEmMemoria implements RepositorioFontes {
 
 export class NoticiasEmMemoria implements RepositorioNoticias {
   noticias: (NovaNoticia & { eventoId: string })[] = [];
+  falharAoGravar = false;
   private proximoEvento = 1;
 
   async urlsExistentes(urls: string[]) {
     const gravadas = new Set(this.noticias.map((n) => n.url));
     return new Set(urls.filter((u) => gravadas.has(u)));
   }
-  async criarEventosComNoticias(novas: NovaNoticia[]) {
+  async eventosRecentes(desde: Date) {
+    const eventos = new Map<string, string[]>();
+    for (const n of this.noticias) if (n.publicadaEm >= desde) eventos.set(n.eventoId, [...(eventos.get(n.eventoId) ?? []), n.titulo]);
+    return [...eventos].map(([id, titulos]) => ({ id, titulos }));
+  }
+  async gravarGrupos(grupos: GrupoDeNoticias[]) {
+    if (this.falharAoGravar) throw new Error('conexão perdida');
     let gravadas = 0;
-    for (const n of novas) {
-      if (this.noticias.some((x) => x.url === n.url)) continue; // on conflict do nothing
-      this.noticias.push({ ...n, eventoId: `evento-${this.proximoEvento++}` });
-      gravadas++;
+    for (const g of grupos) {
+      let eventoId = g.eventoId;
+      for (const n of g.noticias) {
+        if (this.noticias.some((x) => x.url === n.url)) continue; // on conflict do nothing
+        eventoId ??= `evento-${this.proximoEvento++}`;
+        this.noticias.push({ ...n, eventoId });
+        gravadas++;
+      }
     }
     return gravadas;
   }
