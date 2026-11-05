@@ -2,7 +2,7 @@
 
 **Portal de notícias gratuito para o público jovem, com resumos em linguagem simples**
 
-Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal, sem anúncios e sem coleta de dados de quem lê.
+Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini, com a Groq de reserva), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal, sem anúncios e sem coleta de dados de quem lê.
 
 No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
 
@@ -44,8 +44,9 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
-- ✅ Agrupamento das matérias sobre o mesmo fato, comparando as palavras dos títulos (sem IA)
+- ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido dos títulos (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
+- ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
 - ✅ Registro de cada rodada (novas notícias, resumos e erros) e, em cada resumo, do modelo, dos tokens e do custo
 - ✅ Limpeza diária do banco para caber no plano gratuito
@@ -76,8 +77,11 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 - **Supabase (Postgres)** - Plano gratuito, região São Paulo, com `pg_cron` para a limpeza diária
 - **Supabase CLI 3** - Migrations
 
-### IA:
-- **Gemini** (Google AI Studio) - Modelo lido da tabela `modelo_ia` (hoje `gemini-3.5-flash-lite`)
+### IA (planos gratuitos):
+- **Gemini** (Google AI Studio) - Resumos e editoria; modelo principal lido da tabela `modelo_ia` (hoje `gemini-3.5-flash-lite`)
+- **Groq** - Resumos de reserva; modelo de reserva lido da tabela `modelo_ia` (hoje `llama-3.3-70b-versatile`)
+- **Mistral** (`mistral-embed`) - Vetores dos títulos para o agrupamento
+- **pgvector** - Compara os vetores dentro do banco
 
 ### Infraestrutura e qualidade:
 - **GitHub Actions** - Coleta agendada, migrations e publicação
@@ -130,8 +134,8 @@ papo-reto/
 ```
 
 ### Como funciona:
-1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento (pelo título) e grava tudo no Supabase.
-2. Se houver `GEMINI_API_KEY`, o coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Sem chave, ou com a cota esgotada, essa etapa é pulada.
+1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, os títulos novos viram vetores e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
+2. O coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Se o Gemini falhar ou ficar sem cota, a Groq resume o mesmo lote e o resto da rodada. Sem nenhuma das duas chaves, essa etapa é pulada e o site mostra a manchete original.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
 
@@ -145,7 +149,7 @@ Se a coleta falhar, o site é publicado mesmo assim com o que já está no banco
 | MCP público (futuro) | Os mesmos JSONs do site | Nenhuma |
 | MCP admin (futuro) | Banco do Supabase, a partir da sua máquina | Credencial no `.env` local |
 | Workflow do banco | Postgres, pelo pooler | Segredo `SUPABASE_DB_URL` |
-| Coletor e gerador | Postgres, pelo pooler, no GitHub Actions | Segredos `SUPABASE_DB_URL` e `GEMINI_API_KEY` |
+| Coletor e gerador | Postgres, pelo pooler, no GitHub Actions | Segredos `SUPABASE_DB_URL`, `GEMINI_API_KEY`, `GROQ_API_KEY` e `MISTRAL_API_KEY` |
 
 ### Padrões utilizados:
 - **Clean Architecture** - `core` não importa nada de infraestrutura; `apps` só montam as dependências e chamam os casos de uso
@@ -215,8 +219,14 @@ Copie `.env.example` para `.env` (não renomeie: o exemplo fica no repositório)
 # Supabase > Connect > Session pooler (IPv4, porta 5432), com [YOUR-PASSWORD] trocado pela senha do banco.
 SUPABASE_DB_URL=postgresql://postgres.SEU_REF:SENHA@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
 
-# Google AI Studio. Opcional: sem ela o coletor pula os resumos e o site mostra a manchete original.
+# Google AI Studio. Opcional: IA principal dos resumos.
 GEMINI_API_KEY=
+
+# Groq. Opcional: IA de reserva dos resumos. Sem esta e sem a do Gemini, o site mostra a manchete original.
+GROQ_API_KEY=
+
+# Mistral. Opcional: vetores dos títulos para o agrupamento. Sem ela, o agrupamento compara as palavras.
+MISTRAL_API_KEY=
 ```
 
 Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase.co`) só funciona em IPv6 e falha no GitHub Actions.
@@ -226,14 +236,17 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | Onde | Nome | Para quê |
 |---|---|---|
 | GitHub Actions | `SUPABASE_DB_URL` | Migrations, coletor e gerador do site (Session pooler, com a senha) |
-| GitHub Actions | `GEMINI_API_KEY` | Resumos. Opcional: sem ela, o coletor pula a IA |
+| GitHub Actions | `GEMINI_API_KEY` | Resumos (principal). Opcional |
+| GitHub Actions | `GROQ_API_KEY` | Resumos (reserva). Opcional: sem as duas, o coletor pula os resumos |
+| GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
 | `.env` local | As mesmas variáveis | Rodar o coletor e o gerador na máquina |
 
 ### Dados do banco:
 - **Fontes** (`fonte`) - Um feed por linha; feeds do mesmo portal usam o mesmo `nome`. Para ligar ou desligar um feed, mude `ativa`.
 - **Editorias** (`categoria`) - Lista fechada; a IA só classifica com esses slugs.
-- **Modelo de IA** (`modelo_ia`) - No máximo um ativo; o código lê o nome do modelo daqui.
-- **Prompt** - Versionado em `packages/infra/src/gemini/prompt.ts` (atual: `resumo-v2-2026-11-04`).
+- **Modelos de IA** (`modelo_ia`) - No máximo um ativo (o principal) e um de reserva (`reserva`); o código lê o nome dos modelos daqui.
+- **Prompt** - Versionado em `packages/infra/src/ia/prompt.ts` (atual: `resumo-v2-2026-11-04`), o mesmo para o Gemini e a Groq.
+- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,88) em `packages/core/src/agrupamento.ts`. Confira com `npm run calibrar:agrupamento`.
 
 ---
 
@@ -252,7 +265,8 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 |---|---|
 | `npm test` | Testes (Vitest) |
 | `npm run typecheck` | TypeScript estrito em todos os pacotes e `astro check` no site |
-| `npm run coletar` | Lê os feeds, grava no banco e, com `GEMINI_API_KEY`, gera os resumos |
+| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos |
+| `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento (não grava nada) |
 | `npm run dados:site` | Gera `apps/web/public/dados/*.json` a partir do banco |
 | `npm run dev:web` | Servidor de desenvolvimento do site |
 | `npm run build:web` | Build do site (veja com `npm run preview -w @papo-reto/web`) |
@@ -344,7 +358,7 @@ Ele coleta, gera os JSONs, faz o build e publica no GitHub Pages. Duas publicaç
 2. **GitHub:**
    - Crie um repositório público `papo-reto`, sem README, `.gitignore` nem licença.
    - Em Settings › Secrets and variables › Actions, crie o segredo `SUPABASE_DB_URL`: no painel do Supabase, clique em **Connect**, copie a string do **Session pooler** e troque `[YOUR-PASSWORD]` pela senha do banco.
-   - Opcional: crie o segredo `GEMINI_API_KEY` (Google AI Studio) para ligar os resumos.
+   - Opcionais: crie os segredos `GEMINI_API_KEY` (Google AI Studio) e `GROQ_API_KEY` (console da Groq) para ligar os resumos, e `MISTRAL_API_KEY` (console da Mistral) para agrupar pelo sentido.
    - Em Settings › Pages, em **Source**, escolha **GitHub Actions**.
 
 3. **Já rodou os SQL no SQL Editor?** Se sim, marque as migrations como aplicadas **antes do primeiro push**. Sem isso, o workflow tenta criar as tabelas de novo e falha:
@@ -371,7 +385,8 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 
 ### Limites do plano gratuito:
 - **Supabase:** 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. A limpeza diária (`pg_cron`, 6h UTC) apaga `descricao_original` depois de 30 dias, eventos parados há 180 dias, eventos órfãos e execuções com mais de 30 dias.
-- **Gemini:** poucas requisições por minuto (os limites aparecem só no AI Studio). Por isso os resumos saem em lote.
+- **Gemini, Groq e Mistral:** poucas requisições por minuto e por dia, e os limites aparecem só no painel de cada um. Por isso os resumos saem em lote, a Groq só entra como reserva e a Mistral recebe uma chamada por rodada, só com os títulos novos.
+- **Vetores:** cada título guarda um vetor de cerca de 4 KB, que a limpeza diária apaga depois de 3 dias.
 
 ---
 
@@ -403,7 +418,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Público jovem e dados pessoais:
 - ✅ Sem anúncios, sem perfilamento e sem ferramentas de rastreamento (ECA Digital, Lei 15.211/2025)
 - ✅ Coleta mínima de dados pessoais (LGPD): o site não pede cadastro nem guarda nada de quem lê; só a escolha do tema fica no próprio navegador (`localStorage`)
-- ✅ Nada de quem lê é enviado para a IA: ela recebe só texto público dos feeds
+- ✅ Nada de quem lê é enviado para as IAs: elas recebem só texto público dos feeds (o Google pode usar o que recebe no plano gratuito; a Mistral diz que os dados da API não treinam modelos)
 
 ### Conteúdo e direito autoral:
 - ✅ O site mostra só título, resumo próprio e link para a matéria original. Texto integral, com crédito, apenas de fontes que permitem republicação (Agência Brasil)

@@ -1,6 +1,6 @@
 # Papo Reto
 
-Portal de notícias gratuito para o público jovem. Reúne o que os principais portais do Brasil e do mundo publicam (via RSS), agrupa as matérias sobre um mesmo acontecimento (o "evento") e explica cada um em linguagem simples, com resumos gerados por IA (Gemini) e link para todas as matérias originais.
+Portal de notícias gratuito para o público jovem. Reúne o que os principais portais do Brasil e do mundo publicam (via RSS), agrupa as matérias sobre um mesmo acontecimento (o "evento") e explica cada um em linguagem simples, com resumos gerados por IA (Gemini, com a Groq de reserva) e link para todas as matérias originais.
 
 Projeto acadêmico em grupo (Ciência da Computação, Unoesc Videira, disciplina PRATIC IV), com entrega de uma versão beta.
 
@@ -19,7 +19,7 @@ Projeto acadêmico em grupo (Ciência da Computação, Unoesc Videira, disciplin
 Clean Architecture em monorepo (npm workspaces, TypeScript estrito):
 
 - `packages/core`: entidades, portas (interfaces) e casos de uso. Não importa nada de infraestrutura: nem SDK, nem driver de banco, nem `fetch`.
-- `packages/infra`: adaptadores que implementam as portas (Postgres, leitor de RSS, Gemini).
+- `packages/infra`: adaptadores que implementam as portas (Postgres, leitor de RSS, Gemini, Groq, Mistral).
 - `apps/*`: pontos de entrada. Só montam as dependências e chamam os casos de uso.
 - Erros tipados (domínio x infraestrutura), tratados em cada ponto de entrada, com logs estruturados que levam o id da execução.
 - Interfaces só onde existe chance real de troca (banco, IA, fonte de dados). Sem cerimônia desnecessária.
@@ -32,20 +32,23 @@ O schema está em `supabase/migrations/`, e os dados iniciais em `supabase/seed.
 - `categoria(id, slug único, nome)`: lista fechada; a IA só classifica com esses slugs.
 - `fonte(id, nome, url_feed único, url_site, politica_uso, exige_assinatura, ativa, ultima_coleta_em, falhas_seguidas, ultimo_erro)`: um feed por linha. Feeds do mesmo portal usam o mesmo `nome`, porque a cobertura conta portais pelo nome.
 - `evento(id uuid, categoria_id, criado_em, atualizado_em)`: o acontecimento, que vira um card.
-- `noticia(id uuid, fonte_id, evento_id NOT NULL, titulo, url única e canônica, descricao_original, publicada_em, coletada_em)`.
+- `noticia(id uuid, fonte_id, evento_id NOT NULL, titulo, url única e canônica, descricao_original, publicada_em, coletada_em, vetor)`. `vetor` (pgvector, schema `extensions`, sem dimensão fixa) é o embedding do título, de uso interno do agrupamento.
 - `resumo(id uuid, evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado, criado_em)`: o vigente é o mais recente do evento.
-- `modelo_ia(id, provedor, modelo, custo_entrada_1m, custo_saida_1m, ativo)`: no máximo um ativo. O código lê o nome do modelo daqui.
+- `modelo_ia(id, provedor, modelo, custo_entrada_1m, custo_saida_1m, ativo, reserva)`: no máximo um ativo (o principal dos resumos, hoje `gemini-3.5-flash-lite`) e no máximo um de reserva (hoje Groq `llama-3.3-70b-versatile`). O código lê o nome dos modelos daqui.
 - `execucao(id uuid, iniciada_em, finalizada_em, status, novas_noticias, resumos_gerados, erros jsonb)`: uma linha por rodada do coletor.
 - `doacao`: ainda não usada.
 - View `vw_evento_card`: título (do resumo ou da primeira manchete), resumo, categoria, `fontes` (nomes) e `cobertura` (portais distintos).
 - Gatilho `tocar_evento`: inserir notícia ou resumo atualiza `evento.atualizado_em`.
-- pg_cron (`limpeza_diaria`, 6h UTC): apaga `descricao_original` depois de 30 dias, eventos parados há 180 dias (em cascata), eventos órfãos e execuções com mais de 30 dias.
+- pg_cron (`limpeza_diaria`, 6h UTC): apaga `descricao_original` depois de 30 dias, `vetor` depois de 3 dias, eventos parados há 180 dias (em cascata), eventos órfãos e execuções com mais de 30 dias.
 
 Regras:
 
 - Mudou o schema? Nova migration (`npm run db:nova -- nome`). Nunca edite uma migration já aplicada. O `banco.yml` aplica no push para `main`.
 - RLS ligado em todas as tabelas, sem políticas, de propósito. O navegador nunca lê o banco direto.
-- Antes de inserir notícias, filtre as URLs que já existem. Depois, agrupe: cada notícia nova entra no acontecimento das últimas 48 horas com o título mais parecido ou abre um novo (`agruparNoticias`, em `packages/core/src/agrupamento.ts`, sem IA). Dois títulos são do mesmo fato com 3 ou mais palavras importantes em comum e pelo menos metade do título mais curto; acentos, plural simples, palavras vazias, datas e anos não contam. A gravação é uma transação só, com `on conflict (url) do nothing` como rede de segurança.
+- Antes de inserir notícias, filtre as URLs que já existem. Depois, agrupe: cada notícia nova entra no acontecimento das últimas 48 horas com o título mais parecido ou abre um novo (`agruparNoticias`, em `packages/core/src/agrupamento.ts`). Dois títulos são do mesmo fato por um de dois critérios:
+  - **Vetores (Mistral, `mistral-embed`):** cosseno de pelo menos `SEMELHANCA_MINIMA_VETOR` (0,88). Funciona entre línguas e com palavras diferentes. Os títulos novos são vetorizados numa chamada por rodada; a comparação com as notícias já gravadas roda no banco (`parecidosPorVetor`, operador `<=>` do pgvector), para os vetores não trafegarem. Calibre o limite com `npm run calibrar:agrupamento`.
+  - **Palavras (sempre, e reserva sem `MISTRAL_API_KEY` ou se a Mistral falhar):** 3 ou mais palavras importantes em comum e pelo menos metade do título mais curto; acentos, plural simples, palavras vazias, datas e anos não contam.
+  A gravação é uma transação só, com `on conflict (url) do nothing` como rede de segurança. Falha da Mistral vira erro de etapa `agrupamento` na execução, sem mudar o status.
 - Um acontecimento que já tem resumo não é resumido de novo quando ganha matérias: o resumo continua o da primeira rodada.
 - Normalize as URLs antes de deduplicar. Os links da Folha vêm como `redir.folha.com.br/...*https://...`: use o trecho depois do `*`. Remova parâmetros de rastreio (`utm_*` e parecidos).
 - Plano gratuito: 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. Guarde só o necessário.
@@ -56,15 +59,23 @@ Regras:
 - O coletor usa um driver Postgres (por exemplo, `postgres`) com essa URL, o que permite transações e `on conflict`.
 - Supabase CLI 3, instalada via npm: `db push`, `migration list` e `migration repair` miram o banco **local** por padrão. Para o Supabase, use sempre `--remote` (ou `--remote="<url>"`). Comandos não interativos precisam de `--yes`.
 
-## IA (Gemini)
+## IA (Gemini, Groq e Mistral)
 
-- O plano gratuito tem cotas baixas (poucas requisições por minuto, com os limites visíveis só no AI Studio).
+Três provedores, todos no plano gratuito, cada um com um papel:
+
+| Provedor | Papel | Chave | Sem a chave |
+|---|---|---|---|
+| Gemini (`@google/genai`) | Resumos e editoria: o principal | `GEMINI_API_KEY` | A Groq assume |
+| Groq (API compatível com a da OpenAI, via `fetch`) | Resumos de reserva: assume o mesmo lote e o resto da rodada quando o Gemini falha ou fica sem cota | `GROQ_API_KEY` | Sem reserva |
+| Mistral (`mistral-embed`, via `fetch`) | Vetores dos títulos para o agrupamento | `MISTRAL_API_KEY` | Agrupamento só por palavras |
+
+- Os três planos gratuitos têm cotas baixas, por minuto e por dia, que mudam sem aviso e só aparecem no painel de cada um (AI Studio, console da Groq e console da Mistral). Sem novas tentativas: insistir só gasta cota. HTTP 429 vira `ErroCotaIa`.
 - Processe em lote: vários eventos por chamada, com resposta em JSON.
 - Nunca resuma o mesmo evento duas vezes.
 - Tenha uma alternativa: sem chave, ou com a cota esgotada, o site mostra a manchete original, a fonte e o link.
 - O resumo sai **só** dos títulos e descrições dos feeds, sem inventar fatos. A classificação usa apenas os slugs de `categoria`.
-- No plano gratuito o Google pode usar o conteúdo enviado. Nunca envie dados de usuários.
-- O texto do resumo tem de três a quatro frases (50 a 80 palavras); o código corta em quatro (`limitarFrases`). Prompt atual: `resumo-v2-2026-11-04`.
+- No plano gratuito o Google pode usar o conteúdo enviado; a Mistral diz que os dados da API não treinam modelos; a política da Groq não foi conferida. Por isso, só vai para as IAs o texto público dos feeds. Nunca envie dados de usuários.
+- O texto do resumo tem de três a quatro frases (50 a 80 palavras); o código corta em quatro (`limitarFrases`). Prompt atual: `resumo-v2-2026-11-04`, em `packages/infra/src/ia/prompt.ts`, o mesmo para Gemini e Groq (a Groq recebe só um pedido extra de formato: objeto `{"resumos": [...]}`, exigência do modo JSON dela).
 - Registre a `versao_prompt`, os tokens e o modelo usado.
 
 ## Conteúdo e regras legais
@@ -81,7 +92,9 @@ Regras:
 | Onde | Nome | Para quê |
 |---|---|---|
 | GitHub Actions | `SUPABASE_DB_URL` | Migrations e coletor (Session pooler, com a senha) |
-| GitHub Actions | `GEMINI_API_KEY` | Resumos. Opcional: sem ela, o coletor pula a IA |
+| GitHub Actions | `GEMINI_API_KEY` | Resumos (principal). Opcional |
+| GitHub Actions | `GROQ_API_KEY` | Resumos (reserva). Opcional: sem as duas, o coletor pula os resumos |
+| GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
 | `.env` local | As mesmas variáveis | Rodar o coletor na máquina |
 
 Nunca coloque segredos no código, em logs, em JSONs ou no site. Nos workflows, os segredos entram só nos passos que precisam deles (`env` no passo), nunca no passo de `npm ci`.
@@ -121,7 +134,8 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 
 - `npm install`: dependências. No Windows, se o PowerShell bloquear scripts, use `npm.cmd` ou o Prompt de Comando.
 - `npm test`: testes (Vitest). `npm run typecheck`: TypeScript estrito em todos os pacotes e `astro check` no site.
-- `npm run coletar`: lê os feeds, grava no banco e, se houver `GEMINI_API_KEY`, gera os resumos. Lê o `.env`.
+- `npm run coletar`: lê os feeds, agrupa (com vetores, se houver `MISTRAL_API_KEY`), grava no banco e, se houver `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos. Lê o `.env`.
+- `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Precisa de `MISTRAL_API_KEY`; não grava nada.
 - `npm run dados:site`: gera `apps/web/public/dados/*.json` a partir do banco.
 - `npm run build:web` / `npm run dev:web`: build e servidor de desenvolvimento do site. Sem `public/dados/`, fora do CI, o site usa `apps/web/src/dados-exemplo/`.
 - `npm run db:nova -- nome`: cria uma migration (se a CLI travar no fim, o arquivo já foi criado).
@@ -131,8 +145,8 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 ## Código
 
 - `packages/core`: `ColetarNoticias`, `ResumirEventos`, `GerarDadosDoSite`, `normalizarUrl`, `agruparNoticias`, portas e o contrato dos JSONs (`casos-de-uso/gerar-dados-do-site.ts`). Falsos em memória para testes em `src/testes/falsos.ts`.
-- `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`, prompt versionado em `gemini/prompt.ts`), logs JSON.
-- `apps/coletor`: `coletar.ts` e `dados-do-site.ts`, só montam dependências.
+- `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`), Groq e Mistral (`fetch`, sem SDK), prompt versionado em `ia/prompt.ts`, logs JSON.
+- `apps/coletor`: `coletar.ts`, `dados-do-site.ts` e `calibrar-agrupamento.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.
 - `.github/workflows/publicar.yml`: a cada 30 min coleta, gera os dados, faz o build e publica no Pages.
 
