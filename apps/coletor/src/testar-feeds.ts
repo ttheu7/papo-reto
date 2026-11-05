@@ -8,26 +8,15 @@
 import { ehTituloDePrograma, type ItemRss } from '@papo-reto/core';
 import { LeitorRssHttp } from '@papo-reto/infra';
 
+// Os feeds da migration fontes_esporte_e_games (1.0), escolhidos em 05/11/2026.
 const CANDIDATOS: [nome: string, url: string][] = [
-  // Internacionais (EUA)
-  ['New York Times (mundo)', 'https://rss.nytimes.com/services/xml/rss/nyt/World.xml'],
-  ['New York Times (capa)', 'https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'],
-  ['Fox News (últimas)', 'https://moxie.foxnews.com/google-publisher/latest.xml'],
-  ['Fox News (esporte)', 'https://moxie.foxnews.com/google-publisher/sports.xml'],
-  ['USA Today', 'https://rssfeeds.usatoday.com/usatoday-NewsTopStories'],
-  ['NPR (notícias)', 'https://feeds.npr.org/1001/rss.xml'],
-  ['NPR (mundo)', 'https://feeds.npr.org/1004/rss.xml'],
-  ['The Daily (podcast)', 'https://feeds.simplecast.com/54nAGcIl'],
-  // Nacionais
   ['UOL (notícias)', 'https://rss.uol.com.br/feed/noticias.xml'],
   ['UOL (esporte)', 'https://rss.uol.com.br/feed/esporte.xml'],
-  ['Gazeta do Povo (últimas)', 'https://www.gazetadopovo.com.br/feed/rss/ultimas-noticias.xml'],
-  // Esportes nacionais
   ['ge', 'https://ge.globo.com/rss/ge/'],
-  ['Gazeta Esportiva', 'https://www.gazetaesportiva.com/feed/'],
-  // E-sports internacionais
-  ['VLR.gg (Valorant)', 'https://www.vlr.gg/rss'],
+  ['NPR (mundo)', 'https://feeds.npr.org/1004/rss.xml'],
+  ['Fox News (mundo)', 'https://moxie.foxnews.com/google-publisher/world.xml'],
   ['HLTV (Counter-Strike)', 'https://www.hltv.org/rss/news'],
+  ['VLR.gg (Valorant)', 'https://www.vlr.gg/rss'],
   ['Dot Esports', 'https://dotesports.com/feed'],
 ];
 

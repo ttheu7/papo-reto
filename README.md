@@ -38,7 +38,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
-- ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop e Esportes
+- ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop, Esportes e, na 1.0, Games (jogos e e-sports)
 - ✅ Página "Como funciona", explicando de onde vêm as notícias e onde entra a IA
 - ✅ Botão para reportar erro em um resumo (na beta, abre uma issue no GitHub)
 - ✅ Modo escuro, que segue o aparelho ou o botão no topo
@@ -46,6 +46,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
+- ✅ Na 1.0, mais oito feeds de sete portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV, VLR.gg e Dot Esports
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
 - ✅ Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia…", "Assista…") ficam de fora: não são notícia
 - ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
@@ -421,6 +422,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
 - [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
 - [x] **Redesign com cara de jornal de papel** - Direção "primeira página clássica": folha contínua, fios, gótica no nome, chapéu acima da manchete ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
+- [x] **Esporte e e-sports** - Editoria Games e feeds de UOL, ge, NPR, Fox News, HLTV, VLR.gg e Dot Esports
 - [ ] **PWA para celular** - Instalar na tela inicial e ler a última edição sem internet
 - [ ] **Doações** - A tabela `doacao` já existe; só doação voluntária, sem dados de quem doa no site
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
