@@ -21,6 +21,12 @@
   --barra-forte: rgba(31, 43, 77, 0.55);
   --toque: rgba(31, 43, 77, 0.12);
 
+  /* Texto sobre foto (Giro): iguais nos dois temas, porque a foto não muda com o tema.
+     O véu escuro embaixo da foto é a única exceção à regra "sem gradiente": garante o contraste do texto. */
+  --sobre-foto: #ffffff;
+  --veu-foto: rgba(12, 16, 28, 0.9);
+  --toque-foto: rgba(255, 255, 255, 0.3);
+
   /* Editorias: a única cor do site. Pastéis, sempre com a tinta por cima. */
   --cat-brasil: #cde9d3;
   --cat-mundo: #d3e2f4;

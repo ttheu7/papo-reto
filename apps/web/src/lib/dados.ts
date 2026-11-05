@@ -53,3 +53,7 @@ export function eventosDoGiro(): Evento[] {
   const ids = new Set(deHoje.map((e) => e.id));
   return [...deHoje, ...eventos.eventos.filter((e) => !ids.has(e.id))];
 }
+
+/** Na capa, só a manchete ganha imagem, e só se for um assunto quente: noticiado por pelo menos 3 portais. */
+export const COBERTURA_PARA_FOTO_NA_CAPA = 3;
+export const imagemNaCapa = (e: Evento | undefined) => (e && e.cobertura >= COBERTURA_PARA_FOTO_NA_CAPA ? (e.imagem ?? null) : null);

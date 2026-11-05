@@ -2,7 +2,8 @@
 import Base from '../layouts/Base.astro';
 import ListaDeNoticias from '../components/ListaDeNoticias.astro';
 import Medidor from '../components/Medidor.astro';
-import { categorias, eventos, hoje, portaisAtuais } from '../lib/dados';
+import ImagemIlustrativa from '../components/ImagemIlustrativa.astro';
+import { categorias, eventos, hoje, imagemNaCapa, portaisAtuais } from '../lib/dados';
 import { caminho, exigeAssinatura, lerNo, plural, portaisDe, quando, quemNoticiou, REPOSITORIO } from '../lib/formato';
 
 const geradoEm = eventos.geradoEm;
@@ -17,6 +18,7 @@ const editorias = categorias.categorias
   .filter((c) => c.eventos.length > 0);
 const portais = portaisAtuais();
 const fonteDaManchete = manchete?.materias[0];
+const fotoDaManchete = imagemNaCapa(manchete);
 ---
 <Base capa titulo="Papo Reto: as notícias do dia, explicadas" descricao="As notícias do dia explicadas em até quatro frases, com link para quem noticiou. Grátis, sem anúncio e sem cadastro.">
   {manchete && (
@@ -29,6 +31,7 @@ const fonteDaManchete = manchete?.materias[0];
           <Medidor cobertura={manchete.cobertura} />
           <span>{portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
         </p>
+        {fotoDaManchete && <ImagemIlustrativa imagem={fotoDaManchete} prioridade class="manchete__foto" />}
         <p class="manchete__resumo">{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
         <div class="manchete__acoes">
           <a class="botao" href={caminho(`evento/${manchete.id}/`)}>Entender o assunto</a>
@@ -130,6 +133,9 @@ const fonteDaManchete = manchete?.materias[0];
   }
   .manchete__meta { margin-top: -6px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: var(--step-small); font-weight: 600; }
   .manchete__titulo { font-size: var(--step-head); line-height: 1; }
+  .manchete :global(.manchete__foto) { justify-self: stretch; }
+  .manchete :global(.manchete__foto img) { aspect-ratio: 21 / 9; }
+  .manchete :global(.manchete__foto figcaption) { color: var(--ink); }
   .manchete__titulo a { text-decoration: underline; text-decoration-thickness: 0.05em; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
   @media (hover: hover) and (pointer: fine) { .manchete__titulo a:hover { text-decoration-color: currentColor; } }
   .manchete__resumo { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 40ch; }

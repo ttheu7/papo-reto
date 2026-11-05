@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Cabecalho from '../../components/Cabecalho.astro';
 import ListaDeNoticias from '../../components/ListaDeNoticias.astro';
 import Medidor from '../../components/Medidor.astro';
+import ImagemIlustrativa from '../../components/ImagemIlustrativa.astro';
 import { eventos, type Evento } from '../../lib/dados';
 import { caminho, dataPorExtenso, linkParaReportar, portaisDe, quando } from '../../lib/formato';
 
@@ -26,6 +27,12 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
       <span>Noticiado por {portais.join(', ')}</span>
     </p>
   </Cabecalho>
+
+  {e.imagem && (
+    <div class="moldura foto-topo">
+      <ImagemIlustrativa imagem={e.imagem} prioridade />
+    </div>
+  )}
 
   <div class="moldura evento">
     <section class="minuto card" aria-labelledby="minuto-titulo" data-revela>
@@ -83,6 +90,9 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--step-small); font-weight: 600; }
   .meta time { display: inline-block; }
   .meta time::first-letter { text-transform: uppercase; }
+  .foto-topo { padding-top: var(--gutter); }
+  .foto-topo :global(img) { aspect-ratio: 21 / 9; max-height: 420px; }
+  @media (max-width: 640px) { .foto-topo :global(img) { aspect-ratio: 4 / 3; } }
   .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gutter); padding-top: var(--gutter); align-items: stretch; }
   .minuto, .quem { display: grid; gap: 22px; align-content: start; justify-items: start; }
   .minuto h2, .quem h2 { font-size: var(--step-head); }

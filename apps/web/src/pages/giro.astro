@@ -29,7 +29,21 @@ const id = (i: number) => `cena-${i + 1}`;
         const fonte = e.materias[0];
         return (
           <li class="giro__cena" id={id(i)} data-cat={e.categoria?.slug ?? 'geral'} data-giro-cena={i + 1}>
-            <article class="giro__cartao" aria-labelledby={`${id(i)}-titulo`}>
+            <article class:list={['giro__cartao', { 'giro__cartao--foto': e.imagem }]} aria-labelledby={`${id(i)}-titulo`}>
+              {e.imagem && (
+                <img
+                  class="giro__foto"
+                  src={e.imagem.url}
+                  width={e.imagem.largura || undefined}
+                  height={e.imagem.altura || undefined}
+                  alt=""
+                  loading={i < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  referrerpolicy="no-referrer"
+                  style={e.imagem.cor ? `background-color:${e.imagem.cor}` : undefined}
+                />
+              )}
+              <div class="giro__texto">
               <p class="so-leitor">Notícia {i + 1} de {total}</p>
               <h2 class="giro__manchete" id={`${id(i)}-titulo`}>{e.titulo}</h2>
               <p class="giro__meta">
@@ -38,14 +52,20 @@ const id = (i: number) => `cena-${i + 1}`;
                 <span>{portais.length === 1 ? portais[0] : `${portais.length} portais`} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
               </p>
               <p class="giro__resumo">{e.resumo ?? 'Ainda sem resumo. Toque para ver quem noticiou e ler direto na fonte.'}</p>
-              {e.resumo && <p class="giro__ia">Resumo feito por IA a partir das manchetes dos portais.</p>}
+              {e.resumo && !e.imagem && <p class="giro__ia">Resumo feito por IA a partir das manchetes dos portais.</p>}
               <div class="giro__acoes">
-                <a class="botao" href={caminho(`evento/${e.id}/`)}>Entender o assunto</a>
+                <a class:list={['botao', { 'botao--papel': e.imagem }]} href={caminho(`evento/${e.id}/`)}>Entender o assunto</a>
                 {fonte && (
                   <a class="link giro__fonte" href={fonte.url} rel="noopener">
                     {lerNo(fonte.portal)}{exigeAssinatura(e) ? ' (exige assinatura)' : ''}
                   </a>
                 )}
+              </div>
+              {e.imagem && (
+                <p class="giro__credito">
+                  {e.resumo && 'Resumo feito por IA · '}Imagem ilustrativa · Foto: <a href={e.imagem.urlAutor} rel="noopener">{e.imagem.autor}</a> / <a href={e.imagem.urlPagina} rel="noopener">{e.imagem.provedor}</a>
+                </p>
+              )}
               </div>
             </article>
             <nav class="giro__passos" aria-label="Passar notícia">
@@ -179,8 +199,9 @@ const id = (i: number) => `cena-${i + 1}`;
   }
   .giro__cartao {
     background: var(--cat); border-radius: var(--raio); padding: clamp(24px, 5vw, 48px);
-    display: grid; align-content: center; gap: 20px; justify-items: start;
+    display: grid; align-content: center;
   }
+  .giro__texto { display: grid; gap: 20px; justify-items: start; }
   .giro__manchete { font-size: var(--step-head); line-height: 1.02; letter-spacing: -0.025em; }
   .giro__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-size: var(--step-small); font-weight: 600; }
   .giro__resumo { font-family: var(--serif); font-size: var(--step-lead); line-height: 1.4; max-width: 38ch; }
@@ -199,6 +220,27 @@ const id = (i: number) => `cena-${i + 1}`;
   @media (hover: hover) and (pointer: fine) { .giro__passo:hover { background: var(--papel-2); } }
 
   .giro__cena--fim .giro__cartao { background: var(--papel); }
+
+  /* Com imagem: a foto ocupa o cartão inteiro e o texto fica embaixo, em branco. O véu escuro (a exceção à
+     regra "sem gradiente") acompanha o próprio bloco de texto: começa um pouco acima dele, com um fade, e
+     fica sólido atrás das letras. Assim o contraste vale para qualquer foto e qualquer tamanho de manchete. */
+  .giro__cartao--foto {
+    position: relative; isolation: isolate; overflow: hidden; align-content: end; padding: 0;
+    color: var(--sobre-foto); --toque: var(--toque-foto); background: var(--veu-foto);
+  }
+  .giro__foto { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; }
+  .giro__cartao--foto .giro__texto {
+    --fade: clamp(72px, 14vh, 140px);
+    padding: calc(var(--fade) + 8px) clamp(24px, 5vw, 48px) clamp(24px, 5vw, 48px);
+    background: linear-gradient(to bottom, transparent, var(--veu-foto) var(--fade));
+    gap: 16px;
+  }
+  /* O resumo é nosso (não é manchete de terceiros): no cartão com foto, até 3 linhas, para a foto aparecer. */
+  .giro__cartao--foto .giro__resumo {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
+  }
+  .giro__credito { font-size: var(--step-small); }
+  .giro__credito a { color: inherit; font-weight: 600; text-decoration-color: currentColor; }
 
   /* Descarte: ao passar, o cartão que sai pelo topo encolhe e esmaece, e o próximo sobe para o lugar.
      Animação ligada à própria rolagem (o dedo ou a roda conduzem); onde o navegador não tem isso, só rola. */
