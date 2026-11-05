@@ -2,7 +2,7 @@
 
 **Portal de notícias gratuito para o público jovem, com resumos em linguagem simples**
 
-Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini, com a Groq de reserva), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal, sem anúncios e sem coleta de dados de quem lê.
+Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini, com a Groq de reserva), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal de papel (na 1.0: papel creme, tinta preta, o nome em letra gótica e colunas separadas por fios), sem anúncios e sem coleta de dados de quem lê.
 
 No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este README descreve a versão 1.0, em desenvolvimento. Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
 
@@ -73,7 +73,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 ### Site:
 - **Astro 7** - Site estático, base `/papo-reto/`
 - **CSS próprio** - Tokens de cor, tipo e raio em `apps/web/src/styles/global.css`
-- **Newsreader e Figtree** - Fontes servidas pelo próprio site via `@fontsource`, sem chamadas ao Google
+- **UnifrakturMaguntia, Newsreader e Figtree** - Fontes servidas pelo próprio site via `@fontsource`, sem chamadas ao Google (a gótica só no nome do jornal)
 - **JavaScript mínimo** - Só para o modo escuro e o filtro da lista
 
 ### Banco de dados:
@@ -418,7 +418,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, com a imagem ilustrativa
 - [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
 - [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
-- [ ] **Redesign com cara de jornal de papel** - Site de notícias de verdade, menos "cartões soltos" ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
+- [x] **Redesign com cara de jornal de papel** - Direção "primeira página clássica": folha contínua, fios, gótica no nome, chapéu acima da manchete ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
 - [ ] **PWA para celular** - Instalar na tela inicial e ler a última edição sem internet
 - [ ] **Doações** - A tabela `doacao` já existe; só doação voluntária, sem dados de quem doa no site
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
@@ -500,7 +500,7 @@ Para dúvidas, problemas ou erros em resumos:
 - À Unoesc Videira e à disciplina PRATIC IV
 - Aos portais que mantêm feeds RSS abertos: g1, Folha, Estadão, CNN Brasil, BBC, Agência Brasil e Tecnoblog
 - Às comunidades do Astro, do Supabase e das bibliotecas usadas no projeto
-- Às fundições das fontes Newsreader e Figtree, distribuídas pelo Fontsource
+- Às fundições das fontes UnifrakturMaguntia, Newsreader e Figtree, distribuídas pelo Fontsource
 - Aos fotógrafos que compartilham o trabalho na Pexels e no Unsplash
 
 ---
