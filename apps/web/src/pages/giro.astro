@@ -98,6 +98,31 @@ const id = (i: number) => `cena-${i + 1}`;
       cenas.forEach((c) => io.observe(c));
     }
 
+    // Roda do mouse e touchpad: cada gesto passa exatamente um cartão. Enquanto o cartão encaixa, os
+    // eventos seguintes do mesmo gesto (inclusive a inércia do touchpad) são ignorados.
+    let travado = false;
+    let acumulado = 0;
+    let soltar: ReturnType<typeof setTimeout> | undefined;
+    const destravar = () => {
+      clearTimeout(soltar);
+      // Espera a inércia acabar: só destrava depois de 250 ms sem nenhum evento de roda.
+      soltar = setTimeout(() => { travado = false; acumulado = 0; }, 250);
+    };
+    lista.addEventListener(
+      'wheel',
+      (ev) => {
+        if (ev.ctrlKey || Math.abs(ev.deltaY) < Math.abs(ev.deltaX)) return; // zoom e rolagem lateral seguem normais
+        ev.preventDefault();
+        if (travado) { destravar(); return; }
+        acumulado += ev.deltaMode === 1 ? ev.deltaY * 40 : ev.deltaY;
+        if (Math.abs(acumulado) < 30) return;
+        travado = true;
+        ir(indice + Math.sign(acumulado));
+        destravar();
+      },
+      { passive: false },
+    );
+
     // Os links "Próxima" e "Anterior" funcionam sem JavaScript; com ele, rolam dentro da lista sem mudar o endereço.
     lista.addEventListener('click', (ev) => {
       const passo = (ev.target as HTMLElement).closest<HTMLAnchorElement>('[data-giro-passo], [data-giro-inicio]');
@@ -174,6 +199,24 @@ const id = (i: number) => `cena-${i + 1}`;
   @media (hover: hover) and (pointer: fine) { .giro__passo:hover { background: var(--papel-2); } }
 
   .giro__cena--fim .giro__cartao { background: var(--papel); }
+
+  /* Descarte: ao passar, o cartão que sai pelo topo encolhe e esmaece, e o próximo sobe para o lugar.
+     Animação ligada à própria rolagem (o dedo ou a roda conduzem); onde o navegador não tem isso, só rola. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .giro__cena { animation-name: descartar; animation-timing-function: linear; animation-fill-mode: both; transform-origin: 50% 0; }
+      .giro__cartao { animation-name: chegar; animation-timing-function: linear; animation-fill-mode: both; }
+      /* A linha do tempo fica numa regra à parte: no atalho `animation`, o minificador a juntaria e o navegador a descartaria. */
+      .giro__lista > .giro__cena { animation-timeline: view(); animation-range: exit 0% exit 100%; }
+      .giro__lista .giro__cena > .giro__cartao { animation-timeline: view(); animation-range: entry 0% entry 100%; }
+    }
+  }
+  @keyframes descartar {
+    to { transform: translateY(12%) scale(0.86); opacity: 0.15; }
+  }
+  @keyframes chegar {
+    from { transform: translateY(8%); }
+  }
   @media (max-width: 640px) {
     .giro__cartao { gap: 16px; }
     .giro__resumo { font-size: var(--step-body); line-height: 1.45; }
