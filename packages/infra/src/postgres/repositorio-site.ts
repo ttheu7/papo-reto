@@ -1,4 +1,4 @@
-import type { CardDeEvento, Categoria, MateriaPublica, RepositorioSite } from '@papo-reto/core';
+import type { CardDeEvento, Categoria, MateriaPublica, PortalPublico, RepositorioSite } from '@papo-reto/core';
 import type { Sql } from './conexao';
 
 export class RepositorioSitePg implements RepositorioSite {
@@ -86,5 +86,17 @@ export class RepositorioSitePg implements RepositorioSite {
 
   async categorias(): Promise<Categoria[]> {
     return this.sql<Categoria[]>`select id, slug, nome from public.categoria order by nome`;
+  }
+
+  async portais(): Promise<PortalPublico[]> {
+    // Feeds do mesmo portal têm o mesmo nome: vira um portal só, com o site mais curto (o principal).
+    return this.sql<PortalPublico[]>`
+      select nome,
+             (array_agg(url_site order by length(url_site), url_site))[1] as "urlSite",
+             bool_or(exige_assinatura) as "exigeAssinatura"
+        from public.fonte
+       where ativa
+       group by nome
+       order by lower(nome)`;
   }
 }

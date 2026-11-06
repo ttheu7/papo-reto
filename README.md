@@ -355,6 +355,17 @@ Editorias com o total de acontecimentos.
 }
 ```
 
+#### **GET /dados/portais.json**
+Os portais acompanhados (fontes ativas, agrupadas pelo nome).
+
+**Resposta:**
+```json
+{
+  "geradoEm": "2026-11-04T20:30:00Z",
+  "portais": [{ "nome": "Folha", "site": "https://www.folha.uol.com.br", "exigeAssinatura": true }]
+}
+```
+
 `descricao_original` nunca entra nesses arquivos (há teste para isso). No futuro, o `apps/mcp-publico` vai expor esses mesmos dados como um servidor MCP.
 
 ---

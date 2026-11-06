@@ -146,6 +146,14 @@ export interface CardDeEvento {
 }
 
 /** O que o site mostra de uma notícia. Sem descricao_original, de propósito. */
+/** Um portal acompanhado (fontes ativas com o mesmo nome viram um portal só). Só dados públicos. */
+export interface PortalPublico {
+  nome: string;
+  /** O site do portal (o mais curto entre os feeds dele). */
+  urlSite: string;
+  exigeAssinatura: boolean;
+}
+
 export interface MateriaPublica {
   portal: string;
   titulo: string;

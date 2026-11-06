@@ -12,6 +12,7 @@ import type {
   MateriaPublica,
   ModeloIa,
   ParecidoPorVetor,
+  PortalPublico,
   NovoResumo,
   ResumoGerado,
   StatusExecucao,
@@ -100,6 +101,8 @@ export interface RepositorioSite {
   /** Matérias de cada evento, sem nenhum campo de uso interno. */
   materiasDosEventos(ids: string[]): Promise<Map<string, MateriaPublica[]>>;
   categorias(): Promise<Categoria[]>;
+  /** Os portais acompanhados (fontes ativas), em ordem alfabética. */
+  portais(): Promise<PortalPublico[]>;
 }
 
 export interface EscritorDeDados {

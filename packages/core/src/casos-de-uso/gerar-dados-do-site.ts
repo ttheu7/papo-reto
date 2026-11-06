@@ -52,6 +52,12 @@ export interface CategoriasJson {
   categorias: { slug: string; nome: string; total: number }[];
 }
 
+/** Os portais acompanhados, para a página "Como funciona". */
+export interface PortaisJson {
+  geradoEm: string;
+  portais: { nome: string; site: string; exigeAssinatura: boolean }[];
+}
+
 export interface OpcoesDosDados {
   /** Padrão: 48 horas e até 80 eventos. */
   janelaEmHoras?: number;
@@ -103,6 +109,8 @@ export class GerarDadosDoSite {
     await d.escritor.escrever('eventos.json', { geradoEm, eventos: selecionados.map(paraJson) } satisfies EventosJson);
     await d.escritor.escrever('hoje.json', { geradoEm, eventos: hoje.map(paraJson) } satisfies EventosJson);
     await d.escritor.escrever('categorias.json', { geradoEm, categorias } satisfies CategoriasJson);
+    const portais = (await d.site.portais()).map((p) => ({ nome: p.nome, site: p.urlSite, exigeAssinatura: p.exigeAssinatura }));
+    await d.escritor.escrever('portais.json', { geradoEm, portais } satisfies PortaisJson);
 
     d.registro.info('dados do site gerados', { eventos: selecionados.length, hoje: hoje.length });
     return { eventos: selecionados.length, hoje: hoje.length };
