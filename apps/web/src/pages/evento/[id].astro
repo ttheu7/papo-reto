@@ -94,13 +94,16 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; }
   .foto-topo + .evento { padding-top: var(--gutter); }
   .minuto, .quem { display: grid; gap: 18px; align-content: start; justify-items: start; }
-  .minuto { padding-right: calc(var(--gutter) * 1.5); border-right: 1px solid var(--fio-claro); }
+  .evento { --altura-rotulo: 60px; }
+  .minuto { position: relative; padding-right: calc(var(--gutter) * 1.5); }
+  /* Fio entre as colunas: começa no fio de baixo dos rótulos, não no do cabeçalho. */
+  .minuto::after { content: ''; position: absolute; top: var(--altura-rotulo); bottom: 0; right: 0; border-right: 1px solid var(--fio-claro); }
   .quem { padding-left: calc(var(--gutter) * 1.5); justify-items: stretch; }
   .minuto .rotulo, .quem .rotulo { justify-self: stretch; }
   /* O fio grosso do cabeçalho já fecha a área de cima: os rótulos das duas colunas ficam só com o fio
      de baixo, da mesma espessura, e um pouco mais altos, para o carimbo "Explicado" não encostar. */
   .minuto .rotulo, .quem .rotulo {
-    display: flex; align-items: center; min-height: 60px; padding: 10px 0; border-top: 0; border-bottom-width: 3px;
+    display: flex; align-items: center; min-height: var(--altura-rotulo); padding: 10px 0; border-top: 0; border-bottom-width: 3px;
   }
   .minuto__texto { font-size: var(--step-lead); line-height: 1.45; max-width: 40ch; }
   .minuto__texto::first-letter { float: left; font-size: 3.2em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
@@ -113,7 +116,8 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .mais { font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }
   @media (max-width: 900px) {
     .evento { grid-template-columns: 1fr; }
-    .minuto { padding-right: 0; border-right: 0; padding-bottom: var(--gutter); }
+    .minuto { padding-right: 0; padding-bottom: var(--gutter); }
+    .minuto::after { content: none; }
     .quem { padding-left: 0; }
     /* Numa coluna só, "Quem noticiou" vem depois do resumo: o fio de cima volta para separar. */
     .quem .rotulo { border-top: 3px solid var(--fio); }
