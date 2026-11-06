@@ -89,7 +89,10 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .foto-topo :global(img) { aspect-ratio: 21 / 9; max-height: 360px; }
   @media (max-width: 640px) { .foto-topo :global(img) { aspect-ratio: 4 / 3; } }
   /* Duas colunas com fio entre elas, da mesma altura (como colunas de uma página). */
-  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); padding-top: var(--gutter); align-items: stretch; }
+  /* Sem recuo em cima: o rótulo começa no fio do cabeçalho, com o texto no meio entre os dois fios.
+     Depois da foto do topo, o recuo volta, para o rótulo não colar na legenda. */
+  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; }
+  .foto-topo + .evento { padding-top: var(--gutter); }
   .minuto, .quem { display: grid; gap: 18px; align-content: start; justify-items: start; }
   .minuto { padding-right: calc(var(--gutter) * 1.5); border-right: 1px solid var(--fio-claro); }
   .quem { padding-left: calc(var(--gutter) * 1.5); justify-items: stretch; }
