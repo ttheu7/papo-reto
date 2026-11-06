@@ -98,6 +98,11 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .minuto { position: relative; padding-right: calc(var(--gutter) * 1.5); }
   /* Fio entre as colunas: começa no fio de baixo dos rótulos, não no do cabeçalho. */
   .minuto::after { content: ''; position: absolute; top: var(--altura-rotulo); bottom: 0; right: 0; border-right: 1px solid var(--fio-claro); }
+  /* Na faixa dos rótulos, um fio curto separa os dois títulos, centrado entre o fio de cima e o de baixo. */
+  .minuto::before {
+    content: ''; position: absolute; right: 0; height: 28px; border-right: 1px solid var(--fio-claro);
+    top: calc((var(--altura-rotulo) - 3px - 28px) / 2);
+  }
   .quem { padding-left: calc(var(--gutter) * 1.5); justify-items: stretch; }
   .minuto .rotulo, .quem .rotulo { justify-self: stretch; }
   /* O fio grosso do cabeçalho já fecha a área de cima: os rótulos das duas colunas ficam só com o fio
@@ -117,7 +122,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   @media (max-width: 900px) {
     .evento { grid-template-columns: 1fr; }
     .minuto { padding-right: 0; padding-bottom: var(--gutter); }
-    .minuto::after { content: none; }
+    .minuto::after, .minuto::before { content: none; }
     .quem { padding-left: 0; }
     /* Numa coluna só, "Quem noticiou" vem depois do resumo: o fio de cima volta para separar. */
     .quem .rotulo { border-top: 3px solid var(--fio); }
