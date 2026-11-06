@@ -18,7 +18,7 @@ const relacionados = e.categoria ? eventos.eventos.filter((x) => x.id !== e.id &
 const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria original.`;
 ---
 <Base titulo={`${e.titulo} | Papo Reto`} descricao={descricao}>
-  <Cabecalho>
+  <Cabecalho semFio={!e.imagem}>
     {e.categoria && <a class="chapeu" href={caminho(`categoria/${e.categoria.slug}/`)}>{e.categoria.nome}</a>}
     <h1 id="pagina-titulo">{e.titulo}</h1>
     <p class="servico">
@@ -89,27 +89,18 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .foto-topo :global(img) { aspect-ratio: 21 / 9; max-height: 360px; }
   @media (max-width: 640px) { .foto-topo :global(img) { aspect-ratio: 4 / 3; } }
   /* Duas colunas com fio entre elas, da mesma altura (como colunas de uma página). */
-  /* Sem recuo em cima: o rótulo começa no fio do cabeçalho, com o texto no meio entre os dois fios.
-     Depois da foto do topo, o recuo volta, para o rótulo não colar na legenda. */
-  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; }
+  /* Duas colunas com fio entre elas. Sem foto, o cabeçalho não tem fio de baixo: quem abre a área é o
+     fio forte dos rótulos, com mais espaço depois do título. Com foto, ela fica entre o fio do cabeçalho
+     e o dos rótulos. */
+  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; padding-top: calc(var(--gutter) * 1.5); }
   .foto-topo + .evento { padding-top: var(--gutter); }
   .minuto, .quem { display: grid; gap: 18px; align-content: start; justify-items: start; }
-  .evento { --altura-rotulo: 60px; }
-  .minuto { position: relative; padding-right: calc(var(--gutter) * 1.5); }
-  /* Fio entre as colunas: começa no fio de baixo dos rótulos, não no do cabeçalho. */
-  .minuto::after { content: ''; position: absolute; top: var(--altura-rotulo); bottom: 0; right: 0; border-right: 1px solid var(--fio-claro); }
-  /* Na faixa dos rótulos, um fio curto separa os dois títulos, centrado entre o fio de cima e o de baixo. */
-  .minuto::before {
-    content: ''; position: absolute; right: 0; height: 28px; border-right: 1px solid var(--fio-claro);
-    top: calc((var(--altura-rotulo) - 3px - 28px) / 2);
-  }
+  .minuto { padding-right: calc(var(--gutter) * 1.5); border-right: 1px solid var(--fio-claro); }
   .quem { padding-left: calc(var(--gutter) * 1.5); justify-items: stretch; }
   .minuto .rotulo, .quem .rotulo { justify-self: stretch; }
-  /* O fio grosso do cabeçalho já fecha a área de cima: os rótulos das duas colunas ficam só com o fio
-     de baixo, da mesma espessura, e um pouco mais altos, para o carimbo "Explicado" não encostar. */
-  .minuto .rotulo, .quem .rotulo {
-    display: flex; align-items: center; min-height: var(--altura-rotulo); padding: 10px 0; border-top: 0; border-bottom-width: 3px;
-  }
+  /* Os rótulos das duas colunas no estilo da casa (fio forte em cima, fino embaixo), com a mesma altura
+     e um pouco mais de espaço, para o carimbo "Explicado" não encostar nos fios. */
+  .minuto .rotulo, .quem .rotulo { display: flex; align-items: center; min-height: 64px; padding: 12px 0; }
   .minuto__texto { font-size: var(--step-lead); line-height: 1.45; max-width: 40ch; }
   .minuto__texto::first-letter { float: left; font-size: 3.2em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
   /* Carimbo "Explicado" batido no rótulo do resumo. */
@@ -121,10 +112,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .mais { font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }
   @media (max-width: 900px) {
     .evento { grid-template-columns: 1fr; }
-    .minuto { padding-right: 0; padding-bottom: var(--gutter); }
-    .minuto::after, .minuto::before { content: none; }
+    .minuto { padding-right: 0; border-right: 0; padding-bottom: var(--gutter); }
     .quem { padding-left: 0; }
-    /* Numa coluna só, "Quem noticiou" vem depois do resumo: o fio de cima volta para separar. */
-    .quem .rotulo { border-top: 3px solid var(--fio); }
   }
 </style>
