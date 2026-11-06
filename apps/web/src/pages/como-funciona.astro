@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
+import SeloAssinatura from '../components/SeloAssinatura.astro';
 import { categorias, portaisAcompanhados, portaisAtuais } from '../lib/dados';
 import { caminho, REPOSITORIO } from '../lib/formato';
 
@@ -24,7 +25,7 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
       <div class="passo__texto" data-revela>
         <p>A cada 30 minutos, um programa lê os feeds RSS públicos dos portais: a lista de manchetes que eles mesmos publicam para outros sites e aplicativos. Guardamos o título, o link e a data de cada matéria.</p>
         <p>Quando portais diferentes publicam sobre o mesmo fato, o Papo Reto junta as matérias num assunto só, comparando o sentido dos títulos e das descrições. O anel ao lado de cada notícia mostra quantos dos portais acompanhados falaram dele: o número no meio é quantos portais, e quanto mais cheio o anel, mais gente noticiou.</p>
-        <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>.</p>
+        <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>, e na lista de portais esses ficam com o carimbo <SeloAssinatura />.</p>
         {portais.length > 0 && <a class="link passo__mais" href="#portais-titulo">Ver os {portais.length} portais acompanhados</a>}
       </div>
     </section>
@@ -83,9 +84,11 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
       <ul class="portais" data-revela>
         {portais.map((p) => (
           <li class="portal">
-            {p.site ? <a class="portal__nome" href={p.site} rel="noopener">{p.nome}</a> : <span class="portal__nome">{p.nome}</span>}
+            <span class="portal__linha">
+              {p.site ? <a class="portal__nome" href={p.site} rel="noopener">{p.nome}</a> : <span class="portal__nome">{p.nome}</span>}
+              {p.exigeAssinatura && <SeloAssinatura />}
+            </span>
             {p.site && <span class="portal__site">{dominio(p.site)}</span>}
-            {p.exigeAssinatura && <span class="portal__nota">Exige assinatura</span>}
           </li>
         ))}
       </ul>
@@ -102,7 +105,7 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
 
 <style>
   /* Três colunas de texto, com fio entre elas, como uma página de jornal. */
-  .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); padding-top: calc(var(--gutter) * 1.5); }
+  .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); padding-top: calc(var(--respiro) - 22px); }
   .passo { display: grid; gap: 14px; align-content: start; justify-items: start; }
   .passo .rotulo { justify-self: stretch; }
   .passo__texto { display: grid; gap: 12px; justify-items: start; }
@@ -113,10 +116,10 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
     column-gap: var(--gutter);
   }
   .portal { display: grid; align-content: start; gap: 2px; padding: 16px 0 18px; border-bottom: 1px solid var(--fio-claro); }
-  .portal__nome { font: 700 var(--step-lead) / 1.15 var(--serif); letter-spacing: -0.01em; text-decoration: none; justify-self: start; }
+  .portal__linha { display: flex; align-items: center; gap: 10px; }
+  .portal__nome { font: 700 var(--step-lead) / 1.15 var(--serif); letter-spacing: -0.01em; text-decoration: none; }
   @media (hover: hover) and (pointer: fine) { a.portal__nome:hover { text-decoration: underline; text-decoration-thickness: 0.06em; } }
   .portal__site { font: 400 var(--step-small) / 1.3 var(--sans); color: var(--muted); }
-  .portal__nota { font: 600 var(--step-small) / 1.3 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 4px; }
   @media (max-width: 640px) {
     .portais { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
     .portal__nome { overflow-wrap: anywhere; }

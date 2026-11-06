@@ -1,0 +1,13 @@
+---
+// Carimbo pequeno de "Exige assinatura": um cifrão num círculo, girado como os outros carimbos da casa.
+// O nome vai para o leitor de tela e aparece como dica ao passar o mouse.
+---
+<span class="selo-assinatura" role="img" aria-label="Exige assinatura" title="Exige assinatura"><span aria-hidden="true">$</span></span>
+
+<style>
+  .selo-assinatura {
+    display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px;
+    border: 1.5px solid var(--ink); border-radius: 50%; transform: rotate(-9deg);
+    font: 600 0.75rem / 1 var(--sans); color: var(--ink); vertical-align: middle;
+  }
+</style>
