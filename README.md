@@ -2,9 +2,9 @@
 
 **Portal de notícias gratuito para o público jovem, com resumos em linguagem simples**
 
-Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal, sem anúncios e sem coleta de dados de quem lê.
+Site que reúne o que os principais portais do Brasil e do mundo publicam (via RSS), explica cada acontecimento em três ou quatro frases, com resumos gerados por IA (Gemini, com a Groq de reserva), e leva sempre para as matérias originais. O visual é o de uma primeira página de jornal de papel (na 1.0: papel creme, tinta preta, o nome em letra gótica e colunas separadas por fios), sem anúncios e sem coleta de dados de quem lê.
 
-No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
+No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este README descreve a versão 1.0, em desenvolvimento. Projeto acadêmico de Ciência da Computação da Unoesc Videira, disciplina PRATIC IV.
 
 ---
 
@@ -30,11 +30,15 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ## ✨ Funcionalidades
 
 ### Para quem lê:
+- ✅ Giro: as manchetes em tela cheia, uma de cada vez, para passar deslizando (ou com a roda do mouse); cada cartão traz a manchete, o medidor de cobertura e, quando há, a imagem ocupando pelo menos metade do cartão, e tocar abre a notícia (sem personalização e com fim)
+- ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
+- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos dos portais acompanhados noticiaram cada assunto
+- ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
-- ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop e Esportes
+- ✅ Páginas por editoria: Brasil, Mundo, Política, Economia, Tecnologia, Ciência, Educação, Pop, Esportes e, na 1.0, Games (jogos e e-sports)
 - ✅ Página "Como funciona", explicando de onde vêm as notícias e onde entra a IA
 - ✅ Botão para reportar erro em um resumo (na beta, abre uma issue no GitHub)
 - ✅ Modo escuro, que segue o aparelho ou o botão no topo
@@ -42,8 +46,13 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 
 ### Nos bastidores (automático):
 - ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
+- ✅ Na 1.0, mais oito feeds de sete portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
+- ✅ Matéria de outro portal acompanhado que aparece num feed (a Folha no feed do UOL) fica com o portal dono, com o nome e a etiqueta de assinatura certos; páginas de jogo ao vivo do ge ficam de fora
+- ✅ Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia…", "Assista…") ficam de fora: não são notícia
+- ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
+- ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
 - ✅ Registro de cada rodada (novas notícias, resumos e erros) e, em cada resumo, do modelo, dos tokens e do custo
 - ✅ Limpeza diária do banco para caber no plano gratuito
@@ -67,15 +76,21 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta). Projeto acadêm
 ### Site:
 - **Astro 7** - Site estático, base `/papo-reto/`
 - **CSS próprio** - Tokens de cor, tipo e raio em `apps/web/src/styles/global.css`
-- **Newsreader e Figtree** - Fontes servidas pelo próprio site via `@fontsource`, sem chamadas ao Google
+- **UnifrakturMaguntia, Newsreader e Figtree** - Fontes servidas pelo próprio site via `@fontsource`, sem chamadas ao Google (a gótica só no nome do jornal)
 - **JavaScript mínimo** - Só para o modo escuro e o filtro da lista
 
 ### Banco de dados:
 - **Supabase (Postgres)** - Plano gratuito, região São Paulo, com `pg_cron` para a limpeza diária
 - **Supabase CLI 3** - Migrations
 
-### IA:
-- **Gemini** (Google AI Studio) - Modelo lido da tabela `modelo_ia` (hoje `gemini-3.5-flash-lite`)
+### IA (planos gratuitos):
+- **Gemini** (Google AI Studio) - Resumos e editoria; modelo principal lido da tabela `modelo_ia` (hoje `gemini-3.5-flash-lite`)
+- **Groq** - Resumos de reserva; modelo de reserva lido da tabela `modelo_ia` (hoje `llama-3.3-70b-versatile`)
+- **Mistral** (`mistral-embed`) - Vetores do título e da descrição para o agrupamento
+- **pgvector** - Compara os vetores dentro do banco
+
+### Imagens (planos gratuitos):
+- **Pexels** e **Unsplash** - Imagens ilustrativas, buscadas com as palavras-chave que a IA sugere; a Pexels primeiro, o Unsplash de reserva
 
 ### Infraestrutura e qualidade:
 - **GitHub Actions** - Coleta agendada, migrations e publicação
@@ -128,8 +143,8 @@ papo-reto/
 ```
 
 ### Como funciona:
-1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs e grava evento e notícia no Supabase.
-2. Se houver `GEMINI_API_KEY`, o coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Sem chave, ou com a cota esgotada, essa etapa é pulada.
+1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, o título e o começo da descrição de cada notícia nova viram um vetor e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
+2. O coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Se o Gemini falhar ou ficar sem cota, a Groq resume o mesmo lote e o resto da rodada. Sem nenhuma das duas chaves, essa etapa é pulada e o site mostra a manchete original.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
 
@@ -143,7 +158,7 @@ Se a coleta falhar, o site é publicado mesmo assim com o que já está no banco
 | MCP público (futuro) | Os mesmos JSONs do site | Nenhuma |
 | MCP admin (futuro) | Banco do Supabase, a partir da sua máquina | Credencial no `.env` local |
 | Workflow do banco | Postgres, pelo pooler | Segredo `SUPABASE_DB_URL` |
-| Coletor e gerador | Postgres, pelo pooler, no GitHub Actions | Segredos `SUPABASE_DB_URL` e `GEMINI_API_KEY` |
+| Coletor e gerador | Postgres, pelo pooler, no GitHub Actions | Segredos `SUPABASE_DB_URL`, `GEMINI_API_KEY`, `GROQ_API_KEY` e `MISTRAL_API_KEY` |
 
 ### Padrões utilizados:
 - **Clean Architecture** - `core` não importa nada de infraestrutura; `apps` só montam as dependências e chamam os casos de uso
@@ -213,8 +228,18 @@ Copie `.env.example` para `.env` (não renomeie: o exemplo fica no repositório)
 # Supabase > Connect > Session pooler (IPv4, porta 5432), com [YOUR-PASSWORD] trocado pela senha do banco.
 SUPABASE_DB_URL=postgresql://postgres.SEU_REF:SENHA@aws-0-sa-east-1.pooler.supabase.com:5432/postgres
 
-# Google AI Studio. Opcional: sem ela o coletor pula os resumos e o site mostra a manchete original.
+# Google AI Studio. Opcional: IA principal dos resumos.
 GEMINI_API_KEY=
+
+# Groq. Opcional: IA de reserva dos resumos. Sem esta e sem a do Gemini, o site mostra a manchete original.
+GROQ_API_KEY=
+
+# Mistral. Opcional: vetores (título + descrição) para o agrupamento. Sem ela, o agrupamento compara as palavras.
+MISTRAL_API_KEY=
+
+# Pexels e Unsplash ("Access Key"). Opcionais: imagens ilustrativas. Sem as duas, o site segue só com texto.
+PEXELS_API_KEY=
+UNSPLASH_API_KEY=
 ```
 
 Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase.co`) só funciona em IPv6 e falha no GitHub Actions.
@@ -224,14 +249,19 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | Onde | Nome | Para quê |
 |---|---|---|
 | GitHub Actions | `SUPABASE_DB_URL` | Migrations, coletor e gerador do site (Session pooler, com a senha) |
-| GitHub Actions | `GEMINI_API_KEY` | Resumos. Opcional: sem ela, o coletor pula a IA |
+| GitHub Actions | `GEMINI_API_KEY` | Resumos (principal). Opcional |
+| GitHub Actions | `GROQ_API_KEY` | Resumos (reserva). Opcional: sem as duas, o coletor pula os resumos |
+| GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
+| GitHub Actions | `PEXELS_API_KEY` | Imagens ilustrativas (o primeiro acervo). Opcional |
+| GitHub Actions | `UNSPLASH_API_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
 | `.env` local | As mesmas variáveis | Rodar o coletor e o gerador na máquina |
 
 ### Dados do banco:
 - **Fontes** (`fonte`) - Um feed por linha; feeds do mesmo portal usam o mesmo `nome`. Para ligar ou desligar um feed, mude `ativa`.
 - **Editorias** (`categoria`) - Lista fechada; a IA só classifica com esses slugs.
-- **Modelo de IA** (`modelo_ia`) - No máximo um ativo; o código lê o nome do modelo daqui.
-- **Prompt** - Versionado em `packages/infra/src/gemini/prompt.ts` (atual: `resumo-v2-2026-11-04`).
+- **Modelos de IA** (`modelo_ia`) - No máximo um ativo (o principal) e um de reserva (`reserva`); o código lê o nome dos modelos daqui.
+- **Prompt** - Versionado em `packages/infra/src/ia/prompt.ts` (atual: `resumo-v2-2026-11-04`), o mesmo para o Gemini e a Groq.
+- **Limite do agrupamento** - `SEMELHANCA_MINIMA_VETOR` (0,88) em `packages/core/src/agrupamento.ts`, calibrado com notícias reais. Confira com `npm run calibrar:agrupamento -- --banco`.
 
 ---
 
@@ -242,7 +272,8 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 2. Leia a manchete e os destaques do dia, ou escolha uma editoria
 3. Abra um acontecimento para ver o resumo "Em 1 minuto" e a lista "Quem noticiou"
 4. Clique em uma matéria para ler no portal original
-5. Achou um erro no resumo? Use "Reportar erro neste resumo". Na beta, ele abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na 1.0, vira um formulário próprio, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
+5. Quer passar rápido pelas notícias? Abra o **Giro** no menu: uma manchete por tela, para deslizar (ou usar a roda do mouse, as setas e j/k no computador). Toque no cartão para abrir a notícia
+6. Achou um erro no resumo? Use "Reportar erro neste resumo". Na beta, ele abre uma [issue no GitHub](https://github.com/ttheu7/papo-reto/issues) já preenchida com o id e o título do acontecimento (é preciso ter conta no GitHub). Na 1.0, vira um formulário próprio, sem conta ([tarefa 02](docs/tarefas/02-reportar-erro.md)).
 
 ### Comandos do projeto:
 
@@ -250,7 +281,9 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 |---|---|
 | `npm test` | Testes (Vitest) |
 | `npm run typecheck` | TypeScript estrito em todos os pacotes e `astro check` no site |
-| `npm run coletar` | Lê os feeds, grava no banco e, com `GEMINI_API_KEY`, gera os resumos |
+| `npm run coletar` | Lê os feeds, agrupa, grava no banco e, com `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos; com `PEXELS_API_KEY` ou `UNSPLASH_API_KEY`, procura as imagens ilustrativas |
+| `npm run calibrar:agrupamento` | Lista os pares de manchetes mais parecidos pelos vetores da Mistral, para conferir o limite do agrupamento. Com `-- --banco`, usa as notícias recentes do banco e compara o vetor só do título com o do título + descrição (não grava nada) |
+| `npm run testar:feeds` | Testa feeds candidatos com o mesmo leitor do coletor, antes de cadastrá-los (itens, descrição, data, dois títulos). Aceita endereços depois de `--`. Não grava nada |
 | `npm run dados:site` | Gera `apps/web/public/dados/*.json` a partir do banco |
 | `npm run dev:web` | Servidor de desenvolvimento do site |
 | `npm run build:web` | Build do site (veja com `npm run preview -w @papo-reto/web`) |
@@ -297,7 +330,11 @@ Acontecimentos das últimas 48 horas, até 80, os mais recentes primeiro.
       "criadoEm": "ISO", "atualizadoEm": "ISO", "publicadoEm": "ISO",
       "materias": [
         { "portal": "g1", "titulo": "…", "url": "https://…", "publicadaEm": "ISO", "exigeAssinatura": false }
-      ]
+      ],
+      "imagem": {                            // ilustrativa, ou null (notícia sensível ou sem imagem achada)
+        "url": "https://images.pexels.com/…", "largura": 1600, "altura": 1067, "cor": "#334455",
+        "provedor": "Pexels", "autor": "…", "urlAutor": "https://…", "urlPagina": "https://…"
+      }
     }
   ]
 }
@@ -326,7 +363,7 @@ Editorias com o total de acontecimentos.
 ### Publicação automática:
 
 O workflow **Publicar site** (`.github/workflows/publicar.yml`) roda:
-- a cada 30 minutos (o GitHub pode atrasar ou pular execuções agendadas);
+- a cada 30 minutos, nos minutos 17 e 47 (o GitHub pode atrasar ou pular execuções agendadas);
 - a cada push na `main` com mudanças fora de `supabase/`;
 - à mão, pela aba Actions (**Run workflow**).
 
@@ -342,7 +379,7 @@ Ele coleta, gera os JSONs, faz o build e publica no GitHub Pages. Duas publicaç
 2. **GitHub:**
    - Crie um repositório público `papo-reto`, sem README, `.gitignore` nem licença.
    - Em Settings › Secrets and variables › Actions, crie o segredo `SUPABASE_DB_URL`: no painel do Supabase, clique em **Connect**, copie a string do **Session pooler** e troque `[YOUR-PASSWORD]` pela senha do banco.
-   - Opcional: crie o segredo `GEMINI_API_KEY` (Google AI Studio) para ligar os resumos.
+   - Opcionais: crie os segredos `GEMINI_API_KEY` (Google AI Studio) e `GROQ_API_KEY` (console da Groq) para ligar os resumos, e `MISTRAL_API_KEY` (console da Mistral) para agrupar pelo sentido.
    - Em Settings › Pages, em **Source**, escolha **GitHub Actions**.
 
 3. **Já rodou os SQL no SQL Editor?** Se sim, marque as migrations como aplicadas **antes do primeiro push**. Sem isso, o workflow tenta criar as tabelas de novo e falha:
@@ -368,8 +405,9 @@ O push dispara o workflow **Banco de dados**, que cria as tabelas no Supabase.
 O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma política. É de propósito: veja [Segurança e privacidade](#️-segurança-e-privacidade).
 
 ### Limites do plano gratuito:
-- **Supabase:** 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. A limpeza diária (`pg_cron`, 6h UTC) apaga `descricao_original` depois de 30 dias, eventos parados há 180 dias, eventos órfãos e execuções com mais de 30 dias.
-- **Gemini:** poucas requisições por minuto (os limites aparecem só no AI Studio). Por isso os resumos saem em lote.
+- **Supabase:** 500 MB de banco (acima disso ele fica só leitura), 5 GB de tráfego por mês, pausa depois de uma semana sem atividade e nenhum backup automático. A limpeza diária (`pg_cron`, 6h UTC) apaga `descricao_original` depois de 30 dias, `vetor` depois de 3 dias, eventos parados há 90 dias (180 na beta; a 1.0 reduziu porque, com umas 1.400 matérias por dia, 180 dias chegariam perto dos 500 MB), eventos órfãos e execuções com mais de 30 dias.
+- **Gemini, Groq e Mistral:** poucas requisições por minuto e por dia, e os limites aparecem só no painel de cada um. Por isso os resumos saem em lote, a Groq só entra como reserva e a Mistral recebe uma chamada por rodada, só com os títulos novos.
+- **Vetores:** cada notícia guarda um vetor de cerca de 4 KB, que a limpeza diária apaga depois de 3 dias.
 
 ---
 
@@ -378,13 +416,26 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Implementações futuras:
 
 #### Versão 1.0:
+- [x] **Agrupamento das matérias do mesmo fato** - Por palavras e por vetores da Mistral (título + descrição)
+- [x] **Indicador de cobertura** - Anel com quantos portais noticiaram (no lugar das barrinhas da beta)
+- [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
+- [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, com a imagem ilustrativa
+- [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
+- [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
+- [x] **Redesign com cara de jornal de papel** - Direção "primeira página clássica": folha contínua, fios, gótica no nome, chapéu acima da manchete ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
+- [x] **Esporte e e-sports** - Editoria Games e feeds de UOL, ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
+- [ ] **PWA para celular** - Instalar na tela inicial e ler a última edição sem internet
+- [ ] **Doações** - A tabela `doacao` já existe; só doação voluntária, sem dados de quem doa no site
 - [ ] **Formulário próprio para reportar erro** - Sem conta no GitHub, gravando no banco ([tarefa 02](docs/tarefas/02-reportar-erro.md))
+- [ ] **Pedidos de melhoria** - Formulário para sugerir funcionalidades, como o de reportar erro
+- [ ] **Triagem com IA** - Classifica cada report de erro e cada pedido de melhoria (tipo, prioridade, resumo) e dá uma nota de complexidade, para a rotina da 2.0
 
-#### Depois da 1.0:
-- [ ] **Agrupar matérias do mesmo acontecimento** - Hoje cada notícia vira um evento próprio
+#### Versão 2.0:
+- [ ] **Telemetria anônima e resumo diário por e-mail** - Números agregados (visitas, notícias, resumos, erros), sem rastrear ninguém, enviados ao grupo uma vez por dia
+- [ ] **Rotina de correção com IA** - Lê a triagem e, para itens de complexidade baixa, cria uma branch, corrige, roda testes e abre um PR para o grupo revisar (nunca mescla sozinha)
+- [ ] **Resumo atualizado quando o acontecimento cresce** - Hoje o resumo é feito uma vez só, com as matérias da primeira rodada
 - [ ] **MCP público** (`apps/mcp-publico`) - Os dados públicos como servidor MCP, no Cloudflare Workers
 - [ ] **MCP admin** (`apps/mcp-admin`) - Manutenção do banco pela máquina local
-- [ ] **Doações** - A tabela `doacao` já existe, mas ainda não é usada
 
 ---
 
@@ -401,11 +452,14 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 ### Público jovem e dados pessoais:
 - ✅ Sem anúncios, sem perfilamento e sem ferramentas de rastreamento (ECA Digital, Lei 15.211/2025)
 - ✅ Coleta mínima de dados pessoais (LGPD): o site não pede cadastro nem guarda nada de quem lê; só a escolha do tema fica no próprio navegador (`localStorage`)
-- ✅ Nada de quem lê é enviado para a IA: ela recebe só texto público dos feeds
+- ✅ As imagens vêm direto da Pexels ou do Unsplash, sem dizer de que página foram pedidas (`referrerpolicy="no-referrer"`); o acervo vê só o IP de quem carrega a imagem. Não há script nem cookie de terceiros
+- ✅ Nada de quem lê é enviado para as IAs: elas recebem só texto público dos feeds (o Google pode usar o que recebe no plano gratuito; a Mistral diz que os dados da API não treinam modelos)
 
 ### Conteúdo e direito autoral:
 - ✅ O site mostra só título, resumo próprio e link para a matéria original. Texto integral, com crédito, apenas de fontes que permitem republicação (Agência Brasil)
-- ✅ Sem imagens dos portais: o visual é tipográfico
+- ✅ Sem imagens dos portais (direito autoral: a foto é obra protegida, e o crédito não substitui a autorização)
+- ✅ Imagens só de acervos gratuitos com licença para isso (Pexels e Unsplash), marcadas como "Imagem ilustrativa", com crédito e link para o fotógrafo. A IA não sugere imagem para crimes, mortes, tragédias com vítimas nem para notícias sobre uma pessoa específica, porque ali uma foto ilustrativa pode enganar ou ferir
+- ✅ Sem posts de redes sociais por embed: o professor sugeriu, mas os scripts do Instagram, do X e do TikTok mandam à plataforma a visita de quem lê antes de qualquer clique, o que vai contra o ECA Digital e a LGPD
 - ✅ Todo resumo avisa que foi gerado por IA, mostra quais matérias foram usadas e oferece um jeito de reportar erro
 - ✅ O resumo sai só dos títulos e descrições dos feeds, e a IA é instruída a não inventar fatos
 
@@ -425,15 +479,16 @@ Para contribuir:
 
 1. Leia o [`CLAUDE.md`](CLAUDE.md), que reúne as regras do projeto, e veja as tarefas em [`docs/tarefas/`](docs/tarefas/)
 2. Crie uma branch a partir da `main` (`git checkout -b nome-da-mudanca`)
-3. Faça commits pequenos, com mensagens em português
+3. Faça commits pequenos
 4. Antes de enviar, rode `npm test` e `npm run typecheck`
 5. Envie a branch e abra um Pull Request
 
 ### Diretrizes:
-- Português do Brasil em tudo: interface, tabelas, entidades, casos de uso, commits e comentários
+- Textos da interface em português do Brasil
 - `packages/core` não importa nada de infraestrutura; casos de uso são testados com falsos em memória, sem banco e sem rede
 - Mudou o banco? Nova migration. Nunca edite uma que já foi aplicada. Um push na `main` que mexe em `supabase/migrations/` vai direto para o banco de produção
 - Cor nova no site sempre como token, nos dois temas (claro e escuro)
+- Mudou o visual? Confira com as skills taste-skill e web-design-guidelines; o comando e a lista de falhas esperadas estão em "Visual › Conferir", no `CLAUDE.md`
 - Quando uma decisão mudar, atualize o `CLAUDE.md` e este README, mantendo a estrutura de seções deste arquivo
 
 ---
@@ -450,7 +505,8 @@ Para dúvidas, problemas ou erros em resumos:
 - À Unoesc Videira e à disciplina PRATIC IV
 - Aos portais que mantêm feeds RSS abertos: g1, Folha, Estadão, CNN Brasil, BBC, Agência Brasil e Tecnoblog
 - Às comunidades do Astro, do Supabase e das bibliotecas usadas no projeto
-- Às fundições das fontes Newsreader e Figtree, distribuídas pelo Fontsource
+- Às fundições das fontes UnifrakturMaguntia, Newsreader e Figtree, distribuídas pelo Fontsource
+- Aos fotógrafos que compartilham o trabalho na Pexels e no Unsplash
 
 ---
 

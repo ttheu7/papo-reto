@@ -1,16 +1,16 @@
 ---
-// O verso da folha: o conteúdo termina com os cantos redondos e o rodapé aparece por baixo.
+// O expediente, como no pé de um jornal: o nome, as editorias e as páginas do site entre fios.
 import { categorias } from '../lib/dados';
 import { caminho, REPOSITORIO } from '../lib/formato';
 
 const ano = new Date().getFullYear();
 ---
-<footer class="rodape">
-  <div class="rodape__miolo moldura">
+<footer class="rodape moldura">
+  <div class="rodape__miolo">
     <div class="rodape__assina">
       <p class="rodape__nome" translate="no">Papo Reto</p>
       <p>Notícia explicada em até quatro frases, para quem quer entender o dia sem se perder em dez abas.</p>
-      <a class="botao" href="#topo">Voltar ao topo</a>
+      <a class="botao botao--papel" href="#topo">Voltar ao topo</a>
     </div>
     <nav aria-labelledby="rodape-editorias">
       <h2 class="rodape__titulo" id="rodape-editorias">Editorias</h2>
@@ -28,22 +28,29 @@ const ano = new Date().getFullYear();
       </ul>
     </nav>
   </div>
-  <p class="rodape__imprenta moldura">© {ano} Papo Reto · Projeto acadêmico da Unoesc Videira (SC), disciplina PRATIC IV · As manchetes e as matérias pertencem aos portais citados.</p>
+  <p class="rodape__imprenta">© {ano} Papo Reto · Projeto acadêmico da Unoesc Videira (SC), disciplina PRATIC IV · As manchetes e as matérias pertencem aos portais citados.</p>
 </footer>
 
 <style>
-  .rodape { background: var(--cinza); padding: clamp(48px, 6vw, 80px) 0 24px; }
-  .rodape .moldura { padding-inline: calc(var(--margin) + 20px); }
-  .rodape__miolo { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); gap: 40px var(--gutter); }
-  .rodape__assina { display: grid; gap: 16px; align-content: start; justify-items: start; max-width: 40ch; }
-  .rodape__nome { font-family: var(--serif); font-weight: 600; font-size: var(--step-head); letter-spacing: -0.035em; line-height: 0.95; }
-  .rodape__titulo { font-family: var(--sans); font-size: var(--step-small); font-weight: 600; letter-spacing: 0; color: var(--muted); margin-bottom: 4px; }
+  .rodape { padding-bottom: 32px; }
+  .rodape__miolo {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr);
+    border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio);
+  }
+  .rodape__miolo > * { padding: 24px var(--gutter); }
+  .rodape__miolo > * + * { border-left: 1px solid var(--fio-claro); }
+  .rodape__miolo > :first-child { padding-left: 0; }
+  .rodape__assina { display: grid; gap: 14px; align-content: start; justify-items: start; max-width: 44ch; }
+  .rodape__nome { font: 400 var(--step-head) / 1 var(--gotica); }
+  .rodape__titulo { font: 600 var(--step-small) / 1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
   .rodape__editorias { columns: 2; column-gap: 24px; }
-  .rodape li a { display: inline-flex; min-height: 44px; align-items: center; text-decoration: none; }
-  .rodape__imprenta { margin-top: 40px; font-size: var(--step-small); color: var(--muted); text-align: center; text-wrap: balance; }
+  .rodape li a { display: inline-flex; min-height: 40px; align-items: center; text-decoration: none; }
+  .rodape li a:hover { text-decoration: underline; }
+  .rodape__imprenta { padding-top: 14px; font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); text-align: center; text-wrap: balance; }
   @media (max-width: 760px) {
     .rodape__miolo { grid-template-columns: 1fr 1fr; }
-    .rodape__assina { grid-column: 1 / -1; }
+    .rodape__assina { grid-column: 1 / -1; padding-inline: 0; border-bottom: 1px solid var(--fio-claro); }
+    .rodape__miolo > :nth-child(2) { padding-left: 0; border-left: 0; }
     .rodape__editorias { columns: 1; }
   }
 </style>

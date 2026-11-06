@@ -1,118 +1,92 @@
-/* Papo Reto: direção "a página é o objeto" (taste-skill, seed 2036481194).
-   O site é a primeira página do jornal da edição atual: papel claro, tinta azul-marinho,
-   cantos redondos e cor só para separar as editorias. */
+/* Papo Reto 1.0: direção "primeira página clássica".
+   O site é um jornal de papel na tela: papel creme, tinta preta, o nome em letra gótica entre fios,
+   colunas separadas por fios, chapéu da editoria acima da manchete e cantos retos. */
 
 @import '@fontsource-variable/newsreader/opsz.css';
 @import '@fontsource-variable/newsreader/opsz-italic.css';
 @import '@fontsource/figtree/latin-400.css';
 @import '@fontsource/figtree/latin-600.css';
+@import '@fontsource/unifrakturmaguntia/latin-400.css';
 
 :root {
-  /* Papel e tinta: neutros. */
-  --chao: #efefed;        /* o fundo onde as folhas ficam */
-  --papel: #ffffff;        /* as folhas (cards) */
-  --papel-2: #f5f5f3;      /* folha dentro de folha */
-  --cinza: #e2e3e0;        /* o verso: rodapé */
-  --ink: #1f2b4d;          /* tinta azul-marinho */
-  --muted: #5d6479;        /* tinta fraca, AA sobre papel e chão */
-  --on-ink: #ffffff;
-  --ink-forte: #2e3d66;     /* botão com o mouse em cima */
-  --barra: rgba(31, 43, 77, 0.35);
-  --barra-forte: rgba(31, 43, 77, 0.55);
-  --toque: rgba(31, 43, 77, 0.12);
+  /* Papel e tinta. */
+  --papel: #f5f2ea;        /* a página */
+  --papel-2: #ece7dc;      /* quadros e caixas dentro da página */
+  --chao: var(--papel);
+  --cinza: var(--papel-2);
+  --ink: #16181d;          /* tinta: texto, fios fortes e botões */
+  --muted: #555a63;        /* tinta fraca, AA sobre os dois papéis */
+  --on-ink: #f5f2ea;
+  --ink-forte: #000000;
+  --fio: var(--ink);       /* fio forte: abre e fecha seções */
+  --fio-claro: #cdc6b7;    /* fio fino entre colunas e itens (decorativo, não é texto) */
+  --barra: rgba(22, 24, 29, 0.35);
+  --barra-forte: rgba(22, 24, 29, 0.55);
+  --toque: rgba(22, 24, 29, 0.12);
 
-  /* Editorias: a única cor do site. Pastéis, sempre com a tinta por cima. */
-  --cat-brasil: #cde9d3;
-  --cat-mundo: #d3e2f4;
-  --cat-politica: #f5d0cc;
-  --cat-economia: #f4e5b2;
-  --cat-tecnologia: #c8ebe9;
-  --cat-ciencia: #e0ecc0;
-  --cat-educacao: #efe3d0;
-  --cat-esportes: #f9d0b3;
-  --cat-pop: #f6d3e4;
-  --cat-geral: #e7e7e4;
+  /* Texto sobre foto (Giro): iguais nos dois temas, porque a foto não muda com o tema.
+     O véu escuro embaixo da foto é a única exceção à regra "sem gradiente": garante o contraste do texto. */
+  --sobre-foto: #ffffff;
+  --veu-foto: rgba(12, 14, 18, 0.9);
+  --toque-foto: rgba(255, 255, 255, 0.3);
 
-  /* Tipo: cinco tamanhos, e só. */
+  /* Tipo: cinco tamanhos, e só. O nome do jornal usa a gótica (só nele). */
   --serif: 'Newsreader Variable', Georgia, serif;
   --sans: 'Figtree', system-ui, sans-serif;
+  --gotica: 'UnifrakturMaguntia', 'Newsreader Variable', serif;
   --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
   --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
-  --step-hero: clamp(3.25rem, 1.2rem + 7vw, 7.5rem);
+  --step-head: clamp(2rem, 1.3rem + 3.2vw, 3.75rem);
+  --step-hero: clamp(3.5rem, 1.6rem + 7vw, 7rem);
 
-  /* Forma: um raio só, em tudo. */
-  --raio: 22px;
+  /* Forma: cantos retos, como papel. */
+  --raio: 0px;
 
   /* Espaço */
-  --margin: clamp(16px, 2.4vw, 32px);
-  --gutter: clamp(16px, 2.4vw, 32px);
-  --respiro: clamp(56px, 7vw, 112px);
-  --dentro: clamp(20px, 3vw, 44px);
+  --margin: clamp(16px, 3vw, 40px);
+  --gutter: clamp(16px, 2.2vw, 28px);
+  --respiro: clamp(32px, 4vw, 56px);
+  --dentro: clamp(16px, 2.4vw, 28px);
 
   /* Movimento */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --t-press: 140ms;
   --t-hover: 180ms;
-  --stagger: 60ms;
+  --stagger: 50ms;
 
   color-scheme: light;
   scrollbar-color: var(--barra) transparent;
 }
 
-/* Modo escuro: segue o aparelho, a não ser que a pessoa escolha no botão do topo (data-tema). */
+/* Modo escuro: o jornal "à noite". Segue o aparelho, a não ser que a pessoa escolha no botão do topo (data-tema). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema='claro']) {
-    --chao: #14171f;
-    --papel: #1d2230;
-    --papel-2: #262c3c;
-    --cinza: #0f1218;
-    --ink: #e9ebf1;
-    --muted: #a7adbd;
-    --on-ink: #14171f;
+    --papel: #15171b;
+    --papel-2: #1e2127;
+    --ink: #ece7dc;
+    --muted: #a8a295;
+    --on-ink: #15171b;
     --ink-forte: #ffffff;
-    --barra: rgba(233, 235, 241, 0.3);
-    --barra-forte: rgba(233, 235, 241, 0.5);
-    --toque: rgba(233, 235, 241, 0.12);
-    /* Editorias no escuro: os mesmos tons, fundos e sem brilho, com a tinta clara por cima. */
-    --cat-brasil: #24402d;
-    --cat-mundo: #22354f;
-    --cat-politica: #4b2b2a;
-    --cat-economia: #463b1a;
-    --cat-tecnologia: #1c4341;
-    --cat-ciencia: #35411f;
-    --cat-educacao: #40372a;
-    --cat-esportes: #4c311f;
-    --cat-pop: #48263a;
-    --cat-geral: #2b3040;
+    --fio-claro: #3b3e46;
+    --barra: rgba(236, 231, 220, 0.3);
+    --barra-forte: rgba(236, 231, 220, 0.5);
+    --toque: rgba(236, 231, 220, 0.12);
     color-scheme: dark;
   }
 }
 :root[data-tema='escuro'] {
-  --chao: #14171f;
-  --papel: #1d2230;
-  --papel-2: #262c3c;
-  --cinza: #0f1218;
-  --ink: #e9ebf1;
-  --muted: #a7adbd;
-  --on-ink: #14171f;
+  --papel: #15171b;
+  --papel-2: #1e2127;
+  --ink: #ece7dc;
+  --muted: #a8a295;
+  --on-ink: #15171b;
   --ink-forte: #ffffff;
-  --barra: rgba(233, 235, 241, 0.3);
-  --barra-forte: rgba(233, 235, 241, 0.5);
-  --toque: rgba(233, 235, 241, 0.12);
-  /* Editorias no escuro: os mesmos tons, fundos e sem brilho, com a tinta clara por cima. */
-  --cat-brasil: #24402d;
-  --cat-mundo: #22354f;
-  --cat-politica: #4b2b2a;
-  --cat-economia: #463b1a;
-  --cat-tecnologia: #1c4341;
-  --cat-ciencia: #35411f;
-  --cat-educacao: #40372a;
-  --cat-esportes: #4c311f;
-  --cat-pop: #48263a;
-  --cat-geral: #2b3040;
+  --fio-claro: #3b3e46;
+  --barra: rgba(236, 231, 220, 0.3);
+  --barra-forte: rgba(236, 231, 220, 0.5);
+  --toque: rgba(236, 231, 220, 0.12);
   color-scheme: dark;
 }
 
@@ -122,108 +96,109 @@
 ::-webkit-scrollbar-thumb { background: var(--barra); border-radius: 12px; border: 3px solid transparent; background-clip: padding-box; }
 ::-webkit-scrollbar-thumb:hover { background-color: var(--barra-forte); }
 
-/* Cada editoria vira uma variável: data-cat="mundo" dá --cat a cor de Mundo. */
-[data-cat] { --cat: var(--cat-geral); }
-[data-cat='brasil'] { --cat: var(--cat-brasil); }
-[data-cat='mundo'] { --cat: var(--cat-mundo); }
-[data-cat='politica'] { --cat: var(--cat-politica); }
-[data-cat='economia'] { --cat: var(--cat-economia); }
-[data-cat='tecnologia'] { --cat: var(--cat-tecnologia); }
-[data-cat='ciencia'] { --cat: var(--cat-ciencia); }
-[data-cat='educacao'] { --cat: var(--cat-educacao); }
-[data-cat='esportes'] { --cat: var(--cat-esportes); }
-[data-cat='pop'] { --cat: var(--cat-pop); }
-
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; background: var(--cinza); }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 24px; background: var(--papel); }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 body {
   margin: 0;
-  background: var(--cinza);
+  background: var(--papel);
   color: var(--ink);
-  font-family: var(--sans);
+  font-family: var(--serif);
   font-size: var(--step-body);
   line-height: 1.5;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 h1, h2, h3 {
-  font-family: var(--serif); font-weight: 560; font-optical-sizing: auto;
-  letter-spacing: -0.02em; line-height: 1.02; margin: 0; text-wrap: balance;
+  font-family: var(--serif); font-weight: 680; font-optical-sizing: auto;
+  letter-spacing: -0.015em; line-height: 1.08; margin: 0; text-wrap: balance;
 }
 p { margin: 0; text-wrap: pretty; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
-a { color: inherit; text-underline-offset: 0.18em; text-decoration-thickness: 0.07em; }
+a { color: inherit; text-underline-offset: 0.16em; text-decoration-thickness: 0.06em; }
 button { font: inherit; color: inherit; }
 a, button { touch-action: manipulation; -webkit-tap-highlight-color: var(--toque); }
 img, svg { display: block; max-width: 100%; }
-:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 6px; }
-::selection { background: var(--cat-economia); color: var(--ink); }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+::selection { background: var(--ink); color: var(--on-ink); }
 .so-leitor {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; /* taste-skill-ignore: texto só para leitores de tela */
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .pular {
-  position: absolute; left: var(--margin); top: -100px; z-index: 50; padding: 12px 18px; border-radius: var(--raio);
-  background: var(--ink); color: var(--on-ink); font-weight: 600; text-decoration: none;
+  position: absolute; left: var(--margin); top: -100px; z-index: 50; padding: 12px 18px;
+  background: var(--ink); color: var(--on-ink); font: 600 var(--step-small) var(--sans); text-decoration: none;
 }
 .pular:focus { top: 12px; }
 [hidden] { display: none !important; }
 
-/* ---------- A folha: o conteúdo inteiro sobe por cima do rodapé (cortina) ---------- */
-.folha {
-  position: relative; z-index: 1; background: var(--chao);
-  border-radius: 0 0 calc(var(--raio) * 2) calc(var(--raio) * 2);
-  padding-bottom: var(--respiro);
-}
-.moldura { padding-inline: var(--margin); max-width: 1440px; margin-inline: auto; }
+/* ---------- A página ---------- */
+.folha { padding-bottom: var(--respiro); }
+.moldura { padding-inline: var(--margin); max-width: 1320px; margin-inline: auto; }
 
-/* Card: uma folha de papel, com o raio da casa. */
-.card { background: var(--papel); border-radius: var(--raio); padding: var(--dentro); }
+/* ---------- Fios e rótulos de jornal ---------- */
+/* Rótulo de seção ("TAMBÉM HOJE", "MUNDO"): versalete entre fio forte em cima e fio fino embaixo. */
+.rotulo {
+  font: 600 var(--step-small) / 1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase;
+  border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); padding: 8px 0; margin: 0;
+}
+.rotulo a { text-decoration: none; }
+.rotulo a:hover { text-decoration: underline; }
+/* Chapéu: a editoria em versalete, acima da manchete, como no jornal. */
+.chapeu {
+  display: inline-block; font: 600 var(--step-small) / 1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none;
+}
+a.chapeu:hover { text-decoration: underline; }
+/* Linha de serviço: portais, hora, medidor. */
+.servico {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px;
+  font: 600 var(--step-small) / 1.3 var(--sans); color: var(--muted);
+}
+.servico time { font-variant-numeric: tabular-nums; }
+.assinatura { font: 600 var(--step-small) var(--sans); color: var(--ink); }
+
+/* Item de notícia (.item) com a manchete como link (.estica): o link se estende pelo item inteiro,
+   a manchete sublinha no hover e o foco contorna o item. */
+.item { position: relative; }
+.estica { text-decoration: underline; text-decoration-thickness: 0.05em; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
+.estica::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+.estica:focus-visible { outline: none; }
+.item:has(.estica:focus-visible) { outline: 3px solid var(--ink); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { .item:hover .estica { text-decoration-color: currentColor; } }
 
 /* ---------- Botão ---------- */
 .botao {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
-  min-height: 48px; padding: 12px 24px; border-radius: var(--raio);
+  min-height: 44px; padding: 10px 20px; border: 1px solid var(--ink);
   background: var(--ink); color: var(--on-ink);
-  font-family: var(--sans); font-weight: 600; font-size: var(--step-body); text-decoration: none; border: 0; cursor: pointer;
-  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease;
+  font: 600 var(--step-small) / 1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, color var(--t-hover) ease;
 }
-.botao:active { transform: scale(0.97); }
-.botao--papel { background: var(--papel); color: var(--ink); }
+.botao:active { transform: scale(0.98); }
+.botao--papel { background: transparent; color: var(--ink); }
 @media (hover: hover) and (pointer: fine) {
-  .botao:hover { background: var(--ink-forte); }
-  .botao--papel:hover { background: var(--papel-2); }
+  .botao:hover { background: var(--ink-forte); border-color: var(--ink-forte); }
+  .botao--papel:hover { background: var(--ink); color: var(--on-ink); }
 }
 
-.link {
-  text-decoration: underline; text-decoration-color: transparent;
-  transition: text-decoration-color var(--t-hover) ease;
-}
+.link { text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color var(--t-hover) ease; }
 @media (hover: hover) and (pointer: fine) { .link:hover { text-decoration-color: currentColor; } }
 
-/* Etiqueta de editoria: a cor da editoria com a tinta por cima. */
-.editoria {
-  display: inline-flex; align-items: center; min-height: 28px; padding: 2px 12px; border-radius: var(--raio);
-  background: var(--cat); color: var(--ink); font-family: var(--sans); font-weight: 600; font-size: var(--step-small);
-  line-height: 1.2; text-decoration: none; letter-spacing: 0; white-space: nowrap;
-}
-a.editoria { position: relative; }
-a.editoria::before { content: ''; position: absolute; inset: -8px -2px; } /* alvo de toque maior */
-.editoria--papel { background: var(--papel); min-height: 36px; padding: 0 14px; }
-.assinatura { font-weight: 600; font-size: var(--step-small); color: var(--ink); }
-
-/* ---------- Títulos de seção ---------- */
+/* ---------- Seções ---------- */
 .secao { padding-top: var(--respiro); }
-.cabeca { display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap; margin-bottom: clamp(20px, 2.6vw, 36px); padding-inline: 20px; }
-.cabeca h2 { font-size: var(--step-head); }
-.cabeca p, .cabeca a { font-size: var(--step-body); color: var(--muted); }
+.secao__titulo {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px 24px; flex-wrap: wrap;
+  border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); padding: 10px 0; margin-bottom: 4px;
+}
+.secao__titulo h2 { font-size: var(--step-lead); font-weight: 700; }
+.secao__titulo p { font: 600 var(--step-small) var(--sans); color: var(--muted); }
 
 /* ---------- Revelação ao rolar (uma vez) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js [data-revela] > * {
-    opacity: 0; transform: translateY(20px);
-    transition: opacity 600ms var(--ease-out), transform 800ms var(--ease-expo);
+    opacity: 0; transform: translateY(12px);
+    transition: opacity 500ms var(--ease-out), transform 700ms var(--ease-expo);
     transition-delay: calc(var(--i, 0) * var(--stagger));
   }
   .js [data-revela].visivel > * { opacity: 1; transform: none; }

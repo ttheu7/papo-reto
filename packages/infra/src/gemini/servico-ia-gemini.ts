@@ -1,6 +1,6 @@
 import { ErroCotaIa, ErroInfra, type EventoParaResumir, type ResumoGerado, type ServicoIa } from '@papo-reto/core';
 import { GoogleGenAI } from '@google/genai';
-import { esquemaDaResposta, INSTRUCOES, montarPedido, VERSAO_DO_PROMPT } from './prompt';
+import { esquemaDaResposta, INSTRUCOES, interpretarResumos, montarPedido, VERSAO_DO_PROMPT } from '../ia/prompt';
 
 /** O pedaço do SDK que usamos. Facilita testar sem rede. */
 export type GerarConteudo = (pedido: {
@@ -59,13 +59,6 @@ export class ServicoIaGemini implements ServicoIa {
     } catch {
       throw new ErroInfra('o Gemini não devolveu JSON válido');
     }
-    if (!Array.isArray(dados)) throw new ErroInfra('o Gemini não devolveu uma lista');
-
-    return dados.flatMap((item): ResumoGerado[] => {
-      if (!item || typeof item !== 'object') return [];
-      const { id, titulo, texto, categoria } = item as Record<string, unknown>;
-      if (typeof id !== 'string' || typeof titulo !== 'string' || typeof texto !== 'string') return [];
-      return [{ eventoId: id, titulo, texto, categoriaSlug: typeof categoria === 'string' ? categoria : null }];
-    });
+    return interpretarResumos(dados, 'Gemini');
   }
 }

@@ -2,19 +2,26 @@
  "geradoEm": "2026-11-04T13:36:47.246Z",
  "eventos": [
   {
-   "id": "58ee7f8a-fd5c-470a-a988-891b5e4ad67b",
+   "id": "be62797f-cd98-4606-8c16-e3c291ecabcc",
    "titulo": "Democratas conquistam maioria na Câmara e no Senado dos EUA",
    "resumo": "O Partido Democrata garantiu o controle do Congresso americano após vitórias em Estados como Texas e Kansas. A mudança altera o equilíbrio de poder em Washington durante o mandato de Donald Trump.",
-   "geradoPorIa": true,
+   "geradoPorIa": false,
    "categoria": {
     "slug": "mundo",
     "nome": "Mundo"
    },
    "cobertura": 1,
-   "criadoEm": "2026-11-04T13:36:47.246Z",
-   "atualizadoEm": "2026-11-04T13:36:47.246Z",
+   "criadoEm": "2026-11-04T07:58:57.000Z",
+   "atualizadoEm": "2026-11-04T07:58:57.000Z",
    "publicadoEm": "2026-11-04T13:36:47.246Z",
    "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
+     "url": "https://www.bbc.com/portuguese/articles/crn8wnw3eq0wo",
+     "publicadaEm": "2026-11-04T07:58:57.000Z",
+     "exigeAssinatura": false
+    },
     {
      "portal": "BBC News Brasil",
      "titulo": "Eleições nos EUA: em noite histórica, Partido Democrata conquista controle da Câmara e do Senado; veja resultados",
@@ -301,19 +308,26 @@
    ]
   },
   {
-   "id": "b5560321-acaf-4617-92a8-4e4553b23378",
+   "id": "84ba1bf9-f46a-4213-b245-46dd1c344acb",
    "titulo": "Rafael Nadal vai integrar a diretoria do Real Madrid",
    "resumo": "O Real Madrid anunciou que o ex-tenista Rafael Nadal passará a fazer parte da direção do clube espanhol. Conhecido torcedor da equipe, ele assume nova função na gestão esportiva.",
-   "geradoPorIa": true,
+   "geradoPorIa": false,
    "categoria": {
     "slug": "esportes",
     "nome": "Esportes"
    },
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T13:12:00.000Z",
-   "atualizadoEm": "2026-11-04T13:12:00.000Z",
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T12:50:37.000Z",
+   "atualizadoEm": "2026-11-04T12:50:37.000Z",
    "publicadoEm": "2026-11-04T13:12:00.000Z",
    "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
+     "url": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/futebol-espanhol/rafael-nadal-pode-fazer-parte-da-diretoria-do-real-madrid-entenda/",
+     "publicadaEm": "2026-11-04T12:50:37.000Z",
+     "exigeAssinatura": false
+    },
     {
      "portal": "Folha",
      "titulo": "Rafael Nadal entrará para a diretoria do Real Madrid",
@@ -577,19 +591,26 @@
    ]
   },
   {
-   "id": "91ba0545-d43d-4b56-bc94-f540923ac2c1",
+   "id": "b0b4e98d-4e6b-488f-87b1-1bea735f5d58",
    "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
    "resumo": "As reações internacionais ao resultado das urnas incluem críticas à política externa de Trump. Também houve alertas sobre possíveis mudanças nas relações comerciais e apoios ao pleito.",
-   "geradoPorIa": true,
+   "geradoPorIa": false,
    "categoria": {
     "slug": "mundo",
     "nome": "Mundo"
    },
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T12:55:09.000Z",
-   "atualizadoEm": "2026-11-04T12:55:09.000Z",
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T12:44:00.000Z",
+   "atualizadoEm": "2026-11-04T12:44:00.000Z",
    "publicadoEm": "2026-11-04T12:55:09.000Z",
    "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
+     "url": "https://www1.folha.uol.com.br/mundo/2026/11/china-diz-estar-disposta-a-seguir-trabalhando-com-eua-apos-vitoria-democrata-nas-eleicoes-de-meio-de-mandato.shtml",
+     "publicadaEm": "2026-11-04T12:44:00.000Z",
+     "exigeAssinatura": true
+    },
     {
      "portal": "CNN Brasil",
      "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
@@ -692,26 +713,6 @@
    ]
   },
   {
-   "id": "84ba1bf9-f46a-4213-b245-46dd1c344acb",
-   "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
-   "resumo": null,
-   "geradoPorIa": false,
-   "categoria": null,
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T12:50:37.000Z",
-   "atualizadoEm": "2026-11-04T12:50:37.000Z",
-   "publicadoEm": "2026-11-04T12:50:37.000Z",
-   "materias": [
-    {
-     "portal": "CNN Brasil",
-     "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
-     "url": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/futebol-espanhol/rafael-nadal-pode-fazer-parte-da-diretoria-do-real-madrid-entenda/",
-     "publicadaEm": "2026-11-04T12:50:37.000Z",
-     "exigeAssinatura": false
-    }
-   ]
-  },
-  {
    "id": "86fd152e-2851-4573-bca4-c6fa67c1035a",
    "titulo": "Companheiro de equipe defende goleiro de jogada que resultou em morte",
    "resumo": null,
@@ -772,36 +773,23 @@
    ]
   },
   {
-   "id": "b0b4e98d-4e6b-488f-87b1-1bea735f5d58",
-   "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
+   "id": "f234b0dd-c7fd-4cdd-a87a-c3ad537a8ec6",
+   "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
    "resumo": null,
    "geradoPorIa": false,
    "categoria": null,
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T12:44:00.000Z",
-   "atualizadoEm": "2026-11-04T12:44:00.000Z",
-   "publicadoEm": "2026-11-04T12:44:00.000Z",
-   "materias": [
-    {
-     "portal": "Folha",
-     "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
-     "url": "https://www1.folha.uol.com.br/mundo/2026/11/china-diz-estar-disposta-a-seguir-trabalhando-com-eua-apos-vitoria-democrata-nas-eleicoes-de-meio-de-mandato.shtml",
-     "publicadaEm": "2026-11-04T12:44:00.000Z",
-     "exigeAssinatura": true
-    }
-   ]
-  },
-  {
-   "id": "27739491-92b8-4e61-9f5c-ea5820977615",
-   "titulo": "Análise: Trump será forçado a mudar após vitória democrata",
-   "resumo": null,
-   "geradoPorIa": false,
-   "categoria": null,
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T12:42:49.000Z",
-   "atualizadoEm": "2026-11-04T12:42:49.000Z",
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T10:54:38.000Z",
+   "atualizadoEm": "2026-11-04T10:54:38.000Z",
    "publicadoEm": "2026-11-04T12:42:49.000Z",
    "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
+     "url": "https://www.bbc.com/portuguese/articles/cr1ex57zlqj2o",
+     "publicadaEm": "2026-11-04T10:54:38.000Z",
+     "exigeAssinatura": false
+    },
     {
      "portal": "CNN Brasil",
      "titulo": "Análise: Trump será forçado a mudar após vitória democrata",
@@ -1193,26 +1181,6 @@
    ]
   },
   {
-   "id": "f234b0dd-c7fd-4cdd-a87a-c3ad537a8ec6",
-   "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
-   "resumo": null,
-   "geradoPorIa": false,
-   "categoria": null,
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T10:54:38.000Z",
-   "atualizadoEm": "2026-11-04T10:54:38.000Z",
-   "publicadoEm": "2026-11-04T10:54:38.000Z",
-   "materias": [
-    {
-     "portal": "BBC News Brasil",
-     "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
-     "url": "https://www.bbc.com/portuguese/articles/cr1ex57zlqj2o",
-     "publicadaEm": "2026-11-04T10:54:38.000Z",
-     "exigeAssinatura": false
-    }
-   ]
-  },
-  {
    "id": "ad82df3d-e7a9-4e26-bad5-bb68ade8cc7a",
    "titulo": "Refinaria de Manguinhos será avaliada para aproveitamento da estrutura",
    "resumo": null,
@@ -1484,26 +1452,6 @@
      "url": "https://www.estadao.com.br/brasil/com-a-pec-da-seguranca-nao-existe-mais-espaco-para-empurrar-a-responsabilidade-diz-especialista/",
      "publicadaEm": "2026-11-04T08:30:00.000Z",
      "exigeAssinatura": true
-    }
-   ]
-  },
-  {
-   "id": "be62797f-cd98-4606-8c16-e3c291ecabcc",
-   "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
-   "resumo": null,
-   "geradoPorIa": false,
-   "categoria": null,
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T07:58:57.000Z",
-   "atualizadoEm": "2026-11-04T07:58:57.000Z",
-   "publicadoEm": "2026-11-04T07:58:57.000Z",
-   "materias": [
-    {
-     "portal": "BBC News Brasil",
-     "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
-     "url": "https://www.bbc.com/portuguese/articles/crn8wnw3eq0wo",
-     "publicadaEm": "2026-11-04T07:58:57.000Z",
-     "exigeAssinatura": false
     }
    ]
   },

@@ -66,6 +66,7 @@ describe('GerarDadosDoSite', () => {
         { portal: 'g1', titulo: 'Manchete g1', url: 'https://g1.exemplo/x', publicadaEm: horasAtras(2).toISOString(), exigeAssinatura: false },
         { portal: 'Folha', titulo: 'Manchete Folha', url: 'https://Folha.exemplo/x', publicadaEm: horasAtras(2).toISOString(), exigeAssinatura: true },
       ],
+      imagem: null,
     });
   });
 
@@ -125,5 +126,27 @@ describe('GerarDadosDoSite', () => {
     const { caso, escritor } = gerar([card('a', 1)]);
     await caso.executar();
     expect((escritor.arquivos.get('eventos.json') as EventosJson).eventos[0]).toMatchObject({ resumo: null, geradoPorIa: false, categoria: null });
+  });
+
+  it('deixa de fora acontecimentos só com listas de vídeos ou chamadas de programa', async () => {
+    const m = (titulo: string): MateriaPublica => ({ portal: 'g1', titulo, url: `https://g1.exemplo/${titulo.length}`, publicadaEm: horasAtras(1), exigeAssinatura: false });
+    const { caso, escritor } = gerar(
+      [card('programa', 1), card('noticia', 2)],
+      new Map([
+        ['programa', [m('VÍDEOS: Bom Dia Goiás de quinta-feira'), m('Assista ao Bom Dia ES')]],
+        ['noticia', [m('Vídeo mostra o resgate de um cachorro')]],
+      ]),
+    );
+    await caso.executar();
+    expect((escritor.arquivos.get('eventos.json') as EventosJson).eventos.map((e) => e.id)).toEqual(['noticia']);
+  });
+
+  it('leva a imagem ilustrativa com o crédito, e null quando não há', async () => {
+    const imagem = { provedor: 'Pexels', url: 'https://img/1.jpg', largura: 1600, altura: 900, cor: '#123456', autor: 'Ana', urlAutor: 'https://p/@ana', urlPagina: 'https://p/1' };
+    const { caso, escritor } = gerar([card('com', 1, 1, { imagem }), card('sem', 2)]);
+    await caso.executar();
+    const eventos = (escritor.arquivos.get('eventos.json') as EventosJson).eventos;
+    expect(eventos.find((e) => e.id === 'com')?.imagem).toEqual(imagem);
+    expect(eventos.find((e) => e.id === 'sem')?.imagem).toBeNull();
   });
 });

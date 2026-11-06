@@ -3,8 +3,9 @@ import '../styles/global.css';
 import Topo from '../components/Topo.astro';
 import Rodape from '../components/Rodape.astro';
 
-interface Props { titulo: string; descricao: string; capa?: boolean }
-const { titulo, descricao, capa = false } = Astro.props;
+// `imersivo`: página de tela cheia (o Giro), sem o cabeçalho do jornal nem o rodapé.
+interface Props { titulo: string; descricao: string; capa?: boolean; imersivo?: boolean }
+const { titulo, descricao, capa = false, imersivo = false } = Astro.props;
 const canonico = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -15,8 +16,8 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
     <title>{titulo}</title>
     <meta name="description" content={descricao} />
     <link rel="canonical" href={canonico} />
-    <meta name="theme-color" content="#efefed" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#14171f" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15171b" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={titulo} />
     <meta property="og:description" content={descricao} />
     <meta property="og:type" content="website" />
@@ -31,15 +32,23 @@ const canonico = new URL(Astro.url.pathname, Astro.site);
       } catch {}
     </script>
   </head>
-  <body id="topo">
+  <body id="topo" class:list={{ imersivo }}>
     <a class="pular" href="#conteudo">Pular para o conteúdo</a>
-    <div class="folha">
-      <Topo capa={capa} />
+    {imersivo ? (
       <main id="conteudo" tabindex="-1">
         <slot />
       </main>
-    </div>
-    <Rodape />
+    ) : (
+      <>
+        <div class="folha">
+          <Topo capa={capa} />
+          <main id="conteudo" tabindex="-1">
+            <slot />
+          </main>
+        </div>
+        <Rodape />
+      </>
+    )}
     <script>
       // Entradas: cada filho de [data-revela] sobe uma vez, em sequência, ao entrar na tela.
       const blocos = document.querySelectorAll<HTMLElement>('[data-revela]');

@@ -2,19 +2,113 @@
  "geradoEm": "2026-11-04T13:36:47.246Z",
  "eventos": [
   {
-   "id": "58ee7f8a-fd5c-470a-a988-891b5e4ad67b",
+   "id": "84ba1bf9-f46a-4213-b245-46dd1c344acb",
+   "titulo": "Rafael Nadal vai integrar a diretoria do Real Madrid",
+   "resumo": "O Real Madrid anunciou que o ex-tenista Rafael Nadal passará a fazer parte da direção do clube espanhol. Conhecido torcedor da equipe, ele assume nova função na gestão esportiva.",
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "esportes",
+    "nome": "Esportes"
+   },
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T12:50:37.000Z",
+   "atualizadoEm": "2026-11-04T12:50:37.000Z",
+   "publicadoEm": "2026-11-04T13:12:00.000Z",
+   "materias": [
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Rafael Nadal pode fazer parte da diretoria do Real Madrid; entenda",
+     "url": "https://www.cnnbrasil.com.br/esportes/futebol/futebol-internacional/futebol-espanhol/rafael-nadal-pode-fazer-parte-da-diretoria-do-real-madrid-entenda/",
+     "publicadaEm": "2026-11-04T12:50:37.000Z",
+     "exigeAssinatura": false
+    },
+    {
+     "portal": "Folha",
+     "titulo": "Rafael Nadal entrará para a diretoria do Real Madrid",
+     "url": "https://www1.folha.uol.com.br/esporte/2026/11/rafael-nadal-entrara-para-a-diretoria-do-real-madrid.shtml",
+     "publicadaEm": "2026-11-04T13:12:00.000Z",
+     "exigeAssinatura": true
+    }
+   ]
+  },
+  {
+   "id": "b0b4e98d-4e6b-488f-87b1-1bea735f5d58",
+   "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
+   "resumo": "As reações internacionais ao resultado das urnas incluem críticas à política externa de Trump. Também houve alertas sobre possíveis mudanças nas relações comerciais e apoios ao pleito.",
+   "geradoPorIa": false,
+   "categoria": {
+    "slug": "mundo",
+    "nome": "Mundo"
+   },
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T12:44:00.000Z",
+   "atualizadoEm": "2026-11-04T12:44:00.000Z",
+   "publicadoEm": "2026-11-04T12:55:09.000Z",
+   "materias": [
+    {
+     "portal": "Folha",
+     "titulo": "China diz estar disposta a seguir trabalhando com EUA após vitória democrata nas eleições de meio de mandato",
+     "url": "https://www1.folha.uol.com.br/mundo/2026/11/china-diz-estar-disposta-a-seguir-trabalhando-com-eua-apos-vitoria-democrata-nas-eleicoes-de-meio-de-mandato.shtml",
+     "publicadaEm": "2026-11-04T12:44:00.000Z",
+     "exigeAssinatura": true
+    },
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Líderes mundiais reagem à vitória democrata nas eleições dos EUA",
+     "url": "https://www.cnnbrasil.com.br/internacional/lideres-mundiais-reagem-a-vitoria-democrata-nas-eleicoes-dos-eua/",
+     "publicadaEm": "2026-11-04T12:55:09.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "f234b0dd-c7fd-4cdd-a87a-c3ad537a8ec6",
+   "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
+   "resumo": null,
+   "geradoPorIa": false,
+   "categoria": null,
+   "cobertura": 2,
+   "criadoEm": "2026-11-04T10:54:38.000Z",
+   "atualizadoEm": "2026-11-04T10:54:38.000Z",
+   "publicadoEm": "2026-11-04T12:42:49.000Z",
+   "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "Análise: democratas avançam sobre território de Trump com vitórias históricas",
+     "url": "https://www.bbc.com/portuguese/articles/cr1ex57zlqj2o",
+     "publicadaEm": "2026-11-04T10:54:38.000Z",
+     "exigeAssinatura": false
+    },
+    {
+     "portal": "CNN Brasil",
+     "titulo": "Análise: Trump será forçado a mudar após vitória democrata",
+     "url": "https://www.cnnbrasil.com.br/internacional/analise-trump-sera-forcado-a-mudar-apos-vitoria-democrata/",
+     "publicadaEm": "2026-11-04T12:42:49.000Z",
+     "exigeAssinatura": false
+    }
+   ]
+  },
+  {
+   "id": "be62797f-cd98-4606-8c16-e3c291ecabcc",
    "titulo": "Democratas conquistam maioria na Câmara e no Senado dos EUA",
    "resumo": "O Partido Democrata garantiu o controle do Congresso americano após vitórias em Estados como Texas e Kansas. A mudança altera o equilíbrio de poder em Washington durante o mandato de Donald Trump.",
-   "geradoPorIa": true,
+   "geradoPorIa": false,
    "categoria": {
     "slug": "mundo",
     "nome": "Mundo"
    },
    "cobertura": 1,
-   "criadoEm": "2026-11-04T13:36:47.246Z",
-   "atualizadoEm": "2026-11-04T13:36:47.246Z",
+   "criadoEm": "2026-11-04T07:58:57.000Z",
+   "atualizadoEm": "2026-11-04T07:58:57.000Z",
    "publicadoEm": "2026-11-04T13:36:47.246Z",
    "materias": [
+    {
+     "portal": "BBC News Brasil",
+     "titulo": "As viradas democratas que definiram a disputa pelo Senado nos EUA",
+     "url": "https://www.bbc.com/portuguese/articles/crn8wnw3eq0wo",
+     "publicadaEm": "2026-11-04T07:58:57.000Z",
+     "exigeAssinatura": false
+    },
     {
      "portal": "BBC News Brasil",
      "titulo": "Eleições nos EUA: em noite histórica, Partido Democrata conquista controle da Câmara e do Senado; veja resultados",
@@ -43,75 +137,6 @@
      "titulo": "Serviço militar em Santarém: 60 jovens juram à bandeira e recebem certificado de dispensa",
      "url": "https://g1.globo.com/pa/santarem-regiao/noticia/2026/11/04/servico-militar-em-santarem-60-jovens-juram-a-bandeira-e-recebem-certificado-de-dispensa.ghtml",
      "publicadaEm": "2026-11-04T13:28:16.000Z",
-     "exigeAssinatura": false
-    }
-   ]
-  },
-  {
-   "id": "8f81664a-635a-40fe-b976-f6cb1554346c",
-   "titulo": "Procon divulga lista de material escolar para escolas particulares no Pará",
-   "resumo": "O órgão estadual publicou a relação de itens que podem ser exigidos e proibiu a cobrança de produtos de higiene, limpeza e uso coletivo. Pais devem guardar notas fiscais para eventuais trocas e reclamações.",
-   "geradoPorIa": true,
-   "categoria": {
-    "slug": "brasil",
-    "nome": "Brasil"
-   },
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T13:27:05.000Z",
-   "atualizadoEm": "2026-11-04T13:27:05.000Z",
-   "publicadoEm": "2026-11-04T13:27:05.000Z",
-   "materias": [
-    {
-     "portal": "g1",
-     "titulo": "Procon divulga lista de material escolar para 2027 no Pará; veja o que pode ser exigido",
-     "url": "https://g1.globo.com/pa/para/noticia/2026/11/04/procon-divulga-lista-de-material-escolar-para-2027-no-para-veja-o-que-pode-ser-exigido.ghtml",
-     "publicadaEm": "2026-11-04T13:27:05.000Z",
-     "exigeAssinatura": false
-    }
-   ]
-  },
-  {
-   "id": "f5a81870-8348-4d10-a292-ac571a63e0f4",
-   "titulo": "Idoso de 75 anos é preso após disparar arma e ameaçar vizinhos no interior de SP",
-   "resumo": "A Guarda Civil Municipal deteve o suspeito após denúncias de que ele intimidou moradores com um facão e atirou de dentro de uma caminhonete. Com ele, os agentes encontraram uma espingarda e munições.",
-   "geradoPorIa": true,
-   "categoria": {
-    "slug": "brasil",
-    "nome": "Brasil"
-   },
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T13:26:54.000Z",
-   "atualizadoEm": "2026-11-04T13:26:54.000Z",
-   "publicadoEm": "2026-11-04T13:26:54.000Z",
-   "materias": [
-    {
-     "portal": "g1",
-     "titulo": "Idoso de 75 anos é preso após atirar e ameaçar vizinhos com facão no interior de SP",
-     "url": "https://g1.globo.com/sp/sao-carlos-regiao/noticia/2026/11/04/idoso-de-75-anos-e-preso-apos-atirar-e-ameacar-vizinhos-com-facao-no-interior-de-sp.ghtml",
-     "publicadaEm": "2026-11-04T13:26:54.000Z",
-     "exigeAssinatura": false
-    }
-   ]
-  },
-  {
-   "id": "8a044ee4-e22c-45fd-a191-8126454aa028",
-   "titulo": "Assista aos vídeos do Bom Dia Amazônia desta quarta-feira",
-   "resumo": "O telejornal matinal foi veiculado normalmente pela Rede Amazônica nesta quarta-feira.",
-   "geradoPorIa": true,
-   "categoria": {
-    "slug": "brasil",
-    "nome": "Brasil"
-   },
-   "cobertura": 1,
-   "criadoEm": "2026-11-04T13:26:32.000Z",
-   "atualizadoEm": "2026-11-04T13:26:32.000Z",
-   "publicadoEm": "2026-11-04T13:26:32.000Z",
-   "materias": [
-    {
-     "portal": "g1",
-     "titulo": "VÍDEOS: Bom Dia Amazônia desta quarta-feira, 4 de novembro de 2026",
-     "url": "https://g1.globo.com/am/amazonas/playlist/videos-bom-dia-amazonia-desta-quarta-feira-4-de-novembro-de-2026.ghtml",
-     "publicadaEm": "2026-11-04T13:26:32.000Z",
      "exigeAssinatura": false
     }
    ]

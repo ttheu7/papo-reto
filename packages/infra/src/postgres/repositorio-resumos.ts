@@ -1,15 +1,26 @@
 import type { Categoria, EventoParaResumir, ModeloIa, NovoResumo, RepositorioResumos } from '@papo-reto/core';
 import type { Sql } from './conexao';
 
+type LinhaDoModelo = { id: number; provedor: string; modelo: string; entrada: number; saida: number };
+const paraModelo = (l: LinhaDoModelo): ModeloIa => ({ id: l.id, provedor: l.provedor, modelo: l.modelo, custoEntrada1m: l.entrada, custoSaida1m: l.saida });
+
 export class RepositorioResumosPg implements RepositorioResumos {
   constructor(private readonly sql: Sql) {}
 
   async modeloAtivo(): Promise<ModeloIa | null> {
-    const [l] = await this.sql<{ id: number; provedor: string; modelo: string; entrada: number; saida: number }[]>`
+    const [l] = await this.sql<LinhaDoModelo[]>`
       select id, provedor, modelo, custo_entrada_1m::float8 as entrada, custo_saida_1m::float8 as saida
         from public.modelo_ia
        where ativo`;
-    return l ? { id: l.id, provedor: l.provedor, modelo: l.modelo, custoEntrada1m: l.entrada, custoSaida1m: l.saida } : null;
+    return l ? paraModelo(l) : null;
+  }
+
+  async modeloReserva(): Promise<ModeloIa | null> {
+    const [l] = await this.sql<LinhaDoModelo[]>`
+      select id, provedor, modelo, custo_entrada_1m::float8 as entrada, custo_saida_1m::float8 as saida
+        from public.modelo_ia
+       where reserva`;
+    return l ? paraModelo(l) : null;
   }
 
   async categorias(): Promise<Categoria[]> {
@@ -38,9 +49,9 @@ export class RepositorioResumosPg implements RepositorioResumos {
     return this.sql.begin(async (tx) => {
       const inseridos = await tx`
         insert into public.resumo
-          (evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado)
+          (evento_id, modelo_ia_id, titulo, texto, versao_prompt, tokens_entrada, tokens_saida, custo_estimado, busca_imagem)
         select ${r.eventoId}, ${r.modeloIaId}, ${r.titulo}, ${r.texto}, ${r.versaoPrompt},
-               ${r.tokensEntrada}, ${r.tokensSaida}, ${r.custoEstimado}
+               ${r.tokensEntrada}, ${r.tokensSaida}, ${r.custoEstimado}, ${r.buscaImagem}
          where not exists (select 1 from public.resumo where evento_id = ${r.eventoId})
         returning id`;
       if (inseridos.length === 0) return false;

@@ -1,3 +1,4 @@
+import { soProgramas } from '../agrupamento';
 import type { ErroDeExecucao, EventoParaResumir, ModeloIa, ResumoGerado } from '../entidades';
 import { ErroCotaIa, mensagemDe } from '../erros';
 import type { Registro, RepositorioExecucoes, RepositorioResumos, Relogio, ServicoIa } from '../portas';
@@ -5,7 +6,10 @@ import type { Registro, RepositorioExecucoes, RepositorioResumos, Relogio, Servi
 export interface DependenciasDosResumos {
   resumos: RepositorioResumos;
   execucoes: RepositorioExecucoes;
-  ia: ServicoIa;
+  /** IA principal (Gemini). Nula quando não há chave. */
+  ia: ServicoIa | null;
+  /** IA de reserva (Groq): assume quando a principal falha ou fica sem cota. */
+  reserva?: ServicoIa | null;
   registro: Registro;
   agora: Relogio;
 }
@@ -23,10 +27,27 @@ export interface ResultadoDosResumos {
   resumosGerados: number;
   chamadas: number;
   erros: ErroDeExecucao[];
+  /** Se a IA de reserva precisou entrar nesta rodada. */
+  usouReserva: boolean;
+}
+
+interface Opcao {
+  nome: 'principal' | 'reserva';
+  ia: ServicoIa;
+  modelo: ModeloIa;
 }
 
 const TAMANHO_MAXIMO_DO_TITULO = 120;
 const FRASES_NO_TEXTO = 4;
+
+/**
+ * Limpa as palavras-chave de imagem que a IA devolveu: só letras, números, espaço e hífen, no máximo
+ * 60 caracteres. Vazio vira null (sem imagem).
+ */
+export function limparBuscaDeImagem(busca: string | null | undefined): string | null {
+  const limpa = busca?.replace(/[^\p{L}\p{N} -]+/gu, ' ').replace(/\s+/g, ' ').trim().slice(0, 60).trim();
+  return limpa ? limpa : null;
+}
 
 /** Corta o texto em até quatro frases. */
 export function limitarFrases(texto: string, maximo = FRASES_NO_TEXTO): string {
@@ -48,46 +69,64 @@ export class ResumirEventos {
     const erros: ErroDeExecucao[] = [];
     let resumosGerados = 0;
     let chamadas = 0;
+    let usouReserva = false;
 
-    const modelo = await d.resumos.modeloAtivo();
-    if (!modelo) {
-      d.registro.aviso('nenhum modelo de IA ativo; resumos pulados', { execucaoId });
-      return { resumosGerados, chamadas, erros };
+    const modeloPrincipal = d.ia ? await d.resumos.modeloAtivo() : null;
+    const modeloReserva = d.reserva ? await d.resumos.modeloReserva() : null;
+    const principal: Opcao | null = d.ia && modeloPrincipal ? { nome: 'principal', ia: d.ia, modelo: modeloPrincipal } : null;
+    const reserva: Opcao | null = d.reserva && modeloReserva ? { nome: 'reserva', ia: d.reserva, modelo: modeloReserva } : null;
+    let atual = principal ?? reserva;
+    if (!atual) {
+      d.registro.aviso('nenhuma IA com modelo cadastrado; resumos pulados', { execucaoId });
+      return { resumosGerados, chamadas, erros, usouReserva };
     }
+    if (atual === reserva) usouReserva = true;
 
     const categorias = await d.resumos.categorias();
     const idDaCategoria = new Map(categorias.map((c) => [c.slug, c.id]));
-    const eventos = await d.resumos.eventosSemResumo({
-      limite: tamanhoDoLote * maximoDeChamadas,
-      desde: new Date(d.agora().getTime() - janela * 3_600_000),
-    });
+    // Listas de vídeos e chamadas de programa gravadas antes do filtro da coleta não gastam cota.
+    const eventos = (
+      await d.resumos.eventosSemResumo({
+        limite: tamanhoDoLote * maximoDeChamadas,
+        desde: new Date(d.agora().getTime() - janela * 3_600_000),
+      })
+    ).filter((e) => !soProgramas(e.materias.map((m) => m.titulo)));
 
-    for (let i = 0; i < eventos.length && chamadas < maximoDeChamadas; i += tamanhoDoLote) {
+    lotes: for (let i = 0; i < eventos.length && chamadas < maximoDeChamadas; i += tamanhoDoLote) {
       const lote = eventos.slice(i, i + tamanhoDoLote);
       chamadas++;
-      try {
-        const resposta = await d.ia.resumir({ modelo: modelo.modelo, categorias: [...idDaCategoria.keys()], eventos: lote });
-        resumosGerados += await this.gravar(lote, resposta, modelo, idDaCategoria, execucaoId);
-      } catch (erro) {
-        if (erro instanceof ErroCotaIa) {
-          d.registro.aviso('cota da IA esgotada; resumos encerrados nesta rodada', { execucaoId });
-          erros.push({ etapa: 'resumos', mensagem: `cota da IA esgotada: ${erro.message}` });
-          break;
+      // Cada lote tenta a IA da vez; se a principal falhar, o mesmo lote vai para a reserva.
+      while (atual) {
+        try {
+          const resposta = await atual.ia.resumir({ modelo: atual.modelo.modelo, categorias: [...idDaCategoria.keys()], eventos: lote });
+          resumosGerados += await this.gravar(lote, resposta, atual, idDaCategoria, execucaoId);
+          continue lotes;
+        } catch (erro) {
+          const cota = erro instanceof ErroCotaIa;
+          const quem = `${atual.modelo.provedor} (${atual.nome})`;
+          d.registro.aviso(cota ? 'cota da IA esgotada' : 'falha num lote de resumos', { execucaoId, ia: quem, erro: mensagemDe(erro) });
+          erros.push({ etapa: 'resumos', mensagem: `${quem}: ${cota ? 'cota esgotada: ' : ''}${mensagemDe(erro)}` });
+          if (atual === principal && reserva) {
+            d.registro.info('resumos seguem com a IA de reserva', { execucaoId, ia: reserva.modelo.provedor });
+            atual = reserva;
+            usouReserva = true;
+            continue;
+          }
+          if (cota) break lotes;
+          continue lotes;
         }
-        d.registro.aviso('falha num lote de resumos', { execucaoId, erro: mensagemDe(erro) });
-        erros.push({ etapa: 'resumos', mensagem: mensagemDe(erro) });
       }
     }
 
     await d.execucoes.registrarResumos(execucaoId, resumosGerados, erros);
-    d.registro.info('resumos finalizados', { execucaoId, resumosGerados, chamadas, erros: erros.length });
-    return { resumosGerados, chamadas, erros };
+    d.registro.info('resumos finalizados', { execucaoId, resumosGerados, chamadas, erros: erros.length, usouReserva });
+    return { resumosGerados, chamadas, erros, usouReserva };
   }
 
   private async gravar(
     lote: EventoParaResumir[],
     resposta: Awaited<ReturnType<ServicoIa['resumir']>>,
-    modelo: ModeloIa,
+    { ia, modelo }: Opcao,
     idDaCategoria: Map<string, number>,
     execucaoId: string,
   ): Promise<number> {
@@ -117,11 +156,12 @@ export class ResumirEventos {
         modeloIaId: modelo.id,
         titulo: r.titulo,
         texto: r.texto,
-        versaoPrompt: this.d.ia.versaoPrompt,
+        versaoPrompt: ia.versaoPrompt,
         tokensEntrada,
         tokensSaida,
         custoEstimado,
         categoriaId: r.categoriaSlug ? (idDaCategoria.get(r.categoriaSlug) ?? null) : null,
+        buscaImagem: limparBuscaDeImagem(r.buscaImagem),
       });
       if (gravou) gravados++;
     }

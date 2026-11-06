@@ -26,7 +26,7 @@ export interface ItemRss {
   publicadaEm: Date | null;
 }
 
-/** Notícia pronta para gravar. Cada uma vira um evento novo (MVP). */
+/** Notícia pronta para gravar. Entra num acontecimento recente parecido ou abre um novo. */
 export interface NovaNoticia {
   fonteId: number;
   categoriaId: number | null;
@@ -34,10 +34,31 @@ export interface NovaNoticia {
   url: string;
   descricaoOriginal: string | null;
   publicadaEm: Date;
+  /** Vetor do título (embedding), quando o serviço de vetores está ligado. */
+  vetor?: number[] | null;
+}
+
+/** O acontecimento já gravado mais parecido com uma notícia nova, pelo vetor do título. */
+export interface ParecidoPorVetor {
+  eventoId: string;
+  /** Semelhança de cosseno, de -1 a 1. */
+  semelhanca: number;
+}
+
+/** Acontecimento recente, com os títulos das suas notícias, para o agrupamento. */
+export interface EventoRecente {
+  id: string;
+  titulos: string[];
+}
+
+/** Notícias que vão para o mesmo acontecimento. `eventoId` nulo cria um acontecimento novo. */
+export interface GrupoDeNoticias {
+  eventoId: string | null;
+  noticias: NovaNoticia[];
 }
 
 export interface ErroDeExecucao {
-  etapa: 'fontes' | 'coleta' | 'resumos' | 'dados';
+  etapa: 'fontes' | 'coleta' | 'agrupamento' | 'resumos' | 'dados';
   mensagem: string;
   fonteId?: number;
 }
@@ -69,6 +90,8 @@ export interface ResumoGerado {
   titulo: string;
   texto: string;
   categoriaSlug: string | null;
+  /** Palavras-chave (em inglês) para buscar a imagem ilustrativa, ou null para não ter imagem. */
+  buscaImagem?: string | null;
 }
 
 export interface NovoResumo {
@@ -82,6 +105,30 @@ export interface NovoResumo {
   custoEstimado: number;
   /** Só é aplicada se o evento ainda não tiver categoria. */
   categoriaId: number | null;
+  /** Palavras-chave da imagem ilustrativa, ou null para o acontecimento não ter imagem. */
+  buscaImagem: string | null;
+}
+
+/**
+ * Imagem ilustrativa de acervo gratuito (Pexels, Unsplash). Não mostra o fato: só ilustra o assunto.
+ * É exibida direto do acervo, sempre com o crédito ao fotógrafo e o link para a foto.
+ */
+export interface ImagemDeAcervo {
+  provedor: string;
+  url: string;
+  largura: number;
+  altura: number;
+  /** Cor média da foto, para pintar o espaço enquanto ela carrega. */
+  cor: string | null;
+  autor: string;
+  urlAutor: string;
+  urlPagina: string;
+}
+
+/** Acontecimento com resumo, palavras-chave de imagem e ainda sem imagem procurada. */
+export interface EventoParaIlustrar {
+  eventoId: string;
+  busca: string;
 }
 
 /** Linha da vw_evento_card, com a data da matéria mais recente. */
@@ -95,6 +142,7 @@ export interface CardDeEvento {
   criadoEm: Date;
   atualizadoEm: Date;
   publicadoEm: Date;
+  imagem?: ImagemDeAcervo | null;
 }
 
 /** O que o site mostra de uma notícia. Sem descricao_original, de propósito. */

@@ -16,14 +16,25 @@ export class RepositorioSitePg implements RepositorioSite {
         criado_em: Date;
         atualizado_em: Date;
         publicado_em: Date;
+        im_provedor: string | null;
+        im_url: string | null;
+        im_largura: number | null;
+        im_altura: number | null;
+        im_cor: string | null;
+        im_autor: string | null;
+        im_url_autor: string | null;
+        im_url_pagina: string | null;
       }[]
     >`
       select v.id, v.titulo, v.resumo, v.categoria_slug, v.categoria_nome, v.cobertura,
-             v.criado_em, v.atualizado_em, p.publicado_em
+             v.criado_em, v.atualizado_em, p.publicado_em,
+             i.provedor as im_provedor, i.url as im_url, i.largura as im_largura, i.altura as im_altura,
+             i.cor as im_cor, i.autor as im_autor, i.url_autor as im_url_autor, i.url_pagina as im_url_pagina
         from public.vw_evento_card v
         join lateral (
           select max(n.publicada_em) as publicado_em from public.noticia n where n.evento_id = v.id
         ) p on true
+        left join public.imagem i on i.evento_id = v.id and i.url is not null
        where p.publicado_em >= ${desde}
        order by p.publicado_em desc
        limit ${limite}`;
@@ -37,6 +48,19 @@ export class RepositorioSitePg implements RepositorioSite {
       criadoEm: l.criado_em,
       atualizadoEm: l.atualizado_em,
       publicadoEm: l.publicado_em,
+      imagem:
+        l.im_url && l.im_provedor && l.im_autor && l.im_url_pagina
+          ? {
+              provedor: l.im_provedor,
+              url: l.im_url,
+              largura: l.im_largura ?? 0,
+              altura: l.im_altura ?? 0,
+              cor: l.im_cor,
+              autor: l.im_autor,
+              urlAutor: l.im_url_autor ?? l.im_url_pagina,
+              urlPagina: l.im_url_pagina,
+            }
+          : null,
     }));
   }
 

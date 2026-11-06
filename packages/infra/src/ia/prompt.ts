@@ -1,14 +1,15 @@
-import type { EventoParaResumir } from '@papo-reto/core';
+import { ErroInfra, type EventoParaResumir, type ResumoGerado } from '@papo-reto/core';
 
 /** Mude a versão sempre que mudar o texto do prompt: ela vai para `resumo.versao_prompt`. */
-export const VERSAO_DO_PROMPT = 'resumo-v2-2026-11-04';
+export const VERSAO_DO_PROMPT = 'resumo-v4-2026-11-05';
 
 export const INSTRUCOES = `Você escreve para o Papo Reto, um portal de notícias gratuito para jovens brasileiros de 15 a 24 anos.
 
 Para cada acontecimento você recebe as manchetes e descrições publicadas por portais de notícia. Escreva:
 - "titulo": uma manchete em português do Brasil, clara e direta, em linguagem jovem mas sem gíria forçada, sem clickbait, sem emoji e com no máximo 90 caracteres.
 - "texto": de três a quatro frases curtas, entre 50 e 80 palavras no total: o que aconteceu, o contexto que as matérias trazem e, se elas permitirem, por que isso importa. Se o material recebido for pouco, escreva menos em vez de completar com suposições.
-- "categoria": um dos slugs permitidos, ou null se nenhum servir.
+- "categoria": um dos slugs permitidos, ou null se nenhum servir. Jogos eletrônicos e e-sports (campeonatos de CS, Valorant, LoL e afins) são "games", não "esportes".
+- "imagem": de 2 a 4 palavras-chave EM INGLÊS para buscar uma foto ilustrativa genérica do assunto em bancos de imagens gratuitos (por exemplo "soccer stadium night", "rain flooded street", "solar panels"). Só lugares, objetos, paisagens e cenas sem pessoas identificáveis. Nunca nomes de pessoas, marcas, clubes, empresas, partidos ou países com bandeira. Use null quando o acontecimento envolver crime, violência, morte, acidente, desastre ou tragédia com vítimas, doença de alguém, ou quando o assunto principal for uma pessoa específica: nesses casos uma foto ilustrativa pode enganar ou ferir.
 
 Regras:
 - Use SOMENTE o que está nas manchetes e descrições recebidas. Não invente fatos, números, nomes, datas, causas nem consequências. Na dúvida, diga menos.
@@ -34,8 +35,28 @@ export function esquemaDaResposta(categorias: string[]) {
         titulo: { type: 'string' },
         texto: { type: 'string' },
         categoria: { type: ['string', 'null'], enum: [...categorias, null] },
+        imagem: { type: ['string', 'null'] },
       },
-      required: ['id', 'titulo', 'texto', 'categoria'],
+      required: ['id', 'titulo', 'texto', 'categoria', 'imagem'],
     },
   };
+}
+
+/** Lê a lista de resumos devolvida pela IA, descartando itens sem id, título ou texto. */
+export function interpretarResumos(dados: unknown, provedor: string): ResumoGerado[] {
+  if (!Array.isArray(dados)) throw new ErroInfra(`o ${provedor} não devolveu uma lista de resumos`);
+  return dados.flatMap((item): ResumoGerado[] => {
+    if (!item || typeof item !== 'object') return [];
+    const { id, titulo, texto, categoria, imagem } = item as Record<string, unknown>;
+    if (typeof id !== 'string' || typeof titulo !== 'string' || typeof texto !== 'string') return [];
+    return [
+      {
+        eventoId: id,
+        titulo,
+        texto,
+        categoriaSlug: typeof categoria === 'string' ? categoria : null,
+        buscaImagem: typeof imagem === 'string' ? imagem : null,
+      },
+    ];
+  });
 }

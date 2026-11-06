@@ -3,8 +3,11 @@ import type {
   CardDeEvento,
   Categoria,
   ErroDeExecucao,
+  EventoParaIlustrar,
   EventoParaResumir,
   Fonte,
+  ImagemDeAcervo,
+  GrupoDeNoticias,
   ItemRss,
   MateriaPublica,
   ModeloIa,
@@ -21,8 +24,12 @@ import type {
   RepositorioNoticias,
   RepositorioResumos,
   RepositorioSite,
+  AcervoDeImagens,
+  RepositorioImagens,
+  ServicoDeVetores,
   ServicoIa,
 } from '../portas';
+import { cosseno } from '../agrupamento';
 
 export function fonte(parcial: Partial<Fonte> & Pick<Fonte, 'id'>): Fonte {
   return {
@@ -58,20 +65,61 @@ export class FontesEmMemoria implements RepositorioFontes {
 
 export class NoticiasEmMemoria implements RepositorioNoticias {
   noticias: (NovaNoticia & { eventoId: string })[] = [];
+  falharAoGravar = false;
   private proximoEvento = 1;
 
   async urlsExistentes(urls: string[]) {
     const gravadas = new Set(this.noticias.map((n) => n.url));
     return new Set(urls.filter((u) => gravadas.has(u)));
   }
-  async criarEventosComNoticias(novas: NovaNoticia[]) {
+  async eventosRecentes(desde: Date) {
+    const eventos = new Map<string, string[]>();
+    for (const n of this.noticias) if (n.publicadaEm >= desde) eventos.set(n.eventoId, [...(eventos.get(n.eventoId) ?? []), n.titulo]);
+    return [...eventos].map(([id, titulos]) => ({ id, titulos }));
+  }
+  async gravarGrupos(grupos: GrupoDeNoticias[]) {
+    if (this.falharAoGravar) throw new Error('conexão perdida');
     let gravadas = 0;
-    for (const n of novas) {
-      if (this.noticias.some((x) => x.url === n.url)) continue; // on conflict do nothing
-      this.noticias.push({ ...n, eventoId: `evento-${this.proximoEvento++}` });
-      gravadas++;
+    for (const g of grupos) {
+      let eventoId = g.eventoId;
+      for (const n of g.noticias) {
+        if (this.noticias.some((x) => x.url === n.url)) continue; // on conflict do nothing
+        eventoId ??= `evento-${this.proximoEvento++}`;
+        this.noticias.push({ ...n, eventoId });
+        gravadas++;
+      }
     }
     return gravadas;
+  }
+  /** Como o banco: compara com as notícias gravadas com vetor, publicadas desde `desde`. */
+  async parecidosPorVetor(vetores: number[][], desde: Date) {
+    const comVetor = this.noticias.filter((n) => n.vetor && n.publicadaEm >= desde);
+    return vetores.map((v) => {
+      let melhor: { eventoId: string; semelhanca: number } | null = null;
+      for (const n of comVetor) {
+        const s = cosseno(v, n.vetor!);
+        if (!melhor || s > melhor.semelhanca) melhor = { eventoId: n.eventoId, semelhanca: s };
+      }
+      return melhor;
+    });
+  }
+}
+
+/** Vetores falsos: cada texto ganha o vetor registrado para ele, ou um vetor só seu. */
+export class VetoresFalsos implements ServicoDeVetores {
+  chamadas: string[][] = [];
+  falhar = false;
+  private proprios = 0;
+  constructor(private readonly conhecidos: Record<string, number[]> = {}) {}
+  async vetorizar(textos: string[]) {
+    this.chamadas.push(textos);
+    if (this.falhar) throw new Error('cota da Mistral esgotada');
+    return textos.map((t) => this.conhecidos[t] ?? this.unico());
+  }
+  /** Um vetor perpendicular a todos os outros: não se parece com nada. */
+  private unico() {
+    const eixo = 64 + this.proprios++;
+    return Array.from({ length: eixo + 1 }, (_, i) => (i === eixo ? 1 : 0));
   }
 }
 
@@ -125,6 +173,8 @@ export class ResumosEmMemoria implements RepositorioResumos {
   categoriaDoEvento = new Map<string, number | null>();
   pedidos: { limite: number; desde: Date }[] = [];
 
+  modeloDeReserva: ModeloIa | null = null;
+
   constructor(
     public modelo: ModeloIa | null,
     readonly listaDeCategorias: Categoria[],
@@ -133,6 +183,9 @@ export class ResumosEmMemoria implements RepositorioResumos {
 
   async modeloAtivo() {
     return this.modelo;
+  }
+  async modeloReserva() {
+    return this.modeloDeReserva;
   }
   async categorias() {
     return this.listaDeCategorias;
@@ -186,5 +239,42 @@ export class EscritorEmMemoria implements EscritorDeDados {
   arquivos = new Map<string, unknown>();
   async escrever(nome: string, dados: unknown) {
     this.arquivos.set(nome, JSON.parse(JSON.stringify(dados)));
+  }
+}
+
+export class ImagensEmMemoria implements RepositorioImagens {
+  gravadas = new Map<string, { busca: string; imagem: ImagemDeAcervo | null }>();
+  pedidos: { desde: Date; limite: number }[] = [];
+  constructor(readonly pendentes: EventoParaIlustrar[]) {}
+  async eventosParaIlustrar(opcoes: { desde: Date; limite: number }) {
+    this.pedidos.push(opcoes);
+    return this.pendentes.filter((p) => !this.gravadas.has(p.eventoId)).slice(0, opcoes.limite);
+  }
+  async gravarImagem(eventoId: string, busca: string, imagem: ImagemDeAcervo | null) {
+    this.gravadas.set(eventoId, { busca, imagem });
+  }
+}
+
+export const imagemDeTeste = (provedor: string, busca: string): ImagemDeAcervo => ({
+  provedor,
+  url: `https://img.${provedor.toLowerCase()}.exemplo/${encodeURIComponent(busca)}`,
+  largura: 1600,
+  altura: 1067,
+  cor: '#888888',
+  autor: 'Fotógrafa',
+  urlAutor: `https://${provedor.toLowerCase()}.exemplo/@fotografa`,
+  urlPagina: `https://${provedor.toLowerCase()}.exemplo/foto`,
+});
+
+/** Acervo falso: responde pela função dada e guarda as buscas. */
+export class AcervoFalso implements AcervoDeImagens {
+  buscas: string[] = [];
+  constructor(
+    readonly nome: string,
+    private readonly responder: (termos: string) => Promise<ImagemDeAcervo | null>,
+  ) {}
+  async buscar(termos: string) {
+    this.buscas.push(termos);
+    return this.responder(termos);
   }
 }

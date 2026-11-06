@@ -1,3 +1,4 @@
+import { soProgramas } from '../agrupamento';
 import type { CardDeEvento, MateriaPublica } from '../entidades';
 import type { EscritorDeDados, Registro, RepositorioSite, Relogio } from '../portas';
 
@@ -14,6 +15,18 @@ export interface MateriaJson {
   exigeAssinatura: boolean;
 }
 
+/** Imagem ilustrativa de acervo: exibida direto do acervo, sempre com o crédito. */
+export interface ImagemJson {
+  url: string;
+  largura: number;
+  altura: number;
+  cor: string | null;
+  provedor: string;
+  autor: string;
+  urlAutor: string;
+  urlPagina: string;
+}
+
 export interface EventoJson {
   id: string;
   titulo: string;
@@ -25,6 +38,8 @@ export interface EventoJson {
   atualizadoEm: string;
   publicadoEm: string;
   materias: MateriaJson[];
+  /** Ilustrativa (não mostra o fato). Null para notícias sensíveis ou sem imagem achada. */
+  imagem: ImagemJson | null;
 }
 
 export interface EventosJson {
@@ -62,10 +77,13 @@ export class GerarDadosDoSite {
     const desdeHoje = agora.getTime() - (this.opcoes.janelaDeHojeEmHoras ?? 24) * HORA;
 
     // Busca uma margem a mais para o "hoje" não ficar de fora quando houver muitos eventos.
-    const cards = await d.site.cardsRecentes({
+    const recentes = await d.site.cardsRecentes({
       desde: new Date(agora.getTime() - (this.opcoes.janelaEmHoras ?? 48) * HORA),
       limite: maximo * 4,
     });
+    // Acontecimentos só com listas de vídeos ou chamadas de programa, gravados antes do filtro da coleta, ficam de fora.
+    const materias = await d.site.materiasDosEventos(recentes.map((c) => c.id));
+    const cards = recentes.filter((c) => !soProgramas((materias.get(c.id) ?? []).map((m) => m.titulo)));
 
     const hoje = cards
       .filter((c) => c.publicadoEm.getTime() >= desdeHoje)
@@ -75,7 +93,6 @@ export class GerarDadosDoSite {
     const mais = cards.filter((c) => !idsDeHoje.has(c.id)).slice(0, Math.max(0, maximo - hoje.length));
     const selecionados = [...hoje, ...mais].sort((a, b) => b.publicadoEm.getTime() - a.publicadoEm.getTime());
 
-    const materias = await d.site.materiasDosEventos(selecionados.map((c) => c.id));
     const paraJson = (c: CardDeEvento) => eventoJson(c, materias.get(c.id) ?? []);
     const geradoEm = agora.toISOString();
 
@@ -111,5 +128,17 @@ function eventoJson(c: CardDeEvento, materias: MateriaPublica[]): EventoJson {
       publicadaEm: m.publicadaEm.toISOString(),
       exigeAssinatura: m.exigeAssinatura,
     })),
+    imagem: c.imagem
+      ? {
+          url: c.imagem.url,
+          largura: c.imagem.largura,
+          altura: c.imagem.altura,
+          cor: c.imagem.cor,
+          provedor: c.imagem.provedor,
+          autor: c.imagem.autor,
+          urlAutor: c.imagem.urlAutor,
+          urlPagina: c.imagem.urlPagina,
+        }
+      : null,
   };
 }

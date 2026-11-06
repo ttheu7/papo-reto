@@ -1,0 +1,34 @@
+---
+// Imagem ilustrativa de acervo gratuito (Pexels, Unsplash), com o crédito embaixo.
+// Ela não mostra o fato, só ilustra o assunto: por isso alt vazio (o texto da notícia já diz tudo)
+// e a legenda "Imagem ilustrativa". Vem direto do acervo, sem dizer de que página foi pedida.
+import type { ImagemJson } from '@papo-reto/core';
+
+interface Props { imagem: ImagemJson; prioridade?: boolean; class?: string }
+const { imagem, prioridade = false, class: classe } = Astro.props;
+---
+<figure class:list={['ilustracao', classe]}>
+  <img
+    src={imagem.url}
+    width={imagem.largura || undefined}
+    height={imagem.altura || undefined}
+    alt=""
+    loading={prioridade ? 'eager' : 'lazy'}
+    decoding="async"
+    fetchpriority={prioridade ? 'high' : 'auto'}
+    referrerpolicy="no-referrer"
+    style={imagem.cor ? `background-color:${imagem.cor}` : undefined}
+  />
+  <figcaption>
+    Imagem ilustrativa · Foto: <a href={imagem.urlAutor} rel="noopener">{imagem.autor}</a> / <a href={imagem.urlPagina} rel="noopener">{imagem.provedor}</a>
+  </figcaption>
+</figure>
+
+<style>
+  .ilustracao { margin: 0; display: grid; gap: 8px; }
+  .ilustracao img {
+    width: 100%; height: 100%; object-fit: cover; border-radius: var(--raio); background: var(--papel-2);
+  }
+  figcaption { font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); }
+  figcaption a { color: inherit; font-weight: 600; text-decoration-color: currentColor; }
+</style>
