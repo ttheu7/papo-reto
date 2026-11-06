@@ -170,6 +170,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - Branch principal: `main`. Um push em `main` que mexe em `supabase/migrations/` é aplicado direto no banco de produção.
 - A beta (o que está na `main` e no ar) está congelada: nada muda nela. Tudo o que vem depois é da versão 1.0 e se acumula na branch `main-hs0u73`, que só vai para a `main` por PR quando o grupo pedir.
 - Commits pequenos.
+- Nunca coloque o link da sessão do Claude (`claude.ai/code/session_…`) em commits, PRs, issues, comentários ou arquivos.
 - Antes de dar uma tarefa por concluída, rode os testes e a checagem de tipos.
 - Quando uma decisão mudar, atualize este arquivo e o README.
 - O README segue sempre a mesma estrutura de seções, nesta ordem, cada uma com o seu emoji: Funcionalidades, Tecnologias, Arquitetura, Instalação, Configuração, Uso, API (dados públicos), Deploy, Roadmap, Segurança e privacidade, Licença, Contribuindo, Suporte e Agradecimentos, com o índice no topo. Informação nova entra na seção certa, e não numa seção nova. Se faltar alguma definição (contato, nomes, prazos), pergunte em vez de inventar.
