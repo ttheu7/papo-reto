@@ -254,6 +254,7 @@ Use sempre a string do **Session pooler**: a conexão direta (`db.<ref>.supabase
 | GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
 | GitHub Actions | `PEXELS_API_KEY` | Imagens ilustrativas (o primeiro acervo). Opcional |
 | GitHub Actions | `UNSPLASH_API_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
+| Vault do Supabase | `github_token_publicar` | Token do GitHub que o banco usa para disparar a publicação a cada 30 minutos. Sem ele, o site atualiza só a cada 3 horas. Vence: renove antes (veja Deploy) |
 | `.env` local | As mesmas variáveis | Rodar o coletor e o gerador na máquina |
 
 ### Dados do banco:
@@ -363,7 +364,8 @@ Editorias com o total de acontecimentos.
 ### Publicação automática:
 
 O workflow **Publicar site** (`.github/workflows/publicar.yml`) roda:
-- a cada 30 minutos, nos minutos 17 e 47 (o GitHub pode atrasar ou pular execuções agendadas);
+- a cada 30 minutos, nos minutos 17 e 47 (UTC), disparado pelo **pg_cron do Supabase** (função `disparar_publicacao`, que chama a API do GitHub). O agendamento do próprio GitHub atrasa e pula execuções: na beta, com "a cada 30 minutos", as rodadas saíam de 4 em 4 a 8 em 8 horas;
+- a cada 3 horas pelo agendamento do GitHub, como reserva (se o token vencer ou o Supabase pausar);
 - a cada push na `main` com mudanças fora de `supabase/`;
 - à mão, pela aba Actions (**Run workflow**).
 
@@ -389,6 +391,31 @@ npx supabase link --project-ref SEU_PROJECT_REF
 npx supabase migration repair --remote --status applied 20261028120000 20261028120100
 ```
 O ref do projeto aparece na URL do painel do Supabase. Se o banco ainda está vazio, pule esta etapa.
+
+### Publicação a cada 30 minutos (token no Vault):
+
+O pg_cron do Supabase dispara o workflow a cada 30 minutos com um token do GitHub guardado no Vault (cifrado). Para cadastrar:
+
+1. No GitHub, em **Settings › Developer settings › Personal access tokens › Fine-grained tokens**, clique em **Generate new token**:
+   - **Repository access:** *Only select repositories* › `papo-reto`.
+   - **Permissions:** *Repository permissions* › **Actions: Read and write**. Nada além disso.
+   - **Expiration:** a maior que o GitHub permitir. Anote a data para renovar.
+2. No **SQL Editor** do Supabase, rode (sem salvar a consulta, para o token não ficar guardado no histórico):
+```sql
+select vault.create_secret('COLE_O_TOKEN_AQUI', 'github_token_publicar', 'Dispara o workflow Publicar site');
+```
+3. Teste na hora:
+```sql
+select public.disparar_publicacao();
+-- alguns segundos depois:
+select status_code, content from net._http_response order by created desc limit 3;
+```
+   Status **204** é sucesso, e uma execução nova aparece na aba Actions. **401** é token errado ou vencido; **404**, falta a permissão de Actions ou o token não é deste repositório.
+
+Para **renovar** o token quando ele vencer:
+```sql
+select vault.update_secret((select id from vault.secrets where name = 'github_token_publicar'), 'COLE_O_TOKEN_NOVO');
+```
 
 4. **Primeiro envio:**
 ```bash
@@ -435,6 +462,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [ ] **Rotina de correção com IA** - Lê a triagem e, para itens de complexidade baixa, cria uma branch, corrige, roda testes e abre um PR para o grupo revisar (nunca mescla sozinha)
 - [ ] **Resumo atualizado quando o acontecimento cresce** - Hoje o resumo é feito uma vez só, com as matérias da primeira rodada
 - [ ] **MCP público** (`apps/mcp-publico`) - Os dados públicos como servidor MCP, no Cloudflare Workers
+- [ ] **Agendador na Cloudflare** - O disparo da publicação a cada 30 minutos sai do pg_cron do Supabase e vai para um Cron Trigger do mesmo Worker
 - [ ] **MCP admin** (`apps/mcp-admin`) - Manutenção do banco pela máquina local
 
 ---

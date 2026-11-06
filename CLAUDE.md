@@ -40,6 +40,7 @@ O schema está em `supabase/migrations/`, e os dados iniciais em `supabase/seed.
 - `doacao`: ainda não usada.
 - View `vw_evento_card`: título (do resumo ou da primeira manchete), resumo, categoria, `fontes` (nomes) e `cobertura` (portais distintos).
 - Gatilho `tocar_evento`: inserir notícia ou resumo atualiza `evento.atualizado_em`.
+- pg_cron `disparar-publicacao` (minutos 17 e 47, UTC): a função `disparar_publicacao` lê o token `github_token_publicar` do Vault e chama, com o pg_net, a API do GitHub (`workflow_dispatch` do `publicar.yml`). Existe porque o agendamento do GitHub atrasava e pulava rodadas (na beta, de 4 em 4 a 8 em 8 horas). Sem o token, ela só avisa. As respostas ficam em `net._http_response` (204 = aceito). Na 2.0, o disparo vai para um Cron Trigger da Cloudflare, junto com o MCP público (tarefa 03). Esta função e a `limpeza_diaria` têm o `execute` revogado de `anon` e `authenticated`: só o banco as chama, nunca a API.
 - pg_cron (`limpeza_diaria`, 6h UTC): apaga `descricao_original` depois de 30 dias, `vetor` depois de 3 dias, eventos parados há 90 dias (em cascata; eram 180 na beta), eventos órfãos e execuções com mais de 30 dias. Medição de 06/11/2026: cerca de 1.100 notícias por dia só com os feeds da beta, uns 1.400 com os da 1.0; com 180 dias o equilíbrio estimado chegava perto dos 500 MB, com 90 fica perto de 290 MB (migration `retencao_de_90_dias`).
 
 Regras:
@@ -103,6 +104,7 @@ E dois acervos de imagens gratuitas, para a imagem ilustrativa (ver "Imagens ilu
 | GitHub Actions | `MISTRAL_API_KEY` | Vetores do agrupamento. Opcional: sem ela, o agrupamento usa só as palavras |
 | GitHub Actions | `PEXELS_API_KEY` | Imagens ilustrativas (o primeiro acervo). Opcional |
 | GitHub Actions | `UNSPLASH_API_KEY` | Imagens ilustrativas (a reserva). Opcional: sem as duas, o site segue só com texto |
+| Vault do Supabase | `github_token_publicar` | Token fine-grained do GitHub (só este repositório, só "Actions: Read and write") para o banco disparar a publicação. Vence: renovar com `vault.update_secret` (README, Deploy) |
 | `.env` local | As mesmas variáveis | Rodar o coletor na máquina |
 
 Nunca coloque segredos no código, em logs, em JSONs ou no site. Nos workflows, os segredos entram só nos passos que precisam deles (`env` no passo), nunca no passo de `npm ci`.
@@ -163,7 +165,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`), Groq, Mistral, Pexels e Unsplash (`fetch`, sem SDK, em `groq/`, `mistral/` e `acervos/`), prompt versionado em `ia/prompt.ts`, logs JSON.
 - `apps/coletor`: `coletar.ts`, `dados-do-site.ts` e `calibrar-agrupamento.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.
-- `.github/workflows/publicar.yml`: a cada 30 min (minutos 17 e 47, fora da hora cheia) coleta, gera os dados, faz o build e publica no Pages. Cada rodada resume até 30 acontecimentos e busca até 15 imagens, então espaçar as rodadas também deixa acontecimentos sem resumo.
+- `.github/workflows/publicar.yml`: a cada 30 min (disparado pelo pg_cron do Supabase nos minutos 17 e 47; o `schedule` do próprio GitHub, a cada 3 horas, é só reserva) coleta, gera os dados, faz o build e publica no Pages. Cada rodada resume até 30 acontecimentos e busca até 15 imagens, então espaçar as rodadas também deixa acontecimentos sem resumo.
 
 ## Fluxo de trabalho
 
