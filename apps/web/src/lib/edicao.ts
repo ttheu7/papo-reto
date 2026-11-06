@@ -1,6 +1,6 @@
 // A numeração da edição, como no cabeçalho de um jornal: "Ano I · Nº 128".
 // Nº conta os dias desde a estreia (a beta entrou no ar em 04/11/2026, que é o Nº 1), no horário de
-// Brasília: todas as edições de meia em meia hora do mesmo dia levam o mesmo número.
+// Brasília: todas as edições do mesmo dia (uma por hora) levam o mesmo número.
 
 const FUSO = 'America/Sao_Paulo';
 /** Dia da estreia (Nº 1), em Brasília. */

@@ -1,10 +1,10 @@
 # Coleta as notícias, gera os JSONs do site, faz o build e publica no GitHub Pages.
-# Roda a cada 30 minutos, à mão pela aba Actions e a cada push na main fora de supabase/.
+# Roda uma vez por hora (no minuto 17, fora da hora cheia, quando o GitHub mais atrasa os agendamentos), à mão pela aba Actions e a cada push na main fora de supabase/.
 name: Publicar site
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "17 * * * *"
   workflow_dispatch:
   push:
     branches: [main]

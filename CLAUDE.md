@@ -163,7 +163,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`), Groq, Mistral, Pexels e Unsplash (`fetch`, sem SDK, em `groq/`, `mistral/` e `acervos/`), prompt versionado em `ia/prompt.ts`, logs JSON.
 - `apps/coletor`: `coletar.ts`, `dados-do-site.ts` e `calibrar-agrupamento.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.
-- `.github/workflows/publicar.yml`: a cada 30 min coleta, gera os dados, faz o build e publica no Pages.
+- `.github/workflows/publicar.yml`: a cada hora (minuto 17; na 1.0 deixou de ser a cada 30 min, para aliviar o banco) coleta, gera os dados, faz o build e publica no Pages.
 
 ## Fluxo de trabalho
 

@@ -45,7 +45,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Funciona sem JavaScript, no celular e com leitor de tela
 
 ### Nos bastidores (automático):
-- ✅ Coleta a cada 30 minutos de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
+- ✅ Coleta a cada hora (na beta, a cada 30 minutos) de dez feeds (g1, Folha, Estadão, CNN Brasil, BBC News Brasil, BBC News, Agência Brasil e Tecnoblog)
 - ✅ Na 1.0, mais oito feeds de sete portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
 - ✅ Matéria de outro portal acompanhado que aparece num feed (a Folha no feed do UOL) fica com o portal dono, com o nome e a etiqueta de assinatura certos; páginas de jogo ao vivo do ge ficam de fora
@@ -143,7 +143,7 @@ papo-reto/
 ```
 
 ### Como funciona:
-1. A cada 30 minutos, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, o título e o começo da descrição de cada notícia nova viram um vetor e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
+1. A cada hora, o workflow **Publicar site** roda o coletor: lê os feeds RSS das fontes ativas, normaliza e deduplica as URLs, junta as matérias sobre o mesmo fato num acontecimento e grava tudo no Supabase. Com `MISTRAL_API_KEY`, o título e o começo da descrição de cada notícia nova viram um vetor e o banco (pgvector) acha o acontecimento recente mais parecido pelo sentido; sem ela, ou se a Mistral falhar, o agrupamento compara as palavras dos títulos.
 2. O coletor manda os eventos novos em lotes para o Gemini, que devolve título, resumo e editoria. Se o Gemini falhar ou ficar sem cota, a Groq resume o mesmo lote e o resto da rodada. Sem nenhuma das duas chaves, essa etapa é pulada e o site mostra a manchete original.
 3. O gerador lê a view `vw_evento_card` e escreve os JSONs públicos do site.
 4. O Astro monta o site estático e as actions oficiais publicam no GitHub Pages.
@@ -363,7 +363,7 @@ Editorias com o total de acontecimentos.
 ### Publicação automática:
 
 O workflow **Publicar site** (`.github/workflows/publicar.yml`) roda:
-- a cada 30 minutos (o GitHub pode atrasar ou pular execuções agendadas);
+- a cada hora, no minuto 17 (o GitHub pode atrasar ou pular execuções agendadas);
 - a cada push na `main` com mudanças fora de `supabase/`;
 - à mão, pela aba Actions (**Run workflow**).
 
