@@ -40,7 +40,7 @@ O schema está em `supabase/migrations/`, e os dados iniciais em `supabase/seed.
 - `doacao`: ainda não usada.
 - View `vw_evento_card`: título (do resumo ou da primeira manchete), resumo, categoria, `fontes` (nomes) e `cobertura` (portais distintos).
 - Gatilho `tocar_evento`: inserir notícia ou resumo atualiza `evento.atualizado_em`.
-- pg_cron (`limpeza_diaria`, 6h UTC): apaga `descricao_original` depois de 30 dias, `vetor` depois de 3 dias, eventos parados há 180 dias (em cascata), eventos órfãos e execuções com mais de 30 dias.
+- pg_cron (`limpeza_diaria`, 6h UTC): apaga `descricao_original` depois de 30 dias, `vetor` depois de 3 dias, eventos parados há 90 dias (em cascata; eram 180 na beta), eventos órfãos e execuções com mais de 30 dias. Medição de 06/11/2026: cerca de 1.100 notícias por dia só com os feeds da beta, uns 1.400 com os da 1.0; com 180 dias o equilíbrio estimado chegava perto dos 500 MB, com 90 fica perto de 290 MB (migration `retencao_de_90_dias`).
 
 Regras:
 
@@ -163,7 +163,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`), Groq, Mistral, Pexels e Unsplash (`fetch`, sem SDK, em `groq/`, `mistral/` e `acervos/`), prompt versionado em `ia/prompt.ts`, logs JSON.
 - `apps/coletor`: `coletar.ts`, `dados-do-site.ts` e `calibrar-agrupamento.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.
-- `.github/workflows/publicar.yml`: a cada hora (minuto 17; na 1.0 deixou de ser a cada 30 min, para aliviar o banco) coleta, gera os dados, faz o build e publica no Pages.
+- `.github/workflows/publicar.yml`: a cada 30 min (minutos 17 e 47, fora da hora cheia) coleta, gera os dados, faz o build e publica no Pages. Cada rodada resume até 30 acontecimentos e busca até 15 imagens, então espaçar as rodadas também deixa acontecimentos sem resumo.
 
 ## Fluxo de trabalho
 

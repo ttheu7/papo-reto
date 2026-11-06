@@ -69,7 +69,7 @@ const id = (i: number) => `cena-${i + 1}`;
       <li class="giro__cena giro__cena--fim" id={id(total)} data-giro-cena={total + 1}>
         <article class="giro__cartao" aria-labelledby="giro-fim">
           <h2 class="giro__manchete" id="giro-fim">Você viu tudo desta edição</h2>
-          <p class="giro__resumo">Foram {total} notícias das últimas 48 horas. A próxima edição sai em até uma hora, com o que os portais publicarem de novo.</p>
+          <p class="giro__resumo">Foram {total} notícias das últimas 48 horas. A próxima edição sai em até 30 minutos, com o que os portais publicarem de novo.</p>
           <div class="giro__acoes">
             <a class="botao" href={caminho()}>Voltar para a capa</a>
             <a class="link giro__fonte" href={`#${id(0)}`} data-giro-inicio>Ver de novo do começo</a>
