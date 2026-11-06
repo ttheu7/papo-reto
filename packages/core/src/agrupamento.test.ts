@@ -119,6 +119,8 @@ describe('títulos de programa', () => {
     expect(ehTituloDePrograma('Vídeos do g1 e TV Bahia - quinta-feira')).toBe(true);
     expect(ehTituloDePrograma('Assista ao Bom Dia ES')).toBe(true);
     expect(ehTituloDePrograma('Vídeo mostra o crime em parque aquático')).toBe(false);
+    expect(ehTituloDePrograma('VÍDEO: tutora denuncia roubo após cachorro chihuahua ser levado de Cuiabá para Goiânia')).toBe(true);
+    expect(ehTituloDePrograma('Vídeo : motorista foge de blitz')).toBe(true);
     expect(ehTituloDePrograma('Cristiano Ronaldo anuncia aposentadoria')).toBe(false);
   });
 

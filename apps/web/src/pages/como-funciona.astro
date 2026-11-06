@@ -1,13 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import Cabecalho from '../components/Cabecalho.astro';
-import { categorias, portaisAtuais } from '../lib/dados';
+import SeloAssinatura from '../components/SeloAssinatura.astro';
+import { categorias, portaisAcompanhados, portaisAtuais } from '../lib/dados';
 import { caminho, REPOSITORIO } from '../lib/formato';
 
-const portais = portaisAtuais();
+// Todos os portais acompanhados (fontes ativas). Com dados antigos, sem portais.json, os que tiveram notícia em 48 horas.
+const portais = portaisAcompanhados.length > 0
+  ? portaisAcompanhados
+  : portaisAtuais().map((p) => ({ nome: p.nome, site: '', exigeAssinatura: p.exigeAssinatura }));
+// O endereço curto: sem https e sem www, com o caminho quando ele diferencia (bbc.com/portuguese).
+const dominio = (url: string) => { try { const u = new URL(url); return u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/+$/, ''); } catch { return ''; } };
 ---
 <Base titulo="Como funciona | Papo Reto" descricao="De onde vêm as notícias do Papo Reto, onde entra a IA, as imagens, direitos autorais e o que acontece com os seus dados.">
-  <Cabecalho grande>
+  <Cabecalho grande semFio>
     <p class="chapeu">Expediente</p>
     <h1 id="pagina-titulo">Como funciona</h1>
     <p class="abre__apoio">O Papo Reto não escreve notícia. Ele junta o que os portais publicaram, explica em poucas palavras e te leva até a matéria original.</p>
@@ -19,13 +25,9 @@ const portais = portaisAtuais();
       <div class="passo__texto" data-revela>
         <p>A cada 30 minutos, um programa lê os feeds RSS públicos dos portais: a lista de manchetes que eles mesmos publicam para outros sites e aplicativos. Guardamos o título, o link e a data de cada matéria.</p>
         <p>Quando portais diferentes publicam sobre o mesmo fato, o Papo Reto junta as matérias num assunto só, comparando o sentido dos títulos e das descrições. O anel ao lado de cada notícia mostra quantos dos portais acompanhados falaram dele: o número no meio é quantos portais, e quanto mais cheio o anel, mais gente noticiou.</p>
-        <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>.</p>
+        <p>Matérias de portais que cobram assinatura levam a etiqueta <strong class="assinatura">Exige assinatura</strong>, e na lista de portais esses ficam com o carimbo <SeloAssinatura />.</p>
+        {portais.length > 0 && <a class="link passo__mais" href="#portais-titulo">Ver os {portais.length} portais acompanhados</a>}
       </div>
-      {portais.length > 0 && (
-        <ul class="portais" aria-label="Portais com notícias nas últimas 48 horas">
-          {portais.map((p) => <li><span>{p.nome}</span>{p.exigeAssinatura && <span class="portais__nota">exige assinatura</span>}</li>)}
-        </ul>
-      )}
     </section>
 
     <section class="passo" aria-labelledby="ia-titulo">
@@ -73,6 +75,26 @@ const portais = portaisAtuais();
     </section>
   </div>
 
+  {portais.length > 0 && (
+    <section class="secao moldura" aria-labelledby="portais-titulo">
+      <div class="secao__titulo">
+        <h2 id="portais-titulo">Os portais que a gente lê</h2>
+        <p>{portais.length} portais, do Brasil e de fora. Cada nome leva ao site do portal.</p>
+      </div>
+      <ul class="portais" data-revela>
+        {portais.map((p) => (
+          <li class="portal">
+            <span class="portal__linha">
+              {p.site ? <a class="portal__nome" href={p.site} rel="noopener">{p.nome}</a> : <span class="portal__nome">{p.nome}</span>}
+              {p.exigeAssinatura && <SeloAssinatura />}
+            </span>
+            {p.site && <span class="portal__site">{dominio(p.site)}</span>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   <section class="secao moldura" aria-labelledby="fim-titulo">
     <div class="fim">
       <h2 id="fim-titulo">Bora ler?</h2>
@@ -83,13 +105,25 @@ const portais = portaisAtuais();
 
 <style>
   /* Três colunas de texto, com fio entre elas, como uma página de jornal. */
-  .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); padding-top: var(--gutter); }
+  .passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: calc(var(--gutter) * 2); row-gap: var(--respiro); padding-top: calc(var(--respiro) - 22px); }
   .passo { display: grid; gap: 14px; align-content: start; justify-items: start; }
   .passo .rotulo { justify-self: stretch; }
   .passo__texto { display: grid; gap: 12px; justify-items: start; }
-  .portais { display: grid; width: 100%; }
-  .portais li { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--fio-claro); font: 600 var(--step-small) var(--sans); }
-  .portais__nota { color: var(--muted); font-weight: 400; }
+  .passo__mais { display: inline-flex; align-items: center; min-height: 44px; font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }
+  /* Os portais como um índice de jornal: o nome em destaque, o endereço embaixo, fios finos entre eles. */
+  .portais {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+    column-gap: var(--gutter);
+  }
+  .portal { display: grid; align-content: start; gap: 2px; padding: 16px 0 18px; border-bottom: 1px solid var(--fio-claro); }
+  .portal__linha { display: flex; align-items: center; gap: 10px; }
+  .portal__nome { font: 700 var(--step-lead) / 1.15 var(--serif); letter-spacing: -0.01em; text-decoration: none; }
+  @media (hover: hover) and (pointer: fine) { a.portal__nome:hover { text-decoration: underline; text-decoration-thickness: 0.06em; } }
+  .portal__site { font: 400 var(--step-small) / 1.3 var(--sans); color: var(--muted); }
+  @media (max-width: 640px) {
+    .portais { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+    .portal__nome { overflow-wrap: anywhere; }
+  }
   .editorias-lista { columns: 2; column-gap: 24px; width: 100%; }
   .editorias-lista a { display: inline-flex; min-height: 40px; align-items: center; font-weight: 600; }
   .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: var(--dentro) 0; border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); }

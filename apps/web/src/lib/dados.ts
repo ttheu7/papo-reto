@@ -1,6 +1,6 @@
 // Lê os JSONs gerados pelo coletor (npm run dados:site) em public/dados/.
 // Fora do CI, se eles não existirem, usa os dados de exemplo para quem não tem acesso ao banco.
-import type { CategoriasJson, EventoJson, EventosJson } from '@papo-reto/core';
+import type { CategoriasJson, EventoJson, EventosJson, PortaisJson } from '@papo-reto/core';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -22,6 +22,10 @@ const ler = <T>(nome: string): T => JSON.parse(readFileSync(join(base, nome), 'u
 export const eventos = ler<EventosJson>('eventos.json');
 export const hoje = ler<EventosJson>('hoje.json');
 export const categorias = ler<CategoriasJson>('categorias.json');
+// portais.json entrou na 1.0: dados gerados antes dele não têm o arquivo, e aí a lista fica vazia.
+export const portaisAcompanhados: PortaisJson['portais'] = existsSync(join(base, 'portais.json'))
+  ? ler<PortaisJson>('portais.json').portais
+  : [];
 
 export type Evento = EventoJson;
 

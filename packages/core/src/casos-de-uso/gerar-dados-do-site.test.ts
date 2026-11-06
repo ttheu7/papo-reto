@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { CardDeEvento, MateriaPublica } from '../entidades';
 import { EscritorEmMemoria, RegistroMudo, SiteEmMemoria } from '../testes/falsos';
-import { GerarDadosDoSite, type CategoriasJson, type EventosJson } from './gerar-dados-do-site';
+import { GerarDadosDoSite, type CategoriasJson, type EventosJson, type PortaisJson } from './gerar-dados-do-site';
 
 const AGORA = new Date('2026-11-04T12:00:00Z');
 const horasAtras = (h: number) => new Date(AGORA.getTime() - h * 3_600_000);
@@ -32,6 +32,23 @@ function gerar(cards: CardDeEvento[], materias = new Map<string, MateriaPublica[
 }
 
 describe('GerarDadosDoSite', () => {
+  it('gera a lista de portais acompanhados, só com nome, site e etiqueta de assinatura', async () => {
+    const escritor = new EscritorEmMemoria();
+    const portais = [
+      { nome: 'Folha', urlSite: 'https://www.folha.uol.com.br', exigeAssinatura: true },
+      { nome: 'ge', urlSite: 'https://ge.globo.com', exigeAssinatura: false },
+    ];
+    await new GerarDadosDoSite({ site: new SiteEmMemoria([], new Map(), CATEGORIAS, portais), escritor, registro: new RegistroMudo(), agora: () => AGORA }).executar();
+
+    expect(escritor.arquivos.get('portais.json')).toEqual({
+      geradoEm: AGORA.toISOString(),
+      portais: [
+        { nome: 'Folha', site: 'https://www.folha.uol.com.br', exigeAssinatura: true },
+        { nome: 'ge', site: 'https://ge.globo.com', exigeAssinatura: false },
+      ],
+    } satisfies PortaisJson);
+  });
+
   it('gera eventos das últimas 48 horas com matérias, IA e categoria', async () => {
     const materia = (portal: string): MateriaPublica & { descricaoOriginal?: string } => ({
       portal,

@@ -1,0 +1,33 @@
+---
+// Carimbo pequeno de "Exige assinatura": um cifrão em negrito dentro de um selo de borda ondulada,
+// girado como os outros carimbos da casa. O nome vai para o leitor de tela e aparece como dica.
+
+// A borda: um círculo com 12 ondas (o raio sobe e desce em volta do centro).
+const ONDAS = 12;
+const PONTOS = 144;
+const centro = 12;
+const raio = 9.6;
+const altura = 0.8;
+const contorno =
+  Array.from({ length: PONTOS }, (_, i) => {
+    const angulo = (i / PONTOS) * Math.PI * 2;
+    const r = raio + altura * Math.cos(ONDAS * angulo);
+    return `${i === 0 ? 'M' : 'L'}${(centro + r * Math.cos(angulo)).toFixed(2)},${(centro + r * Math.sin(angulo)).toFixed(2)}`;
+  }).join('') + 'Z';
+---
+<span class="selo-assinatura" role="img" aria-label="Exige assinatura" title="Exige assinatura">
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+    <path d={contorno} />
+  </svg>
+  <span class="selo-assinatura__cifrao" aria-hidden="true">$</span>
+</span>
+
+<style>
+  .selo-assinatura {
+    position: relative; display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px;
+    color: var(--ink); vertical-align: middle; transform: translateY(-3px) rotate(-9deg);
+  }
+  .selo-assinatura svg { position: absolute; inset: 0; }
+  .selo-assinatura path { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+  .selo-assinatura__cifrao { position: relative; font: 800 0.75rem / 1 var(--sans); }
+</style>

@@ -63,9 +63,11 @@ export function semelhanca(a: Set<string>, b: Set<string>): number {
  */
 export const SEMELHANCA_MINIMA_VETOR = 0.88;
 
-// Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") não são notícia: a coleta
-// os descarta, e os que já estavam no banco nunca se agrupam, não vão para o site nem para a IA.
-const PROGRAMA = /^\s*(v[íi]deos\b|assista\b)/i;
+// Títulos de programa ("VÍDEOS: Bom Dia Goiás...", "Assista ao Bom Dia ES") e matérias que são só um
+// vídeo ("VÍDEO: tutora denuncia...") não são notícia para o Papo Reto: a coleta os descarta, e os que
+// já estavam no banco nunca se agrupam, não vão para o site nem para a IA. "Vídeo mostra...", sem os
+// dois-pontos, é notícia escrita e passa.
+const PROGRAMA = /^\s*(v[íi]deos?\s*:|v[íi]deos\b|assista\b)/i;
 // Página de jogo em andamento do ge ("São Paulo x Ceará - Copa do Brasil Sub-20 - Ao vivo - globoesporte.com"):
 // "Ao vivo" entre separadores, como etiqueta do título. "Lula fala ao vivo..." é notícia e passa.
 const AO_VIVO = /(^|\s[-–|]\s)ao vivo(\s[-–|]\s|\s*$)/i;

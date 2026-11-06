@@ -49,7 +49,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Na 1.0, mais oito feeds de sete portais, com foco em esporte e e-sports: UOL (notícias e esporte), ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz
 - ✅ Normalização e deduplicação das URLs (redirecionamento da Folha, parâmetros `utm_*`)
 - ✅ Matéria de outro portal acompanhado que aparece num feed (a Folha no feed do UOL) fica com o portal dono, com o nome e a etiqueta de assinatura certos; páginas de jogo ao vivo do ge ficam de fora
-- ✅ Listas de vídeos e chamadas de programa ("VÍDEOS: Bom Dia…", "Assista…") ficam de fora: não são notícia
+- ✅ Listas de vídeos, chamadas de programa e matérias que são só um vídeo ("VÍDEOS: Bom Dia…", "Assista…", "VÍDEO: …") ficam de fora: não são notícia
 - ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
 - ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
@@ -355,6 +355,17 @@ Editorias com o total de acontecimentos.
 }
 ```
 
+#### **GET /dados/portais.json**
+Os portais acompanhados (fontes ativas, agrupadas pelo nome).
+
+**Resposta:**
+```json
+{
+  "geradoEm": "2026-11-04T20:30:00Z",
+  "portais": [{ "nome": "Folha", "site": "https://www.folha.uol.com.br", "exigeAssinatura": true }]
+}
+```
+
 `descricao_original` nunca entra nesses arquivos (há teste para isso). No futuro, o `apps/mcp-publico` vai expor esses mesmos dados como um servidor MCP.
 
 ---
@@ -447,7 +458,7 @@ O Security Advisor do Supabase pode avisar que as tabelas têm RLS sem nenhuma p
 - [x] **Indicador de cobertura** - Anel com quantos portais noticiaram (no lugar das barrinhas da beta)
 - [x] **Groq de reserva nos resumos** - Quando o Gemini falha ou fica sem cota
 - [x] **Giro** - As manchetes em tela cheia, como vídeos curtos, com a imagem ilustrativa
-- [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…" e "Assista…" ficam de fora
+- [x] **Sem listas de vídeos e chamadas de programa** - "VÍDEOS: Bom Dia…", "Assista…" e "VÍDEO: …" ficam de fora
 - [x] **Imagens ilustrativas** - Pexels e Unsplash, com crédito, sem imagem em notícia sensível
 - [x] **Redesign com cara de jornal de papel** - Direção "primeira página clássica": folha contínua, fios, gótica no nome, chapéu acima da manchete ([tarefa 03](docs/tarefas/03-roadmap-1.0-e-2.0.md))
 - [x] **Esporte e e-sports** - Editoria Games e feeds de UOL, ge, NPR, Fox News, HLTV, VLR.gg e GamesIndustry.biz

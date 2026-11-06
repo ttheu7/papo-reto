@@ -1,0 +1,80 @@
+{
+  "geradoEm": "2026-11-04T13:36:47.246Z",
+  "portais": [
+    {
+      "nome": "Agência Brasil",
+      "site": "https://agenciabrasil.ebc.com.br",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "BBC News",
+      "site": "https://www.bbc.com/news",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "BBC News Brasil",
+      "site": "https://www.bbc.com/portuguese",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "CNN Brasil",
+      "site": "https://www.cnnbrasil.com.br",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "Estadão",
+      "site": "https://www.estadao.com.br",
+      "exigeAssinatura": true
+    },
+    {
+      "nome": "Folha",
+      "site": "https://www.folha.uol.com.br",
+      "exigeAssinatura": true
+    },
+    {
+      "nome": "Fox News",
+      "site": "https://www.foxnews.com",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "g1",
+      "site": "https://g1.globo.com",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "GamesIndustry.biz",
+      "site": "https://www.gamesindustry.biz",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "ge",
+      "site": "https://ge.globo.com",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "HLTV",
+      "site": "https://www.hltv.org",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "NPR",
+      "site": "https://www.npr.org",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "Tecnoblog",
+      "site": "https://tecnoblog.net",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "UOL",
+      "site": "https://www.uol.com.br",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "VLR.gg",
+      "site": "https://www.vlr.gg",
+      "exigeAssinatura": false
+    }
+  ]
+}
