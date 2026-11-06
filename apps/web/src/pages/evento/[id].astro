@@ -57,7 +57,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
     <section class="quem" aria-labelledby="quem-titulo">
       <h2 class="rotulo" id="quem-titulo">Quem noticiou</h2>
       <Medidor cobertura={e.cobertura} grande />
-      <ul class="quem__lista" data-revela>
+      <ul class:list={["quem__lista", { "quem__lista--rola": e.materias.length > 2 }]} data-quem-lista data-revela>
         {e.materias.map((m) => (
           <li class="item quem__item">
             <p class="chapeu">{m.portal}</p>
@@ -83,6 +83,20 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   )}
 </Base>
 
+<script>
+  // "Quem noticiou" mostra duas fontes e meia; o resto rola. A metade cortada da terceira avisa que tem
+  // mais. Cada manchete tem uma altura, então a conta é feita com os itens de verdade.
+  const listas = document.querySelectorAll<HTMLElement>('[data-quem-lista].quem__lista--rola');
+  const ajustar = () => {
+    for (const lista of listas) {
+      const [a, b, c] = lista.children as unknown as HTMLElement[];
+      if (a && b && c) lista.style.maxHeight = `${a.offsetHeight + b.offsetHeight + c.offsetHeight / 2}px`;
+    }
+  };
+  ajustar();
+  addEventListener('resize', ajustar);
+</script>
+
 <style>
   .data::first-letter { text-transform: uppercase; }
   .foto-topo { padding-top: var(--gutter); }
@@ -107,6 +121,9 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   .minuto__rotulo { display: flex; align-items: center; gap: 14px; }
   .carimbo-explicado { display: inline-block; padding: 5px 8px 4px; border: 2px solid var(--ink); transform: rotate(-4deg); letter-spacing: 0.14em; }
   .minuto__aviso { font: 400 var(--step-small) / 1.45 var(--sans); color: var(--muted); max-width: 56ch; }
+  /* Mais de duas fontes: altura fixa (duas e meia, ajustada pelo script) e rolagem sem barra. */
+  .quem__lista--rola { max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+  .quem__lista--rola::-webkit-scrollbar { display: none; }
   .quem__item { display: grid; gap: 4px; padding: 12px 0 14px; border-bottom: 1px solid var(--fio-claro); }
   .quem__titulo { font: 650 var(--step-body) / 1.25 var(--serif); }
   .mais { font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }
