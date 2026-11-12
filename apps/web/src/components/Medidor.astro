@@ -10,8 +10,10 @@
 import { coberturaPorEditoria, totalDePortais } from '../lib/dados';
 import { escalaDoMedidor } from '../lib/cobertura';
 
-interface Props { cobertura: number; categoria?: { slug: string; nome: string } | null; grande?: boolean; geral?: boolean }
-const { cobertura, categoria = null, grande = false, geral = false } = Astro.props;
+// `simbolo`: um globo dentro da roda pequena, só na página da notícia; na versão curta a roda pequena cresce
+// para 16 px, para o globo caber.
+interface Props { cobertura: number; categoria?: { slug: string; nome: string } | null; grande?: boolean; geral?: boolean; simbolo?: boolean }
+const { cobertura, categoria = null, grande = false, geral = false, simbolo = false } = Astro.props;
 const totalGeral = Math.max(totalDePortais, cobertura, 1);
 const total = geral ? totalGeral : escalaDoMedidor(cobertura, categoria, coberturaPorEditoria, totalDePortais);
 const porEditoria = !geral && Boolean(categoria && coberturaPorEditoria.get(categoria.slug)?.size) && total !== totalGeral;
@@ -24,7 +26,7 @@ const rotulo = porEditoria
 const falta = (de: number) => 100 - Math.round((cobertura / de) * 100);
 const roda = (tamanho: number, espessura: number) => ({ tamanho, espessura, meio: tamanho / 2, raio: (tamanho - espessura) / 2 });
 const principal = grande ? roda(96, 8) : roda(24, 2.5);
-const satelite = grande ? roda(30, 3) : roda(11, 2);
+const satelite = grande ? roda(30, 3) : simbolo ? roda(16, 1.8) : roda(11, 2);
 ---
 {grande ? (
   <figure class="medidor medidor--grande">
@@ -40,16 +42,17 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
             <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
             <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
           </svg>
+          {simbolo && <svg class="medidor__simbolo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 7.5h14M5 16.5h14" /></svg>}
         </span>
       )}
     </span>
     <figcaption>
       <span><strong>{cobertura} de {total}</strong> {quais} {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto</span>
-      {porEditoria && <span><strong>{cobertura} de {totalGeral}</strong> contando todos os portais acompanhados (a roda pequena)</span>}
+      {porEditoria && <span><strong>{cobertura} de {totalGeral}</strong> contando todos os portais acompanhados ({simbolo ? 'a roda com o globo' : 'a roda pequena'})</span>}
     </figcaption>
   </figure>
 ) : (
-  <span class:list={['medidor medidor--curto', { 'medidor--duplo': porEditoria }]} role="img" aria-label={rotulo} title={rotulo}>
+  <span class:list={['medidor medidor--curto', { 'medidor--duplo': porEditoria, 'medidor--com-simbolo': porEditoria && simbolo }]} role="img" aria-label={rotulo} title={rotulo}>
     <svg width={principal.tamanho} height={principal.tamanho} viewBox={`0 0 ${principal.tamanho} ${principal.tamanho}`} aria-hidden="true">
       <circle class="medidor__trilho" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} />
       <circle class="medidor__cheio" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
@@ -61,6 +64,7 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
           <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
           <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
         </svg>
+        {simbolo && <svg class="medidor__simbolo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 7.5h14M5 16.5h14" /></svg>}
       </span>
     )}
   </span>
@@ -76,6 +80,12 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
      grande, sobre um disco na cor do fundo, como um selo. */
   .medidor__satelite { position: absolute; display: grid; place-items: center; border-radius: 50%; background: var(--fundo-satelite, var(--papel)); }
   .medidor__satelite svg { position: absolute; inset: 0; }
+  /* O globo no meio da roda pequena: traço fino, na cor da tinta, sem girar com a roda. */
+  .medidor .medidor__simbolo { position: relative; inset: auto; transform: none; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .medidor--grande .medidor__simbolo { width: 16px; height: 16px; }
+  .medidor--curto .medidor__simbolo { width: 10px; height: 10px; stroke-width: 2; }
+  .medidor--com-simbolo { margin-right: 8px; }
+  .medidor--com-simbolo .medidor__satelite { width: 16px; height: 16px; right: -8px; bottom: -4px; }
 
   /* Curto: o número de portais no meio do anel. */
   .medidor--curto { position: relative; display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; vertical-align: middle; }
