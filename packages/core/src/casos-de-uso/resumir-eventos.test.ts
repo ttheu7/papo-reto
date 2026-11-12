@@ -221,4 +221,54 @@ describe('ResumirEventos com IA de reserva', () => {
     await new ResumirEventos({ resumos: repo, execucoes, ia, registro: new RegistroMudo(), agora: () => AGORA }).executar(execucaoId);
     expect(ia.chamadas[0]?.eventos.map((e) => e.id)).toEqual(['e1']);
   });
+
+  describe('vaga garantida para Games', () => {
+    const COM_GAMES = [...CATEGORIAS, { id: 9, slug: 'games', nome: 'Games' }];
+    const deGames = (id: string): EventoParaResumir => ({ ...evento(id), categoriaSlug: 'games' });
+    let execucoes: ExecucoesEmMemoria;
+    let execucaoId: string;
+    beforeEach(async () => {
+      execucoes = new ExecucoesEmMemoria();
+      execucaoId = await execucoes.iniciar(AGORA);
+    });
+    const resumidor = (repo: ResumosEmMemoria, ia: IaFalsa, opcoes = {}) =>
+      new ResumirEventos({ resumos: repo, execucoes, ia, registro: new RegistroMudo(), agora: () => AGORA }, opcoes);
+    const iaQueResumeTudo = () =>
+      new IaFalsa(async ({ eventos }) => ({
+        resumos: eventos.map((e) => ({ eventoId: e.id, titulo: `Título ${e.id}`, texto: 'Uma. Duas.', categoriaSlug: 'games' })),
+        tokensEntrada: 1000,
+        tokensSaida: 200,
+      }));
+
+    it('põe o acontecimento de Games no primeiro lote quando nenhum dos escolhidos é de Games', async () => {
+      const repo = new ResumosEmMemoria(MODELO, COM_GAMES, [...eventos(25), deGames('furia')]);
+      const ia = iaQueResumeTudo();
+
+      const r = await resumidor(repo, ia, { tamanhoDoLote: 10, maximoDeChamadas: 2 }).executar(execucaoId);
+
+      expect(ia.chamadas[0]!.eventos[0]!.id).toBe('furia');
+      expect(r.resumosGerados).toBe(20);
+      expect(repo.gravados.map((g) => g.eventoId)).toContain('furia');
+    });
+
+    it('não reserva vaga quando já há um acontecimento de Games entre os escolhidos', async () => {
+      const repo = new ResumosEmMemoria(MODELO, COM_GAMES, [deGames('vct'), ...eventos(25)]);
+      const ia = iaQueResumeTudo();
+
+      await resumidor(repo, ia, { tamanhoDoLote: 10, maximoDeChamadas: 1 }).executar(execucaoId);
+
+      expect(repo.pedidos.some((p) => p.categoria === 'games')).toBe(false);
+      expect(ia.chamadas[0]!.eventos.map((e) => e.id)).toEqual(['vct', ...eventos(9).map((e) => e.id)]);
+    });
+
+    it('não procura Games se a editoria não existe no banco', async () => {
+      const repo = new ResumosEmMemoria(MODELO, CATEGORIAS, [...eventos(5), deGames('furia')]);
+      const ia = iaQueResumeTudo();
+
+      await resumidor(repo, ia, { tamanhoDoLote: 2, maximoDeChamadas: 1 }).executar(execucaoId);
+
+      expect(repo.pedidos.some((p) => p.categoria === 'games')).toBe(false);
+      expect(ia.chamadas[0]!.eventos.map((e) => e.id)).toEqual(['e1', 'e2']);
+    });
+  });
 });

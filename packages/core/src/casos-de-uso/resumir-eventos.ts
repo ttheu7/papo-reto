@@ -21,6 +21,11 @@ export interface OpcoesDosResumos {
   maximoDeChamadas?: number;
   /** Só resume eventos criados nesse intervalo. Padrão: 48 horas. */
   janelaEmHoras?: number;
+  /**
+   * Editorias com vaga garantida em toda rodada: se nenhum dos escolhidos é dela, o mais noticiado dela
+   * entra no primeiro lote. Padrão: ["games"] (e-sports quase sempre saem num portal só e ficariam por último).
+   */
+  editoriasGarantidas?: string[];
 }
 
 export interface ResultadoDosResumos {
@@ -85,12 +90,17 @@ export class ResumirEventos {
     const categorias = await d.resumos.categorias();
     const idDaCategoria = new Map(categorias.map((c) => [c.slug, c.id]));
     // Listas de vídeos e chamadas de programa gravadas antes do filtro da coleta não gastam cota.
-    const eventos = (
-      await d.resumos.eventosSemResumo({
-        limite: tamanhoDoLote * maximoDeChamadas,
-        desde: new Date(d.agora().getTime() - janela * 3_600_000),
-      })
-    ).filter((e) => !soProgramas(e.materias.map((m) => m.titulo)));
+    const limite = tamanhoDoLote * maximoDeChamadas;
+    const desde = new Date(d.agora().getTime() - janela * 3_600_000);
+    const naoEPrograma = (e: EventoParaResumir) => !soProgramas(e.materias.map((m) => m.titulo));
+    let eventos = (await d.resumos.eventosSemResumo({ limite, desde })).filter(naoEPrograma);
+
+    // Vaga garantida: pelo menos um acontecimento de cada editoria garantida por rodada, no primeiro lote.
+    for (const slug of this.opcoes.editoriasGarantidas ?? ['games']) {
+      if (!idDaCategoria.has(slug) || eventos.some((e) => e.categoriaSlug === slug)) continue;
+      const [garantido] = (await d.resumos.eventosSemResumo({ limite: 3, desde, categoria: slug })).filter(naoEPrograma);
+      if (garantido) eventos = [garantido, ...eventos.filter((e) => e.id !== garantido.id)].slice(0, limite);
+    }
 
     lotes: for (let i = 0; i < eventos.length && chamadas < maximoDeChamadas; i += tamanhoDoLote) {
       const lote = eventos.slice(i, i + tamanhoDoLote);

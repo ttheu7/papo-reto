@@ -83,6 +83,8 @@ export interface ModeloIa {
 export interface EventoParaResumir {
   id: string;
   materias: { portal: string; titulo: string; descricao: string | null }[];
+  /** Editoria que o acontecimento já tem (a do feed de seção), para a vaga garantida. Não vai para a IA. */
+  categoriaSlug?: string | null;
 }
 
 export interface ResumoGerado {

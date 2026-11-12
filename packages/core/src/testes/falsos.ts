@@ -172,7 +172,7 @@ export class RegistroMudo implements Registro {
 export class ResumosEmMemoria implements RepositorioResumos {
   gravados: NovoResumo[] = [];
   categoriaDoEvento = new Map<string, number | null>();
-  pedidos: { limite: number; desde: Date }[] = [];
+  pedidos: { limite: number; desde: Date; categoria?: string }[] = [];
 
   modeloDeReserva: ModeloIa | null = null;
 
@@ -191,10 +191,12 @@ export class ResumosEmMemoria implements RepositorioResumos {
   async categorias() {
     return this.listaDeCategorias;
   }
-  async eventosSemResumo(opcoes: { limite: number; desde: Date }) {
+  async eventosSemResumo(opcoes: { limite: number; desde: Date; categoria?: string }) {
     this.pedidos.push(opcoes);
     const resumidos = new Set(this.gravados.map((r) => r.eventoId));
-    return this.pendentes.filter((e) => !resumidos.has(e.id)).slice(0, opcoes.limite);
+    return this.pendentes
+      .filter((e) => !resumidos.has(e.id) && (!opcoes.categoria || e.categoriaSlug === opcoes.categoria))
+      .slice(0, opcoes.limite);
   }
   async gravarResumo(r: NovoResumo) {
     if (this.gravados.some((g) => g.eventoId === r.eventoId)) return false;

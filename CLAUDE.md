@@ -77,6 +77,7 @@ E dois acervos de imagens gratuitas, para a imagem ilustrativa (ver "Imagens ilu
 - Os três planos gratuitos têm cotas baixas, por minuto e por dia, que mudam sem aviso e só aparecem no painel de cada um (AI Studio, console da Groq e console da Mistral). Sem novas tentativas: insistir só gasta cota. HTTP 429 vira `ErroCotaIa`.
 - Processe em lote: vários eventos por chamada, com resposta em JSON.
 - Nunca resuma o mesmo evento duas vezes.
+- Ordem dos resumos: os acontecimentos com mais portais primeiro, depois os mais recentes. Exceção: toda rodada reserva uma vaga para Games (`editoriasGarantidas`, padrão `["games"]`, em `ResumirEventos`). Se nenhum dos escolhidos é de Games, o de Games mais noticiado entra no primeiro lote, para sempre sair pelo menos uma notícia de e-sports explicada e em português por edição (pedido de 12/11/2026; e-sports quase sempre saem num portal só e ficariam por último).
 - Tenha uma alternativa: sem chave, ou com a cota esgotada, o site mostra a manchete original, a fonte e o link.
 - O resumo sai **só** dos títulos e descrições dos feeds, sem inventar fatos. A classificação usa apenas os slugs de `categoria`.
 - No plano gratuito o Google pode usar o conteúdo enviado; a Mistral diz que os dados da API não treinam modelos; a política da Groq não foi conferida. Por isso, só vai para as IAs o texto público dos feeds. Nunca envie dados de usuários.

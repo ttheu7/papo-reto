@@ -53,6 +53,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
 - ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
+- ✅ Vaga garantida para e-sports: toda rodada resume pelo menos uma notícia de Games, que de outro jeito ficaria por último (quase sempre só um portal dá cada uma)
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
 - ✅ Registro de cada rodada (novas notícias, resumos e erros) e, em cada resumo, do modelo, dos tokens e do custo
 - ✅ Limpeza diária do banco para caber no plano gratuito

@@ -27,22 +27,24 @@ export class RepositorioResumosPg implements RepositorioResumos {
     return this.sql<Categoria[]>`select id, slug, nome from public.categoria order by id`;
   }
 
-  async eventosSemResumo({ limite, desde }: { limite: number; desde: Date }): Promise<EventoParaResumir[]> {
+  async eventosSemResumo({ limite, desde, categoria }: { limite: number; desde: Date; categoria?: string }): Promise<EventoParaResumir[]> {
     // descricao_original sai daqui só para a IA (uso interno), nunca para o site.
-    const linhas = await this.sql<{ id: string; materias: EventoParaResumir['materias'] }[]>`
-      select e.id,
+    const linhas = await this.sql<{ id: string; categoriaSlug: string | null; materias: EventoParaResumir['materias'] }[]>`
+      select e.id, c.slug as "categoriaSlug",
              json_agg(json_build_object('portal', f.nome, 'titulo', n.titulo, 'descricao', n.descricao_original)
                       order by n.publicada_em) as materias
         from public.evento e
+        left join public.categoria c on c.id = e.categoria_id
         join public.noticia n on n.evento_id = e.id
         join public.fonte f on f.id = n.fonte_id
        where e.criado_em >= ${desde}
          and not exists (select 1 from public.resumo r where r.evento_id = e.id)
-       group by e.id
+         ${categoria ? this.sql`and c.slug = ${categoria}` : this.sql``}
+       group by e.id, c.slug
       having bool_and(f.politica_uso <> 'so_link')
        order by count(distinct f.nome) desc, max(n.publicada_em) desc
        limit ${limite}`;
-    return linhas.map((l) => ({ id: l.id, materias: l.materias }));
+    return linhas.map((l) => ({ id: l.id, materias: l.materias, categoriaSlug: l.categoriaSlug }));
   }
 
   async gravarResumo(r: NovoResumo): Promise<boolean> {
