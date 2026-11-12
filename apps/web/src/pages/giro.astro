@@ -49,7 +49,7 @@ const id = (i: number) => `cena-${i + 1}`;
                   <a class="giro__abrir" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a>
                 </h2>
                 <p class="giro__meta">
-                  <Medidor cobertura={e.cobertura} />
+                  <Medidor cobertura={e.cobertura} categoria={e.categoria} />
                   <span>{portais.length === 1 ? portais[0] : `${portais.length} portais`} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </p>
                 {e.imagem && (
@@ -190,7 +190,7 @@ const id = (i: number) => `cena-${i + 1}`;
     max-width: 640px; margin-inline: auto;
   }
   .giro__cartao {
-    position: relative; background: var(--papel-2); border-top: 3px solid var(--fio); padding: clamp(24px, 5vw, 48px);
+    position: relative; background: var(--papel-2); --fundo-satelite: var(--papel-2); border-top: 3px solid var(--fio); padding: clamp(24px, 5vw, 48px);
     display: grid; align-content: center;
     transition: transform var(--t-press) var(--ease-out);
   }
@@ -231,7 +231,7 @@ const id = (i: number) => `cena-${i + 1}`;
   .giro__cartao--foto {
     isolation: isolate; overflow: hidden; padding: 0; border-top: 0;
     grid-template-rows: minmax(0, 1fr) auto; align-content: stretch;
-    color: var(--sobre-foto); --medidor-vazio: var(--toque-foto); background: var(--veu-foto);
+    color: var(--sobre-foto); --medidor-vazio: var(--toque-foto); --fundo-satelite: var(--veu-foto); background: var(--veu-foto);
   }
   /* Para a foto ficar com pelo menos metade do cartão, a manchete vai um degrau abaixo (--step-lead) e o bloco
      de texto é só manchete, medidor e crédito. A manchete nunca é cortada (é de terceiros). */

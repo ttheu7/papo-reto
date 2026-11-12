@@ -116,7 +116,8 @@ const aqui = partes.at(-1) ?? '';
   .topo--capa .topo__nome { font-size: var(--step-hero); padding: 18px 0 6px; }
   .topo__nome--link { width: fit-content; margin-inline: auto; }
   .topo__lema { text-align: center; font: italic 400 var(--step-body) / 1.3 var(--serif); color: var(--muted); padding-bottom: 12px; }
-  .topo__fios { border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); height: 7px; }
+  /* Um fio forte entre o nome e o menu (era duplo; ficou só um, para não somar fios). */
+  .topo__fios { border-top: 3px solid var(--fio); }
   .topo__menu { border-bottom: 1px solid var(--fio); overflow-x: auto; scrollbar-width: none; }
   .topo__menu::-webkit-scrollbar { display: none; }
   .topo__menu ul { display: flex; justify-content: center; gap: 0 22px; min-width: max-content; padding: 0 2px; }

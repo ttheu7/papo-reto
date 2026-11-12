@@ -18,11 +18,11 @@ const relacionados = e.categoria ? eventos.eventos.filter((x) => x.id !== e.id &
 const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria original.`;
 ---
 <Base titulo={`${e.titulo} | Papo Reto`} descricao={descricao}>
-  <Cabecalho>
+  <Cabecalho semFio={!e.imagem}>
     {e.categoria && <a class="chapeu" href={caminho(`categoria/${e.categoria.slug}/`)}>{e.categoria.nome}</a>}
     <h1 id="pagina-titulo">{e.titulo}</h1>
     <p class="servico">
-      <Medidor cobertura={e.cobertura} />
+      <Medidor cobertura={e.cobertura} categoria={e.categoria} />
       <span>Noticiado por {portais.join(', ')}</span>
       <span aria-hidden="true">·</span>
       <time class="data" datetime={e.publicadoEm}>{dataPorExtenso(e.publicadoEm)}, {quando(e.publicadoEm, geradoEm)}</time>
@@ -56,8 +56,8 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 
     <section class="quem" aria-labelledby="quem-titulo">
       <h2 class="rotulo" id="quem-titulo">Quem noticiou</h2>
-      <Medidor cobertura={e.cobertura} grande />
-      <ul class="quem__lista" data-revela>
+      <Medidor cobertura={e.cobertura} categoria={e.categoria} grande simbolo />
+      <ul class:list={["quem__lista", { "quem__lista--rola": e.materias.length > 2 }]} data-quem-lista data-revela>
         {e.materias.map((m) => (
           <li class="item quem__item">
             <p class="chapeu">{m.portal}</p>
@@ -83,23 +83,47 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
   )}
 </Base>
 
+<script>
+  // "Quem noticiou" mostra duas fontes e meia; o resto rola. A metade cortada da terceira avisa que tem
+  // mais. Cada manchete tem uma altura, então a conta é feita com os itens de verdade.
+  const listas = document.querySelectorAll<HTMLElement>('[data-quem-lista].quem__lista--rola');
+  const ajustar = () => {
+    for (const lista of listas) {
+      const [a, b, c] = lista.children as unknown as HTMLElement[];
+      if (a && b && c) lista.style.maxHeight = `${a.offsetHeight + b.offsetHeight + c.offsetHeight / 2}px`;
+    }
+  };
+  ajustar();
+  addEventListener('resize', ajustar);
+</script>
+
 <style>
   .data::first-letter { text-transform: uppercase; }
   .foto-topo { padding-top: var(--gutter); }
   .foto-topo :global(img) { aspect-ratio: 21 / 9; max-height: 360px; }
   @media (max-width: 640px) { .foto-topo :global(img) { aspect-ratio: 4 / 3; } }
   /* Duas colunas com fio entre elas, da mesma altura (como colunas de uma página). */
-  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); padding-top: var(--gutter); align-items: stretch; }
+  /* Duas colunas com fio entre elas. Sem foto, o cabeçalho não tem fio de baixo: quem abre a área é o
+     fio forte dos rótulos, com mais espaço depois do título. Com foto, ela fica entre o fio do cabeçalho
+     e o dos rótulos. */
+  .evento { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: stretch; padding-top: calc(var(--gutter) * 1.5); }
+  .foto-topo + .evento { padding-top: var(--gutter); }
   .minuto, .quem { display: grid; gap: 18px; align-content: start; justify-items: start; }
   .minuto { padding-right: calc(var(--gutter) * 1.5); border-right: 1px solid var(--fio-claro); }
   .quem { padding-left: calc(var(--gutter) * 1.5); justify-items: stretch; }
   .minuto .rotulo, .quem .rotulo { justify-self: stretch; }
+  /* Os rótulos das duas colunas no estilo da casa (fio forte em cima, fino embaixo), com a mesma altura
+     e um pouco mais de espaço, para o carimbo "Explicado" não encostar nos fios. */
+  .minuto .rotulo, .quem .rotulo { display: flex; align-items: center; min-height: 64px; padding: 12px 0; }
   .minuto__texto { font-size: var(--step-lead); line-height: 1.45; max-width: 40ch; }
   .minuto__texto::first-letter { float: left; font-size: 3.2em; line-height: 0.82; font-weight: 740; padding: 0.06em 0.08em 0 0; }
   /* Carimbo "Explicado" batido no rótulo do resumo. */
   .minuto__rotulo { display: flex; align-items: center; gap: 14px; }
   .carimbo-explicado { display: inline-block; padding: 5px 8px 4px; border: 2px solid var(--ink); transform: rotate(-4deg); letter-spacing: 0.14em; }
   .minuto__aviso { font: 400 var(--step-small) / 1.45 var(--sans); color: var(--muted); max-width: 56ch; }
+  /* Mais de duas fontes: altura fixa (duas e meia, ajustada pelo script) e rolagem sem barra. */
+  .quem__lista--rola { max-height: 15rem; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
+  .quem__lista--rola::-webkit-scrollbar { display: none; }
   .quem__item { display: grid; gap: 4px; padding: 12px 0 14px; border-bottom: 1px solid var(--fio-claro); }
   .quem__titulo { font: 650 var(--step-body) / 1.25 var(--serif); }
   .mais { font: 600 var(--step-small) var(--sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration-color: currentColor; }

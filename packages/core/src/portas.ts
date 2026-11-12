@@ -12,6 +12,7 @@ import type {
   MateriaPublica,
   ModeloIa,
   ParecidoPorVetor,
+  PortalPublico,
   NovoResumo,
   ResumoGerado,
   StatusExecucao,
@@ -76,7 +77,8 @@ export interface RepositorioResumos {
   modeloReserva(): Promise<ModeloIa | null>;
   categorias(): Promise<Categoria[]>;
   /** Eventos recentes sem nenhum resumo, os de maior cobertura primeiro. */
-  eventosSemResumo(opcoes: { limite: number; desde: Date }): Promise<EventoParaResumir[]>;
+  /** Os mais noticiados primeiro. Com `categoria`, só os dessa editoria (slug). */
+  eventosSemResumo(opcoes: { limite: number; desde: Date; categoria?: string }): Promise<EventoParaResumir[]>;
   /** Grava o resumo se o evento ainda não tiver um. Devolve se gravou. */
   gravarResumo(resumo: NovoResumo): Promise<boolean>;
 }
@@ -100,6 +102,8 @@ export interface RepositorioSite {
   /** Matérias de cada evento, sem nenhum campo de uso interno. */
   materiasDosEventos(ids: string[]): Promise<Map<string, MateriaPublica[]>>;
   categorias(): Promise<Categoria[]>;
+  /** Os portais acompanhados (fontes ativas), em ordem alfabética. */
+  portais(): Promise<PortalPublico[]>;
 }
 
 export interface EscritorDeDados {

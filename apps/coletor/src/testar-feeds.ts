@@ -18,6 +18,12 @@ const CANDIDATOS: [nome: string, url: string][] = [
   ['HLTV (Counter-Strike)', 'https://www.hltv.org/rss/news'],
   ['VLR.gg (Valorant)', 'https://www.vlr.gg/rss'],
   ['GamesIndustry.biz', 'https://www.gamesindustry.biz/feed/news'],
+  // Rap nacional (migration fontes_rap, 12/11/2026).
+  ['Rap Dab', 'https://www.rapdab.com.br/feed'],
+  ['Rap Mídia', 'https://rapmidia.com.br/feed'],
+  ['Rap na Net', 'https://rapnanet.com.br/feed'],
+  ['Jornal do Rap', 'https://www.jornaldorap.com.br/feed'],
+  ['Trapground', 'https://www.trapground.com.br/feed'],
 ];
 
 const HORA = 60 * 60 * 1000;

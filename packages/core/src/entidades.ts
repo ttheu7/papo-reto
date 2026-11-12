@@ -83,6 +83,8 @@ export interface ModeloIa {
 export interface EventoParaResumir {
   id: string;
   materias: { portal: string; titulo: string; descricao: string | null }[];
+  /** Editoria que o acontecimento já tem (a do feed de seção), para a vaga garantida. Não vai para a IA. */
+  categoriaSlug?: string | null;
 }
 
 export interface ResumoGerado {
@@ -146,6 +148,14 @@ export interface CardDeEvento {
 }
 
 /** O que o site mostra de uma notícia. Sem descricao_original, de propósito. */
+/** Um portal acompanhado (fontes ativas com o mesmo nome viram um portal só). Só dados públicos. */
+export interface PortalPublico {
+  nome: string;
+  /** O site do portal (o mais curto entre os feeds dele). */
+  urlSite: string;
+  exigeAssinatura: boolean;
+}
+
 export interface MateriaPublica {
   portal: string;
   titulo: string;

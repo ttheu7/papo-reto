@@ -4,8 +4,9 @@
 import type { Evento } from '../lib/dados';
 import Noticia from './Noticia.astro';
 
-interface Props { eventos: Evento[]; geradoEm: string; filtro?: boolean; mostrarCategoria?: boolean; porVez?: number }
-const { eventos, geradoEm, filtro = false, mostrarCategoria = true, porVez = 0 } = Astro.props;
+// `medidorGeral`: na capa, o indicador de cobertura conta só contra todos os portais (uma roda).
+interface Props { eventos: Evento[]; geradoEm: string; filtro?: boolean; mostrarCategoria?: boolean; porVez?: number; medidorGeral?: boolean }
+const { eventos, geradoEm, filtro = false, mostrarCategoria = true, porVez = 0, medidorGeral = false } = Astro.props;
 
 const contagem = new Map<string, { nome: string; total: number }>();
 for (const e of eventos) {
@@ -29,7 +30,7 @@ const editorias = [...contagem.entries()].sort((a, b) => b[1].total - a[1].total
     </div>
   )}
   <ul class="lista__itens" data-revela>
-    {eventos.map((e) => <Noticia evento={e} geradoEm={geradoEm} mostrarCategoria={mostrarCategoria} />)}
+    {eventos.map((e) => <Noticia evento={e} geradoEm={geradoEm} mostrarCategoria={mostrarCategoria} medidorGeral={medidorGeral} />)}
   </ul>
   {porVez > 0 && eventos.length > porVez && (
     <div class="lista__mais" data-mais hidden>

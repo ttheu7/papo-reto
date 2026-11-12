@@ -4,8 +4,8 @@ import type { Evento } from '../lib/dados';
 import { caminho, quando, quemNoticiou, exigeAssinatura } from '../lib/formato';
 import Medidor from './Medidor.astro';
 
-interface Props { evento: Evento; geradoEm: string; mostrarCategoria?: boolean; comResumo?: boolean }
-const { evento: e, geradoEm, mostrarCategoria = true, comResumo = true } = Astro.props;
+interface Props { evento: Evento; geradoEm: string; mostrarCategoria?: boolean; comResumo?: boolean; medidorGeral?: boolean }
+const { evento: e, geradoEm, mostrarCategoria = true, comResumo = true, medidorGeral = false } = Astro.props;
 const slug = e.categoria?.slug ?? 'geral';
 ---
 <li class="noticia item" data-cat={slug}>
@@ -13,7 +13,7 @@ const slug = e.categoria?.slug ?? 'geral';
   <h3 class="noticia__titulo"><a class="estica" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
   {comResumo && e.resumo && <p class="noticia__resumo">{e.resumo}</p>}
   <p class="servico">
-    <Medidor cobertura={e.cobertura} />
+    <Medidor cobertura={e.cobertura} categoria={e.categoria} geral={medidorGeral} />
     <span>{quemNoticiou(e)}</span>
     <span aria-hidden="true">·</span>
     <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time>
