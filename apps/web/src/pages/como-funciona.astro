@@ -98,7 +98,10 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
   <section class="secao moldura" aria-labelledby="fim-titulo">
     <div class="fim">
       <h2 id="fim-titulo">Bora ler?</h2>
-      <a class="botao" href={caminho()}>Ver as notícias do dia</a>
+      <a class="botao fim__botao" href={caminho()}>
+        <span class="fim__texto">Ver as notícias do dia</span>
+        <svg class="fim__seta" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
+      </a>
     </div>
   </section>
 </Base>
@@ -131,6 +134,14 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
   .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: var(--dentro) 0; border-top: 3px solid var(--fio); }
   :global(.folha:has(.fim)) { padding-bottom: 0; }
   .fim h2 { font-size: var(--step-head); }
+  .fim__seta { display: none; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: square; }
+  /* No celular, título e botão na mesma linha: o botão vira só a seta (o texto fica para o leitor de tela). */
+  @media (max-width: 640px) {
+    .fim { flex-wrap: nowrap; }
+    .fim__botao { flex: none; min-width: 48px; min-height: 48px; padding: 0; justify-content: center; }
+    .fim__texto { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .fim__seta { display: block; }
+  }
   @media (max-width: 1000px) { .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .passos { grid-template-columns: 1fr; } }
 </style>
