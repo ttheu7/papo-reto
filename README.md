@@ -34,7 +34,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
-- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos portais noticiaram cada assunto, contra os portais que cobrem a editoria dele (um assunto de Games é medido contra os portais de games, não contra todos)
+- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos portais noticiaram cada assunto, contra os portais que cobrem a editoria dele (um assunto de Games é medido contra os portais de games, não contra todos), com uma roda pequena ao lado contando todos os portais. Na capa fica só a roda de todos os portais
 - ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez

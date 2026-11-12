@@ -1,42 +1,68 @@
 ---
-// Indicador de cobertura: um anel que enche conforme a parte dos portais que noticiou o assunto, com o
-// número de portais no meio. Curto nas listas; grande, com "de N", em "Quem noticiou". Com editoria, a
-// conta é contra os portais que cobrem a editoria nesta edição (lib/cobertura.ts); sem, contra todos.
+// Indicador de cobertura, com duas rodas:
+// - a grande conta contra os portais que cobrem a editoria do assunto nesta edição (lib/cobertura.ts);
+// - a pequena, encostada nela, conta contra todos os portais acompanhados: um assunto muito relevante
+//   acaba saindo também em portais de fora da editoria (um título mundial do Brasil no e-sports, por exemplo).
+// Sem editoria (ou se as duas contas dão o mesmo número), só a roda grande, contra todos.
+// Na capa (`geral`), só uma roda, contra todos os portais: lá a comparação entre assuntos de editorias
+// diferentes precisa da mesma régua.
+// Curto nas listas; grande, com "de N", em "Quem noticiou".
 import { coberturaPorEditoria, totalDePortais } from '../lib/dados';
 import { escalaDoMedidor } from '../lib/cobertura';
 
-interface Props { cobertura: number; categoria?: { slug: string; nome: string } | null; grande?: boolean }
-const { cobertura, categoria = null, grande = false } = Astro.props;
-const total = escalaDoMedidor(cobertura, categoria, coberturaPorEditoria, totalDePortais);
-const porEditoria = Boolean(categoria && coberturaPorEditoria.get(categoria.slug)?.size);
+interface Props { cobertura: number; categoria?: { slug: string; nome: string } | null; grande?: boolean; geral?: boolean }
+const { cobertura, categoria = null, grande = false, geral = false } = Astro.props;
+const totalGeral = Math.max(totalDePortais, cobertura, 1);
+const total = geral ? totalGeral : escalaDoMedidor(cobertura, categoria, coberturaPorEditoria, totalDePortais);
+const porEditoria = !geral && Boolean(categoria && coberturaPorEditoria.get(categoria.slug)?.size) && total !== totalGeral;
 const quais = porEditoria ? `portais que cobrem a editoria ${categoria!.nome}` : 'portais acompanhados';
-const rotulo = `Noticiado por ${cobertura} de ${total} ${quais}`;
+const rotulo = porEditoria
+  ? `Noticiado por ${cobertura} de ${total} ${quais} e por ${cobertura} de ${totalGeral} portais acompanhados`
+  : `Noticiado por ${cobertura} de ${total} ${quais}`;
+
 // O traço usa pathLength 100: o quanto falta para fechar o anel é 100 menos a porcentagem.
-const falta = 100 - Math.round((cobertura / total) * 100);
-const tamanho = grande ? 96 : 24;
-const espessura = grande ? 8 : 2.5;
-const raio = (tamanho - espessura) / 2;
+const falta = (de: number) => 100 - Math.round((cobertura / de) * 100);
+const roda = (tamanho: number, espessura: number) => ({ tamanho, espessura, meio: tamanho / 2, raio: (tamanho - espessura) / 2 });
+const principal = grande ? roda(96, 8) : roda(24, 2.5);
+const satelite = grande ? roda(30, 3) : roda(11, 2);
 ---
 {grande ? (
   <figure class="medidor medidor--grande">
     <span class="medidor__anel" aria-hidden="true">
-      <svg width={tamanho} height={tamanho} viewBox={`0 0 ${tamanho} ${tamanho}`}>
-        <circle class="medidor__trilho" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} />
-        <circle class="medidor__cheio" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} pathLength="100" style={`--falta:${falta}`} />
+      <svg width={principal.tamanho} height={principal.tamanho} viewBox={`0 0 ${principal.tamanho} ${principal.tamanho}`}>
+        <circle class="medidor__trilho" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} />
+        <circle class="medidor__cheio" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
       </svg>
       <span class="medidor__meio"><b>{cobertura}</b><small>de {total}</small></span>
+      {porEditoria && (
+        <span class="medidor__satelite">
+          <svg width={satelite.tamanho} height={satelite.tamanho} viewBox={`0 0 ${satelite.tamanho} ${satelite.tamanho}`}>
+            <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
+            <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
+          </svg>
+        </span>
+      )}
     </span>
     <figcaption>
-      <strong>{cobertura} de {total}</strong> {quais} {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto
+      <span><strong>{cobertura} de {total}</strong> {quais} {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto</span>
+      {porEditoria && <span><strong>{cobertura} de {totalGeral}</strong> contando todos os portais acompanhados (a roda pequena)</span>}
     </figcaption>
   </figure>
 ) : (
-  <span class="medidor medidor--curto" role="img" aria-label={rotulo} title={rotulo}>
-    <svg width={tamanho} height={tamanho} viewBox={`0 0 ${tamanho} ${tamanho}`} aria-hidden="true">
-      <circle class="medidor__trilho" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} />
-      <circle class="medidor__cheio" cx={tamanho / 2} cy={tamanho / 2} r={raio} stroke-width={espessura} pathLength="100" style={`--falta:${falta}`} />
+  <span class:list={['medidor medidor--curto', { 'medidor--duplo': porEditoria }]} role="img" aria-label={rotulo} title={rotulo}>
+    <svg width={principal.tamanho} height={principal.tamanho} viewBox={`0 0 ${principal.tamanho} ${principal.tamanho}`} aria-hidden="true">
+      <circle class="medidor__trilho" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} />
+      <circle class="medidor__cheio" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
     </svg>
     <b aria-hidden="true">{cobertura}</b>
+    {porEditoria && (
+      <span class="medidor__satelite" aria-hidden="true">
+        <svg width={satelite.tamanho} height={satelite.tamanho} viewBox={`0 0 ${satelite.tamanho} ${satelite.tamanho}`}>
+          <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
+          <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
+        </svg>
+      </span>
+    )}
   </span>
 )}
 
@@ -46,15 +72,22 @@ const raio = (tamanho - espessura) / 2;
   .medidor__trilho { stroke: var(--medidor-vazio, var(--fio-claro)); }
   .medidor__cheio { stroke: currentColor; stroke-dasharray: 100; stroke-dashoffset: var(--falta); }
 
+  /* A roda pequena (todos os portais), sem número, entra um pouco na borda de baixo, à direita, da
+     grande, sobre um disco na cor do fundo, como um selo. */
+  .medidor__satelite { position: absolute; display: grid; place-items: center; border-radius: 50%; background: var(--fundo-satelite, var(--papel)); }
+  .medidor__satelite svg { position: absolute; inset: 0; }
+
   /* Curto: o número de portais no meio do anel. */
   .medidor--curto { position: relative; display: inline-grid; place-items: center; flex: none; width: 24px; height: 24px; vertical-align: middle; }
+  .medidor--duplo { margin-right: 2px; }
   .medidor--curto b {
     position: absolute; inset: 0; display: grid; place-items: center;
     font: 600 0.6875rem / 1 var(--sans); letter-spacing: 0; font-variant-numeric: tabular-nums;
   }
+  .medidor--curto .medidor__satelite { width: 11px; height: 11px; right: -3px; bottom: -1px; outline: 1.5px solid var(--fundo-satelite, var(--papel)); }
 
   /* Grande: o número e o "de N" empilhados, os dois centrados no anel; a frase ao lado. */
-  .medidor--grande { display: flex; align-items: center; gap: 20px; margin: 0; }
+  .medidor--grande { display: flex; align-items: center; gap: 24px; margin: 0; }
   .medidor__anel { position: relative; flex: none; color: var(--ink); }
   .medidor__meio {
     position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
@@ -62,7 +95,8 @@ const raio = (tamanho - espessura) / 2;
   }
   .medidor__meio b { font: 700 1.75rem / 1 var(--serif); font-variant-numeric: lining-nums tabular-nums; }
   .medidor__meio small { font: 600 0.6875rem / 1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-  .medidor--grande figcaption { font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); max-width: 32ch; }
+  .medidor--grande .medidor__satelite { width: 30px; height: 30px; right: 0; bottom: 2px; outline: 3px solid var(--fundo-satelite, var(--papel)); }
+  .medidor--grande figcaption { display: grid; gap: 6px; font: 400 var(--step-small) / 1.4 var(--sans); color: var(--muted); max-width: 34ch; }
   .medidor--grande strong { color: var(--ink); font-weight: 600; }
 
   @media (prefers-reduced-motion: no-preference) {
