@@ -32,14 +32,14 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
     <span class="medidor__anel" aria-hidden="true">
       <svg width={principal.tamanho} height={principal.tamanho} viewBox={`0 0 ${principal.tamanho} ${principal.tamanho}`}>
         <circle class="medidor__trilho" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} />
-        <circle class="medidor__cheio" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
+        <circle class:list={["medidor__cheio", { "medidor__cheio--completo": falta(total) <= 0 }]} cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
       </svg>
       <span class="medidor__meio"><b>{cobertura}</b><small>de {total}</small></span>
       {porEditoria && (
         <span class="medidor__satelite">
           <svg width={satelite.tamanho} height={satelite.tamanho} viewBox={`0 0 ${satelite.tamanho} ${satelite.tamanho}`}>
             <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
-            <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
+            <circle class:list={["medidor__cheio", { "medidor__cheio--completo": falta(totalGeral) <= 0 }]} cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
           </svg>
           {simbolo && <svg class="medidor__simbolo" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 7.5h14M5 16.5h14" /></svg>}
         </span>
@@ -54,14 +54,14 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
   <span class:list={['medidor medidor--curto', { 'medidor--duplo': porEditoria }]} role="img" aria-label={rotulo} title={rotulo}>
     <svg width={principal.tamanho} height={principal.tamanho} viewBox={`0 0 ${principal.tamanho} ${principal.tamanho}`} aria-hidden="true">
       <circle class="medidor__trilho" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} />
-      <circle class="medidor__cheio" cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
+      <circle class:list={["medidor__cheio", { "medidor__cheio--completo": falta(total) <= 0 }]} cx={principal.meio} cy={principal.meio} r={principal.raio} stroke-width={principal.espessura} pathLength="100" style={`--falta:${falta(total)}`} />
     </svg>
     <b aria-hidden="true">{cobertura}</b>
     {porEditoria && (
       <span class="medidor__satelite" aria-hidden="true">
         <svg width={satelite.tamanho} height={satelite.tamanho} viewBox={`0 0 ${satelite.tamanho} ${satelite.tamanho}`}>
           <circle class="medidor__trilho" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} />
-          <circle class="medidor__cheio" cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
+          <circle class:list={["medidor__cheio", { "medidor__cheio--completo": falta(totalGeral) <= 0 }]} cx={satelite.meio} cy={satelite.meio} r={satelite.raio} stroke-width={satelite.espessura} pathLength="100" style={`--falta:${falta(totalGeral)}`} />
         </svg>
       </span>
     )}
@@ -73,6 +73,9 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
   .medidor circle { fill: none; }
   .medidor__trilho { stroke: var(--medidor-vazio, var(--fio-claro)); }
   .medidor__cheio { stroke: currentColor; stroke-dasharray: 100; stroke-dashoffset: var(--falta); }
+  /* Roda cheia: círculo contínuo. Com o tracejado, o começo e o fim do traço se encontram no topo e o
+     navegador deixa uma fresta de menos de 1 px, por onde aparece o trilho claro. */
+  .medidor__cheio--completo { stroke-dasharray: none; }
 
   /* A roda pequena (todos os portais), sem número, entra um pouco na borda de baixo, à direita, da
      grande, sobre um disco na cor do fundo, como um selo. */
@@ -106,6 +109,13 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
 
   @media (prefers-reduced-motion: no-preference) {
     .medidor--grande .medidor__cheio { animation: encher 900ms var(--ease-expo) 150ms both; }
+    .medidor--grande .medidor__cheio--completo { animation-name: encher-completo; }
   }
   @keyframes encher { from { stroke-dashoffset: 100; } }
+  /* A roda cheia enche com o tracejado e, no último instante, vira o círculo contínuo (sem a fresta). */
+  @keyframes encher-completo {
+    from { stroke-dasharray: 100; stroke-dashoffset: 100; }
+    99% { stroke-dasharray: 100; stroke-dashoffset: 0; }
+    to { stroke-dasharray: none; stroke-dashoffset: 0; }
+  }
 </style>
