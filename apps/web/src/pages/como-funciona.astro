@@ -126,7 +126,10 @@ const dominio = (url: string) => { try { const u = new URL(url); return u.hostna
   }
   .editorias-lista { columns: 2; column-gap: 24px; width: 100%; }
   .editorias-lista a { display: inline-flex; min-height: 40px; align-items: center; font-weight: 600; }
-  .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: var(--dentro) 0; border-top: 3px solid var(--fio); border-bottom: 1px solid var(--fio); }
+  /* O fecho da página encosta no rodapé: sem fio embaixo e sem o recuo da folha, o fio grosso do rodapé
+     fecha a seção, com o mesmo espaço em cima e embaixo do texto. */
+  .fim { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: var(--dentro) 0; border-top: 3px solid var(--fio); }
+  :global(.folha:has(.fim)) { padding-bottom: 0; }
   .fim h2 { font-size: var(--step-head); }
   @media (max-width: 1000px) { .passos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .passos { grid-template-columns: 1fr; } }
