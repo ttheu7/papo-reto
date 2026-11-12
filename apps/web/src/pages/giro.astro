@@ -249,13 +249,17 @@ const id = (i: number) => `cena-${i + 1}`;
 
   /* Descarte: ao passar, o cartão que sai pelo topo encolhe e esmaece, e o próximo sobe para o lugar.
      Animação ligada à própria rolagem (o dedo ou a roda conduzem); onde o navegador não tem isso, só rola. */
+  /* A cena (onde a rolagem encaixa) nunca se mexe: se ela encolhesse e descesse, voltar com a roda encaixaria
+     na posição deslocada, cortando o cartão e mostrando o próximo. Quem anima é o que está dentro dela (o
+     cartão e os botões), seguindo a linha do tempo da cena (`--cena`). */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
-      .giro__cena { animation-name: descartar; animation-timing-function: linear; animation-fill-mode: both; transform-origin: 50% 0; }
-      .giro__cartao { animation-name: chegar; animation-timing-function: linear; animation-fill-mode: both; }
+      .giro__lista > .giro__cena { view-timeline-name: --cena; }
+      .giro__cena > .giro__cartao { animation-name: chegar, descartar; animation-timing-function: linear; animation-fill-mode: both; transform-origin: 50% 0; }
+      .giro__cena > .giro__passos { animation-name: descartar; animation-timing-function: linear; animation-fill-mode: both; transform-origin: 50% 0; }
       /* A linha do tempo fica numa regra à parte: no atalho `animation`, o minificador a juntaria e o navegador a descartaria. */
-      .giro__lista > .giro__cena { animation-timeline: view(); animation-range: exit 0% exit 100%; }
-      .giro__lista .giro__cena > .giro__cartao { animation-timeline: view(); animation-range: entry 0% entry 100%; }
+      .giro__lista .giro__cena > .giro__cartao { animation-timeline: --cena, --cena; animation-range: entry 0% entry 100%, exit 0% exit 100%; }
+      .giro__lista .giro__cena > .giro__passos { animation-timeline: --cena; animation-range: exit 0% exit 100%; }
     }
   }
   @keyframes descartar {
