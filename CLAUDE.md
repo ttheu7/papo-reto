@@ -153,6 +153,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `npm run coletar`: lê os feeds, agrupa (com vetores, se houver `MISTRAL_API_KEY`), grava no banco e, se houver `GEMINI_API_KEY` ou `GROQ_API_KEY`, gera os resumos; com `PEXELS_API_KEY` ou `UNSPLASH_API_KEY`, procura as imagens ilustrativas. Lê o `.env`.
 - `npm run calibrar:agrupamento`: vetoriza as manchetes dos dados de exemplo (ou de um `eventos.json` passado depois de `--`) e lista os pares mais parecidos, para conferir o limite do agrupamento. Com `-- --banco [--horas 48] [--limite 120]`, lê as notícias recentes do banco (só leitura) e compara lado a lado o vetor só do título e o do título com a descrição (`textoParaVetor`). Precisa de `MISTRAL_API_KEY`; não grava nada. A coleta usa título + descrição.
 - `npm run testar:feeds [-- <url>...]`: lê feeds candidatos com o mesmo leitor do coletor (sem banco e sem chave) e mostra, para cada um, se respondeu, quantos itens, quantos têm descrição e data, quantos saíram nas últimas 24 h e dois títulos. Sem endereços, testa a lista de candidatos de `apps/coletor/src/testar-feeds.ts`. Rode antes de cadastrar uma fonte.
+- `npm run dados:mudaram -- <url do site>`: compara os JSONs de `apps/web/public/dados` com os publicados, sem contar o `geradoEm`, e escreve `mudou=true|false` (no Actions, em `$GITHUB_OUTPUT`). Na dúvida, diz que mudou.
 - `npm run dados:site`: gera `apps/web/public/dados/*.json` a partir do banco.
 - `npm run build:web` / `npm run dev:web`: build e servidor de desenvolvimento do site. Sem `public/dados/`, fora do CI, o site usa `apps/web/src/dados-exemplo/`.
 - `npm run db:nova -- nome`: cria uma migration (se a CLI travar no fim, o arquivo já foi criado).
@@ -165,7 +166,7 @@ As telas de `docs/prototipo/` mostram só o funcionamento (quais páginas e bloc
 - `packages/infra`: Postgres (`postgres`), leitor de RSS (`fast-xml-parser`, com timeout, User-Agent e ISO-8859-1), Gemini (`@google/genai`), Groq, Mistral, Pexels e Unsplash (`fetch`, sem SDK, em `groq/`, `mistral/` e `acervos/`), prompt versionado em `ia/prompt.ts`, logs JSON.
 - `apps/coletor`: `coletar.ts`, `dados-do-site.ts` e `calibrar-agrupamento.ts`, só montam dependências.
 - `apps/web`: Astro estático, base `/papo-reto/`.
-- `.github/workflows/publicar.yml`: a cada 30 min (disparado pelo pg_cron do Supabase nos minutos 17 e 47; o `schedule` do próprio GitHub, a cada 3 horas, é só reserva) coleta, gera os dados, faz o build e publica no Pages. Cada rodada resume até 30 acontecimentos e busca até 15 imagens, então espaçar as rodadas também deixa acontecimentos sem resumo.
+- `.github/workflows/publicar.yml`: a cada 30 min (disparado pelo pg_cron do Supabase nos minutos 17 e 47; o `schedule` do próprio GitHub, a cada 3 horas, é só reserva) coleta, gera os dados, faz o build e publica no Pages. Cada rodada resume até 30 acontecimentos e busca até 15 imagens, então espaçar as rodadas também deixa acontecimentos sem resumo. Se os JSONs gerados forem iguais aos publicados (sem contar o `geradoEm`), o build e a publicação são pulados (`npm run dados:mudaram`, em `apps/coletor/src/dados-mudaram.ts`; na dúvida, publica). Push na `main` sempre publica; à mão, o "Run workflow" tem a opção `forcar`.
 
 ## Fluxo de trabalho
 

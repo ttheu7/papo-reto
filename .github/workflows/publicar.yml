@@ -2,12 +2,19 @@
 # Roda a cada 30 minutos, disparado pelo pg_cron do Supabase (função disparar_publicacao, via workflow_dispatch),
 # porque o agendamento do GitHub atrasa e pula execuções (na beta, saía de 4 em 4 a 8 em 8 horas).
 # O schedule abaixo, a cada 3 horas, é só a reserva. Roda também à mão pela aba Actions e a cada push na main fora de supabase/.
+# Se a rodada não mudou nada nos dados do site, o build e a publicação são pulados (um push na main sempre publica;
+# à mão, marque "forcar" para publicar mesmo assim).
 name: Publicar site
 
 on:
   schedule:
     - cron: "37 */3 * * *"
   workflow_dispatch:
+    inputs:
+      forcar:
+        description: Publicar mesmo se os dados não mudaram
+        type: boolean
+        default: false
   push:
     branches: [main]
     paths-ignore:
@@ -28,6 +35,8 @@ jobs:
     name: Coletar e montar o site
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      publicar: ${{ steps.decidir.outputs.publicar }}
     steps:
       - uses: actions/checkout@v7
 
@@ -61,18 +70,30 @@ jobs:
         env:
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
 
+      # Compara os JSONs novos com os publicados (sem contar o horário de geração).
+      - name: Ver se os dados mudaram
+        id: mudou
+        run: npm run --silent dados:mudaram -- "${{ steps.pages.outputs.base_url }}"
+
+      - name: Decidir se publica
+        id: decidir
+        run: echo "publicar=${{ github.event_name == 'push' || inputs.forcar == true || steps.mudou.outputs.mudou != 'false' }}" >> "$GITHUB_OUTPUT"
+
       - name: Build do site
+        if: steps.decidir.outputs.publicar == 'true'
         run: npm run build:web
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
 
       - uses: actions/upload-pages-artifact@v5
+        if: steps.decidir.outputs.publicar == 'true'
         with:
           path: apps/web/dist
 
   deploy:
     name: Publicar no GitHub Pages
     needs: build
+    if: needs.build.outputs.publicar == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages

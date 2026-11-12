@@ -380,7 +380,7 @@ O workflow **Publicar site** (`.github/workflows/publicar.yml`) roda:
 - a cada push na `main` com mudanças fora de `supabase/`;
 - à mão, pela aba Actions (**Run workflow**).
 
-Ele coleta, gera os JSONs, faz o build e publica no GitHub Pages. Duas publicações nunca rodam ao mesmo tempo.
+Ele coleta, gera os JSONs, faz o build e publica no GitHub Pages. Duas publicações nunca rodam ao mesmo tempo. Se a rodada não mudou nada nos dados do site (os JSONs ficaram iguais aos publicados, sem contar o horário de geração), o build e a publicação são pulados. Um push na `main` sempre publica, e no **Run workflow** dá para marcar **forcar** para publicar mesmo sem mudança.
 
 ### Configuração inicial (uma vez só):
 
