@@ -57,13 +57,38 @@
       "exigeAssinatura": false
     },
     {
+      "nome": "Jornal do Rap",
+      "site": "https://www.jornaldorap.com.br",
+      "exigeAssinatura": false
+    },
+    {
       "nome": "NPR",
       "site": "https://www.npr.org",
       "exigeAssinatura": false
     },
     {
+      "nome": "Rap Dab",
+      "site": "https://www.rapdab.com.br",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "Rap Mídia",
+      "site": "https://rapmidia.com.br",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "Rap na Net",
+      "site": "https://rapnanet.com.br",
+      "exigeAssinatura": false
+    },
+    {
       "nome": "Tecnoblog",
       "site": "https://tecnoblog.net",
+      "exigeAssinatura": false
+    },
+    {
+      "nome": "Trapground",
+      "site": "https://www.trapground.com.br",
       "exigeAssinatura": false
     },
     {
