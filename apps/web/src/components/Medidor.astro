@@ -1,12 +1,16 @@
 ---
-// Indicador de cobertura: um anel que enche conforme a parte dos portais acompanhados que noticiou o
-// assunto, com o número de portais no meio. Curto nas listas; grande, com "de N", em "Quem noticiou".
-import { totalDePortais } from '../lib/dados';
+// Indicador de cobertura: um anel que enche conforme a parte dos portais que noticiou o assunto, com o
+// número de portais no meio. Curto nas listas; grande, com "de N", em "Quem noticiou". Com editoria, a
+// conta é contra os portais que cobrem a editoria nesta edição (lib/cobertura.ts); sem, contra todos.
+import { coberturaPorEditoria, totalDePortais } from '../lib/dados';
+import { escalaDoMedidor } from '../lib/cobertura';
 
-interface Props { cobertura: number; grande?: boolean }
-const { cobertura, grande = false } = Astro.props;
-const total = Math.max(totalDePortais, cobertura);
-const rotulo = cobertura === 1 ? `Noticiado por 1 de ${total} portais acompanhados` : `Noticiado por ${cobertura} de ${total} portais acompanhados`;
+interface Props { cobertura: number; categoria?: { slug: string; nome: string } | null; grande?: boolean }
+const { cobertura, categoria = null, grande = false } = Astro.props;
+const total = escalaDoMedidor(cobertura, categoria, coberturaPorEditoria, totalDePortais);
+const porEditoria = Boolean(categoria && coberturaPorEditoria.get(categoria.slug)?.size);
+const quais = porEditoria ? `portais que cobrem a editoria ${categoria!.nome}` : 'portais acompanhados';
+const rotulo = `Noticiado por ${cobertura} de ${total} ${quais}`;
 // O traço usa pathLength 100: o quanto falta para fechar o anel é 100 menos a porcentagem.
 const falta = 100 - Math.round((cobertura / total) * 100);
 const tamanho = grande ? 96 : 24;
@@ -23,7 +27,7 @@ const raio = (tamanho - espessura) / 2;
       <span class="medidor__meio"><b>{cobertura}</b><small>de {total}</small></span>
     </span>
     <figcaption>
-      <strong>{cobertura} de {total}</strong> portais acompanhados {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto
+      <strong>{cobertura} de {total}</strong> {quais} {cobertura === 1 ? 'noticiou' : 'noticiaram'} este assunto
     </figcaption>
   </figure>
 ) : (

@@ -23,7 +23,8 @@ export interface OpcoesDosResumos {
   janelaEmHoras?: number;
   /**
    * Editorias com vaga garantida em toda rodada: se nenhum dos escolhidos é dela, o mais noticiado dela
-   * entra no primeiro lote. Padrão: ["games"] (e-sports quase sempre saem num portal só e ficariam por último).
+   * entra no primeiro lote. Padrão: ["games", "rap"] (e-sports e rap quase sempre saem num portal só e
+   * ficariam por último).
    */
   editoriasGarantidas?: string[];
 }
@@ -96,7 +97,7 @@ export class ResumirEventos {
     let eventos = (await d.resumos.eventosSemResumo({ limite, desde })).filter(naoEPrograma);
 
     // Vaga garantida: pelo menos um acontecimento de cada editoria garantida por rodada, no primeiro lote.
-    for (const slug of this.opcoes.editoriasGarantidas ?? ['games']) {
+    for (const slug of this.opcoes.editoriasGarantidas ?? ['games', 'rap']) {
       if (!idDaCategoria.has(slug) || eventos.some((e) => e.categoriaSlug === slug)) continue;
       const [garantido] = (await d.resumos.eventosSemResumo({ limite: 3, desde, categoria: slug })).filter(naoEPrograma);
       if (garantido) eventos = [garantido, ...eventos.filter((e) => e.id !== garantido.id)].slice(0, limite);

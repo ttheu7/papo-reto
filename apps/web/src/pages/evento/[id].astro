@@ -22,7 +22,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
     {e.categoria && <a class="chapeu" href={caminho(`categoria/${e.categoria.slug}/`)}>{e.categoria.nome}</a>}
     <h1 id="pagina-titulo">{e.titulo}</h1>
     <p class="servico">
-      <Medidor cobertura={e.cobertura} />
+      <Medidor cobertura={e.cobertura} categoria={e.categoria} />
       <span>Noticiado por {portais.join(', ')}</span>
       <span aria-hidden="true">·</span>
       <time class="data" datetime={e.publicadoEm}>{dataPorExtenso(e.publicadoEm)}, {quando(e.publicadoEm, geradoEm)}</time>
@@ -56,7 +56,7 @@ const descricao = e.resumo ?? `${e.titulo}. Veja quem noticiou e leia a matéria
 
     <section class="quem" aria-labelledby="quem-titulo">
       <h2 class="rotulo" id="quem-titulo">Quem noticiou</h2>
-      <Medidor cobertura={e.cobertura} grande />
+      <Medidor cobertura={e.cobertura} categoria={e.categoria} grande />
       <ul class:list={["quem__lista", { "quem__lista--rola": e.materias.length > 2 }]} data-quem-lista data-revela>
         {e.materias.map((m) => (
           <li class="item quem__item">

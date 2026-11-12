@@ -2,6 +2,7 @@
 // Fora do CI, se eles não existirem, usa os dados de exemplo para quem não tem acesso ao banco.
 import type { CategoriasJson, EventoJson, EventosJson, PortaisJson } from '@papo-reto/core';
 import { existsSync, readFileSync } from 'node:fs';
+import { portaisPorEditoria } from './cobertura';
 import { join, resolve } from 'node:path';
 
 // O Astro roda com a pasta apps/web como diretório atual (npm run build:web).
@@ -47,6 +48,9 @@ export function portaisAtuais(): { nome: string; exigeAssinatura: boolean; mater
 
 /** Quantos portais o site acompanha agora: a escala do indicador de cobertura. */
 export const totalDePortais = Math.max(1, portaisAtuais().length);
+
+/** Quem cobre cada editoria nesta edição: a escala do indicador de cobertura de cada assunto. */
+export const coberturaPorEditoria = portaisPorEditoria(eventos.eventos);
 
 /**
  * A ordem do Giro, a mesma para todo mundo (nada é personalizado): primeiro os de "hoje", com mais

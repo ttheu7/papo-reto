@@ -49,7 +49,7 @@ const id = (i: number) => `cena-${i + 1}`;
                   <a class="giro__abrir" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a>
                 </h2>
                 <p class="giro__meta">
-                  <Medidor cobertura={e.cobertura} />
+                  <Medidor cobertura={e.cobertura} categoria={e.categoria} />
                   <span>{portais.length === 1 ? portais[0] : `${portais.length} portais`} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </p>
                 {e.imagem && (

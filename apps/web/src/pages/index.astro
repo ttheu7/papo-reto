@@ -29,7 +29,7 @@ const fotoDaManchete = imagemNaCapa(manchete);
         {fotoDaManchete && <ImagemIlustrativa imagem={fotoDaManchete} prioridade class="manchete__foto" />}
         <p class="manchete__resumo">{manchete.resumo && <span class="selo" aria-hidden="true">Papo reto</span>}{manchete.resumo ?? 'Ainda sem resumo. Leia a manchete original direto no portal.'}</p>
         <p class="servico">
-          <Medidor cobertura={manchete.cobertura} />
+          <Medidor cobertura={manchete.cobertura} categoria={manchete.categoria} />
           <span>Noticiado por {portaisDe(manchete).join(', ')} · <time datetime={manchete.publicadoEm}>{quando(manchete.publicadoEm, geradoEm)}</time></span>
         </p>
         <div class="manchete__acoes">
@@ -52,7 +52,7 @@ const fotoDaManchete = imagemNaCapa(manchete);
                 {e.categoria && <p class="chapeu">{e.categoria.nome}</p>}
                 <h3><a class="estica" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h3>
                 <p class="servico">
-                  <Medidor cobertura={e.cobertura} />
+                  <Medidor cobertura={e.cobertura} categoria={e.categoria} />
                   <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span>
                 </p>
               </li>
@@ -74,7 +74,7 @@ const fotoDaManchete = imagemNaCapa(manchete);
               {c.eventos.map((e) => (
                 <li class="item bloco__item">
                   <h4><a class="estica" href={caminho(`evento/${e.id}/`)}>{e.titulo}</a></h4>
-                  <p class="servico"><Medidor cobertura={e.cobertura} /> <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span></p>
+                  <p class="servico"><Medidor cobertura={e.cobertura} categoria={e.categoria} /> <span>{quemNoticiou(e)} · <time datetime={e.publicadoEm}>{quando(e.publicadoEm, geradoEm)}</time></span></p>
                 </li>
               ))}
             </ul>

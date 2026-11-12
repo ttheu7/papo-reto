@@ -34,7 +34,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Imagens ilustrativas de acervos gratuitos (Pexels e Unsplash), sempre com crédito, na página da notícia, no Giro e na manchete da capa quando o assunto está em 3 ou mais portais; notícias sensíveis ficam sem imagem
 - ✅ Primeira página com a manchete do momento, a coluna "Também hoje" e blocos por editoria
 - ✅ Resumo "Em 1 minuto" de cada acontecimento, com aviso de que foi gerado por IA
-- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos dos portais acompanhados noticiaram cada assunto
+- ✅ Indicador de cobertura: um anel com o número de portais no meio mostra quantos portais noticiaram cada assunto, contra os portais que cobrem a editoria dele (um assunto de Games é medido contra os portais de games, não contra todos)
 - ✅ Identidade de jornal de estudantes: edição numerada ("Ano I · Nº 128"), carimbo "Feito por estudantes · grátis · sem anúncio · sem cadastro" e o selo "Papo reto" no resumo
 - ✅ "Quem noticiou": link para todas as matérias originais, com a etiqueta "Exige assinatura" quando é o caso
 - ✅ Lista de últimas notícias com filtro por editoria (`?editoria=mundo`), 16 por vez
@@ -54,7 +54,7 @@ No ar em **https://ttheu7.github.io/papo-reto/** (versão beta, congelada). Este
 - ✅ Agrupamento das matérias sobre o mesmo fato pelo sentido do título e da descrição (vetores da Mistral), inclusive entre português e inglês, com as palavras dos títulos como reserva
 - ✅ Resumos e classificação por editoria em lote no Gemini, sem resumir o mesmo acontecimento duas vezes
 - ✅ Groq de reserva: se o Gemini falha ou fica sem cota, ela resume o resto da rodada
-- ✅ Vaga garantida para e-sports: toda rodada resume pelo menos uma notícia de Games, que de outro jeito ficaria por último (quase sempre só um portal dá cada uma)
+- ✅ Vaga garantida para e-sports e rap: toda rodada resume pelo menos uma notícia de Games e uma de Rap, que de outro jeito ficariam por último (quase sempre só um portal dá cada uma)
 - ✅ Sem chave da IA, ou com a cota esgotada, o site mostra a manchete original, o portal e o link
 - ✅ Registro de cada rodada (novas notícias, resumos e erros) e, em cada resumo, do modelo, dos tokens e do custo
 - ✅ Limpeza diária do banco para caber no plano gratuito
