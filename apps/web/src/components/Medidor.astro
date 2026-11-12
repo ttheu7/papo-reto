@@ -69,7 +69,9 @@ const satelite = grande ? roda(30, 3) : roda(11, 2);
 )}
 
 <style>
-  .medidor svg { display: block; transform: rotate(-90deg); }
+  /* As rodas começam no topo e enchem para a esquerda (sentido anti-horário): o círculo do SVG começa às
+     3 horas e anda no sentido horário, então gira -90° e espelha na horizontal (escolha de 12/11/2026). */
+  .medidor svg { display: block; transform: scaleX(-1) rotate(-90deg); }
   .medidor circle { fill: none; }
   .medidor__trilho { stroke: var(--medidor-vazio, var(--fio-claro)); }
   .medidor__cheio { stroke: currentColor; stroke-dasharray: 100; stroke-dashoffset: var(--falta); }
