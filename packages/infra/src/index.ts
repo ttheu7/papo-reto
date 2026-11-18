@@ -10,7 +10,6 @@ export * from './ia/prompt';
 export * from './gemini/servico-ia-gemini';
 export * from './groq/servico-ia-groq';
 export * from './mistral/servico-de-vetores-mistral';
-export * from './acervos/acervo-pexels';
 export * from './acervos/acervo-unsplash';
 export * from './postgres/repositorio-site';
 export * from './postgres/repositorio-calibragem';
