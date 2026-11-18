@@ -159,7 +159,7 @@ describe('GerarDadosDoSite', () => {
   });
 
   it('leva a imagem ilustrativa com o crédito, e null quando não há', async () => {
-    const imagem = { provedor: 'Pexels', url: 'https://img/1.jpg', largura: 1600, altura: 900, cor: '#123456', autor: 'Ana', urlAutor: 'https://p/@ana', urlPagina: 'https://p/1' };
+    const imagem = { provedor: 'Unsplash', url: 'https://img/1.jpg', largura: 1600, altura: 900, cor: '#123456', autor: 'Ana', urlAutor: 'https://p/@ana', urlPagina: 'https://p/1' };
     const { caso, escritor } = gerar([card('com', 1, 1, { imagem }), card('sem', 2)]);
     await caso.executar();
     const eventos = (escritor.arquivos.get('eventos.json') as EventosJson).eventos;

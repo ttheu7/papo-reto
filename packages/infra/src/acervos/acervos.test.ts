@@ -1,45 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { AcervoPexels } from './acervo-pexels';
 import { AcervoUnsplash } from './acervo-unsplash';
 
 const json = (corpo: unknown, status = 200, cabecalhos: Record<string, string> = {}) => new Response(JSON.stringify(corpo), { status, headers: cabecalhos });
-
-describe('AcervoPexels', () => {
-  it('busca na horizontal com a chave e devolve a primeira foto com crédito, em 1600 px', async () => {
-    const pedidos: { url: string; auth: string | null }[] = [];
-    const acervo = new AcervoPexels({
-      chave: 'chave-pexels',
-      buscar: async (url, init) => {
-        pedidos.push({ url: String(url), auth: new Headers(init?.headers).get('authorization') });
-        return json({
-          photos: [
-            { width: 4000, height: 3000, url: 'https://www.pexels.com/photo/estadio-1/', photographer: 'Ana', photographer_url: 'https://www.pexels.com/@ana', avg_color: '#334455', src: { original: 'https://images.pexels.com/photos/1/a.jpeg' } },
-          ],
-        });
-      },
-    });
-
-    const imagem = await acervo.buscar('soccer stadium night');
-
-    expect(pedidos[0]?.url).toBe('https://api.pexels.com/v1/search?query=soccer+stadium+night&per_page=5&orientation=landscape');
-    expect(pedidos[0]?.auth).toBe('chave-pexels');
-    expect(imagem).toEqual({
-      provedor: 'Pexels',
-      url: 'https://images.pexels.com/photos/1/a.jpeg?auto=compress&cs=tinysrgb&w=1600',
-      largura: 1600,
-      altura: 1200,
-      cor: '#334455',
-      autor: 'Ana',
-      urlAutor: 'https://www.pexels.com/@ana',
-      urlPagina: 'https://www.pexels.com/photo/estadio-1/',
-    });
-  });
-
-  it('sem resultado devolve null; 429 vira ErroCotaIa', async () => {
-    expect(await new AcervoPexels({ chave: 'k', buscar: async () => json({ photos: [] }) }).buscar('x')).toBeNull();
-    await expect(new AcervoPexels({ chave: 'k', buscar: async () => json({}, 429) }).buscar('x')).rejects.toMatchObject({ name: 'ErroCotaIa' });
-  });
-});
 
 describe('AcervoUnsplash', () => {
   it('busca com filtro de conteúdo, avisa o uso pelo download_location e põe utm nos links de crédito', async () => {

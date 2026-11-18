@@ -112,7 +112,7 @@ export interface NovoResumo {
 }
 
 /**
- * Imagem ilustrativa de acervo gratuito (Pexels, Unsplash). Não mostra o fato: só ilustra o assunto.
+ * Imagem ilustrativa de acervo gratuito (Unsplash). Não mostra o fato: só ilustra o assunto.
  * É exibida direto do acervo, sempre com o crédito ao fotógrafo e o link para a foto.
  */
 export interface ImagemDeAcervo {

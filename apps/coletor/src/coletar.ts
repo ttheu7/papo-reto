@@ -1,9 +1,8 @@
 // Ponto de entrada da coleta: monta as dependências e chama os casos de uso.
-// Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY, GROQ_API_KEY, MISTRAL_API_KEY,
-// PEXELS_API_KEY e UNSPLASH_API_KEY).
-import { ColetarNoticias, IlustrarEventos, mensagemDe, ResumirEventos, type AcervoDeImagens } from '@papo-reto/core';
+// Uso: npm run coletar (lê SUPABASE_DB_URL e, se houver, GEMINI_API_KEY, GROQ_API_KEY, MISTRAL_API_KEY
+// e UNSPLASH_API_KEY).
+import { ColetarNoticias, IlustrarEventos, mensagemDe, ResumirEventos } from '@papo-reto/core';
 import {
-  AcervoPexels,
   AcervoUnsplash,
   conectar,
   LeitorRssHttp,
@@ -58,16 +57,12 @@ async function principal(): Promise<number> {
       registro.info('GEMINI_API_KEY e GROQ_API_KEY ausentes; resumos pulados', { execucaoId: coleta.execucaoId });
     }
 
-    // Imagens ilustrativas dos acontecimentos já resumidos: a Pexels primeiro, o Unsplash de reserva.
-    const acervos: AcervoDeImagens[] = [
-      ...(config.chavePexels ? [new AcervoPexels({ chave: config.chavePexels })] : []),
-      ...(config.chaveUnsplash ? [new AcervoUnsplash({ chave: config.chaveUnsplash })] : []),
-    ];
-    if (acervos.length > 0) {
+    // Imagens ilustrativas dos acontecimentos já resumidos, do Unsplash.
+    if (config.chaveUnsplash) {
       try {
-        // Até 30 por rodada (o padrão de IlustrarEventos). Cotas: Pexels 200 buscas por hora e 20 mil por mês;
-        // Unsplash em produção, 1.000 chamadas por hora (cada imagem usada gasta duas: a busca e o aviso de uso).
-        // Se a Pexels esgotar a cota do mês, ela sai da rodada e o Unsplash assume.
+        // Até 30 por rodada (o padrão de IlustrarEventos). O Unsplash em produção dá 1.000 chamadas por hora, e
+        // cada imagem usada gasta duas: a busca e o aviso de uso.
+        const acervos = [new AcervoUnsplash({ chave: config.chaveUnsplash })];
         await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }).executar(
           coleta.execucaoId,
         );
@@ -76,7 +71,7 @@ async function principal(): Promise<number> {
         registro.erro('etapa de imagens falhou', { execucaoId: coleta.execucaoId, erro: mensagemDe(erro) });
       }
     } else {
-      registro.info('PEXELS_API_KEY e UNSPLASH_API_KEY ausentes; imagens puladas', { execucaoId: coleta.execucaoId });
+      registro.info('UNSPLASH_API_KEY ausente; imagens puladas', { execucaoId: coleta.execucaoId });
     }
 
     return coleta.status === 'falha' ? 1 : 0;

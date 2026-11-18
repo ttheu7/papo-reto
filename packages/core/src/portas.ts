@@ -110,7 +110,7 @@ export interface EscritorDeDados {
   escrever(nome: string, dados: unknown): Promise<void>;
 }
 
-/** Um acervo de imagens gratuitas (Pexels, Unsplash). */
+/** Um acervo de imagens gratuitas (hoje, o Unsplash). */
 export interface AcervoDeImagens {
   readonly nome: string;
   /** A melhor imagem para as palavras-chave, ou null se não houver. Lança `ErroCotaIa` sem cota. */
