@@ -134,7 +134,8 @@ img, svg { display: block; max-width: 100%; }
 
 /* ---------- A página ---------- */
 .folha { padding-bottom: var(--respiro); }
-.moldura { padding-inline: var(--margin); max-width: 1320px; margin-inline: auto; }
+/* Largura máxima da folha: 1600 px (era 1320; em 1920 px sobrava margem demais dos lados, 12/11/2026). */
+.moldura { padding-inline: var(--margin); max-width: 1600px; margin-inline: auto; }
 
 /* ---------- Fios e rótulos de jornal ---------- */
 /* Rótulo de seção ("TAMBÉM HOJE", "MUNDO"): versalete entre fio forte em cima e fio fino embaixo. */

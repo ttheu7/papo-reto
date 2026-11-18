@@ -42,12 +42,12 @@ const aqui = partes.at(-1) ?? '';
   <div class="topo__fios" aria-hidden="true"></div>
   <nav class="topo__menu" aria-label="Editorias">
     <ul>
-      <li><a href={caminho('#ultimas')}>Últimas</a></li>
+      {/* Na capa as últimas já estão logo abaixo; nas outras páginas, o atalho leva até elas. */}
+      {!capa && <li><a href={caminho('#ultimas')}>Últimas</a></li>}
       <li><a href={caminho('giro/')} aria-current={aqui === 'giro' ? 'page' : undefined}>Giro</a></li>
       {editorias.map((c) => (
         <li><a href={caminho(`categoria/${c.slug}/`)} aria-current={aqui === c.slug ? 'page' : undefined}>{c.nome}</a></li>
       ))}
-      <li><a href={caminho('como-funciona/')} aria-current={aqui === 'como-funciona' ? 'page' : undefined}>Como funciona</a></li>
     </ul>
   </nav>
 </header>
@@ -120,7 +120,10 @@ const aqui = partes.at(-1) ?? '';
   .topo__fios { border-top: 3px solid var(--fio); }
   .topo__menu { border-bottom: 1px solid var(--fio); overflow-x: auto; scrollbar-width: none; }
   .topo__menu::-webkit-scrollbar { display: none; }
-  .topo__menu ul { display: flex; justify-content: center; gap: 0 22px; min-width: max-content; padding: 0 2px; }
+  /* Centralizado pela margem, e não por justify-content: quando os itens não cabem, a margem vira zero e
+     o menu começa na borda esquerda, rolando para o lado; com justify-content: center, o começo ficava
+     cortado, fora do alcance da rolagem. */
+  .topo__menu ul { display: flex; gap: 0 22px; width: max-content; margin-inline: auto; padding: 0 2px; }
   .topo__menu a {
     display: inline-flex; align-items: center; min-height: 44px; white-space: nowrap; text-decoration: none;
     font: 600 var(--step-small) / 1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase;
@@ -149,6 +152,6 @@ const aqui = partes.at(-1) ?? '';
       font: 600 0.7rem / 1.2 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; text-align: center;
     }
     .topo__faixa::before, .topo__faixa::after { content: ''; flex: 1; min-width: 14px; border-top: 1px solid var(--fio-claro); }
-    .topo__menu ul { justify-content: flex-start; }
+    .topo__menu ul { margin-inline: 0; }
   }
 </style>

@@ -10,7 +10,7 @@ export interface DependenciasDasImagens {
 }
 
 export interface OpcoesDasImagens {
-  /** Acontecimentos por rodada. Padrão: 15 (as cotas gratuitas são por hora). */
+  /** Acontecimentos por rodada. Padrão: 30, o mesmo número de resumos por rodada. */
   limite?: number;
   /** Só ilustra acontecimentos criados nesse intervalo. Padrão: 48 horas. */
   janelaEmHoras?: number;
@@ -40,7 +40,7 @@ export class IlustrarEventos {
 
     const pendentes = await d.imagens.eventosParaIlustrar({
       desde: new Date(d.agora().getTime() - (this.opcoes.janelaEmHoras ?? 48) * 3_600_000),
-      limite: this.opcoes.limite ?? 15,
+      limite: this.opcoes.limite ?? 30,
     });
     const semCota = new Set<string>();
 

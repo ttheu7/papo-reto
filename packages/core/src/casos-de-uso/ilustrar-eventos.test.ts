@@ -20,7 +20,7 @@ describe('IlustrarEventos', () => {
     expect(imagens.gravadas.get('e1')?.imagem?.provedor).toBe('Pexels');
     expect(imagens.gravadas.get('e2')?.imagem?.provedor).toBe('Unsplash');
     expect(unsplash.buscas).toEqual(['busca 2']);
-    expect(imagens.pedidos[0]).toEqual({ desde: new Date('2026-11-03T12:00:00Z'), limite: 15 });
+    expect(imagens.pedidos[0]).toEqual({ desde: new Date('2026-11-03T12:00:00Z'), limite: 30 });
   });
 
   it('grava "sem imagem" quando todos respondem sem achar, para não procurar de novo', async () => {
