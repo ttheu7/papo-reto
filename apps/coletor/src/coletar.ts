@@ -65,10 +65,10 @@ async function principal(): Promise<number> {
     ];
     if (acervos.length > 0) {
       try {
-        // Só com o Unsplash (50 chamadas por hora no modo de teste, e cada imagem usada gasta duas: a busca e o
-        // aviso de uso), 8 por rodada mantêm as duas rodadas da hora abaixo do limite. Com a Pexels, 15.
-        const limite = config.chavePexels ? 15 : 8;
-        await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }, { limite }).executar(
+        // Até 30 por rodada (o padrão de IlustrarEventos). Cotas: Pexels 200 buscas por hora e 20 mil por mês;
+        // Unsplash em produção, 1.000 chamadas por hora (cada imagem usada gasta duas: a busca e o aviso de uso).
+        // Se a Pexels esgotar a cota do mês, ela sai da rodada e o Unsplash assume.
+        await new IlustrarEventos({ imagens: new RepositorioImagensPg(sql), acervos, registro, agora: () => new Date() }).executar(
           coleta.execucaoId,
         );
       } catch (erro) {
