@@ -134,6 +134,13 @@ export interface EventoParaIlustrar {
 }
 
 /** Linha da vw_evento_card, com a data da matéria mais recente. */
+/**
+ * Editorias de nicho: e-sports e rap quase sempre saem num portal só. Elas têm vaga garantida nos resumos
+ * de toda rodada (ResumirEventos) e, depois de explicadas, nunca saem do site antes das 48 horas
+ * (GerarDadosDoSite).
+ */
+export const EDITORIAS_DE_NICHO: readonly string[] = ['games', 'rap'];
+
 export interface CardDeEvento {
   id: string;
   titulo: string;

@@ -1,5 +1,5 @@
 import { soProgramas } from '../agrupamento';
-import type { CardDeEvento, MateriaPublica } from '../entidades';
+import { EDITORIAS_DE_NICHO, type CardDeEvento, type MateriaPublica } from '../entidades';
 import type { EscritorDeDados, Registro, RepositorioSite, Relogio } from '../portas';
 
 // ---------------------------------------------------------------------
@@ -59,9 +59,18 @@ export interface PortaisJson {
 }
 
 export interface OpcoesDosDados {
-  /** Padrão: 48 horas e até 80 eventos. */
+  /** Padrão: 48 horas. */
   janelaEmHoras?: number;
+  /** Acontecimentos sem resumo, os mais recentes, contando os de "hoje". Padrão: 80. */
   maximoDeEventos?: number;
+  /**
+   * Acontecimentos explicados (com resumo) que ficam no site pelas 48 horas, além dos de "hoje", mesmo sem
+   * matéria nova. Passando disso, sai o menos noticiado (menos portais, depois o mais antigo), mas os das
+   * editorias de nicho nunca saem. Padrão: 250.
+   */
+  maximoDeResumidos?: number;
+  /** Editorias cujos acontecimentos explicados nunca saem antes das 48 horas. Padrão: EDITORIAS_DE_NICHO. */
+  editoriasDeNicho?: readonly string[];
   /** "O que importa hoje": padrão 24 horas e 5 eventos. */
   janelaDeHojeEmHoras?: number;
   eventosDeHoje?: number;
@@ -82,10 +91,11 @@ export class GerarDadosDoSite {
     const quantosHoje = this.opcoes.eventosDeHoje ?? 5;
     const desdeHoje = agora.getTime() - (this.opcoes.janelaDeHojeEmHoras ?? 24) * HORA;
 
-    // Busca uma margem a mais para o "hoje" não ficar de fora quando houver muitos eventos.
+    // Busca tudo o que teve matéria na janela: os explicados ficam no site mesmo sem matéria nova, e só aparecem
+    // aqui se a busca não cortar pelos mais recentes. O limite é só uma trava de segurança.
     const recentes = await d.site.cardsRecentes({
       desde: new Date(agora.getTime() - (this.opcoes.janelaEmHoras ?? 48) * HORA),
-      limite: maximo * 4,
+      limite: 5000,
     });
     // Acontecimentos só com listas de vídeos ou chamadas de programa, gravados antes do filtro da coleta, ficam de fora.
     const materias = await d.site.materiasDosEventos(recentes.map((c) => c.id));
@@ -96,8 +106,25 @@ export class GerarDadosDoSite {
       .sort((a, b) => b.cobertura - a.cobertura || b.publicadoEm.getTime() - a.publicadoEm.getTime())
       .slice(0, quantosHoje);
     const idsDeHoje = new Set(hoje.map((c) => c.id));
-    const mais = cards.filter((c) => !idsDeHoje.has(c.id)).slice(0, Math.max(0, maximo - hoje.length));
-    const selecionados = [...hoje, ...mais].sort((a, b) => b.publicadoEm.getTime() - a.publicadoEm.getTime());
+    const resto = cards.filter((c) => !idsDeHoje.has(c.id));
+
+    // Os explicados ficam as 48 horas. Acima do teto, sai o menos noticiado; os de nicho (Games e Rap, que
+    // quase sempre saem num portal só) nunca saem.
+    const nicho = new Set(this.opcoes.editoriasDeNicho ?? EDITORIAS_DE_NICHO);
+    const ehNicho = (c: CardDeEvento) => c.categoriaSlug !== null && nicho.has(c.categoriaSlug);
+    const resumidos = resto.filter((c) => c.resumo);
+    const resumidosDeNicho = resumidos.filter(ehNicho);
+    const outrosResumidos = resumidos
+      .filter((c) => !ehNicho(c))
+      .sort((a, b) => b.cobertura - a.cobertura || b.publicadoEm.getTime() - a.publicadoEm.getTime())
+      .slice(0, Math.max(0, (this.opcoes.maximoDeResumidos ?? 250) - resumidosDeNicho.length));
+
+    // Os sem resumo: só os mais recentes (a busca já vem do mais novo para o mais antigo).
+    const semResumo = resto.filter((c) => !c.resumo).slice(0, Math.max(0, maximo - hoje.length));
+
+    const selecionados = [...hoje, ...resumidosDeNicho, ...outrosResumidos, ...semResumo].sort(
+      (a, b) => b.publicadoEm.getTime() - a.publicadoEm.getTime(),
+    );
 
     const paraJson = (c: CardDeEvento) => eventoJson(c, materias.get(c.id) ?? []);
     const geradoEm = agora.toISOString();

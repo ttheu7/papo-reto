@@ -54,12 +54,14 @@ export const coberturaPorEditoria = portaisPorEditoria(eventos.eventos);
 
 /**
  * A ordem do Giro, a mesma para todo mundo (nada é personalizado): primeiro os de "hoje", com mais
- * portais noticiando, depois os demais das últimas 48 horas, dos mais novos para os mais antigos.
+ * portais noticiando, depois os demais das últimas 48 horas, dos mais novos para os mais antigos, até
+ * CARTOES_NO_GIRO (os dados guardam os explicados das 48 horas, que podem passar de 300).
  */
+export const CARTOES_NO_GIRO = 80;
 export function eventosDoGiro(): Evento[] {
   const deHoje = hoje.eventos;
   const ids = new Set(deHoje.map((e) => e.id));
-  return [...deHoje, ...eventos.eventos.filter((e) => !ids.has(e.id))];
+  return [...deHoje, ...eventos.eventos.filter((e) => !ids.has(e.id))].slice(0, CARTOES_NO_GIRO);
 }
 
 /** Na capa, só a manchete ganha imagem, e só se for um assunto quente: noticiado por pelo menos 3 portais. */

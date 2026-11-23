@@ -314,7 +314,7 @@ O site não tem servidor: os dados são arquivos JSON estáticos, gerados a cada
 Endereço base: `https://ttheu7.github.io/papo-reto/dados/`
 
 #### **GET /dados/eventos.json**
-Acontecimentos das últimas 48 horas, até 80, os mais recentes primeiro.
+Acontecimentos das últimas 48 horas, os mais recentes primeiro: todos os explicados pela IA (até 250, mais os de Games e Rap, que nunca saem) e, sem resumo, os mais recentes, até 80.
 
 **Resposta:**
 ```jsonc

@@ -126,6 +126,34 @@ describe('GerarDadosDoSite', () => {
     expect(ids[ids.length - 1]).toBe('destaque');
   });
 
+  it('acontecimento explicado fica as 48 horas no site, mesmo com muitos mais novos sem resumo', async () => {
+    const novos = Array.from({ length: 10 }, (_, i) => card(`novo${i}`, 1 + i * 0.1, 1));
+    const explicado = card('rima', 30, 1, { resumo: 'Resumo.', categoriaSlug: 'rap', categoriaNome: 'Rap' });
+    const velho = card('velho', 50, 9, { resumo: 'Resumo.' });
+    const { caso, escritor } = gerar([...novos, explicado, velho], new Map(), { maximoDeEventos: 4, eventosDeHoje: 2 });
+    await caso.executar();
+
+    const ids = (escritor.arquivos.get('eventos.json') as EventosJson).eventos.map((e) => e.id);
+    expect(ids).toEqual(['novo0', 'novo1', 'novo2', 'novo3', 'rima']);
+  });
+
+  it('acima do teto de explicados, sai o menos noticiado, mas Games e Rap nunca saem', async () => {
+    const resumido = (id: string, horas: number, cobertura: number, categoriaSlug: string | null = null) =>
+      card(id, horas, cobertura, { resumo: 'Resumo.', categoriaSlug, categoriaNome: categoriaSlug });
+    const cards = [
+      resumido('quente', 2, 6),
+      resumido('medio', 3, 3),
+      resumido('fraco', 4, 1),
+      resumido('major', 40, 1, 'games'),
+      resumido('rima', 45, 1, 'rap'),
+    ];
+    const { caso, escritor } = gerar(cards, new Map(), { eventosDeHoje: 0, maximoDeResumidos: 3 });
+    await caso.executar();
+
+    const ids = (escritor.arquivos.get('eventos.json') as EventosJson).eventos.map((e) => e.id);
+    expect(ids).toEqual(['quente', 'major', 'rima']);
+  });
+
   it('gera categorias com o total de eventos publicados', async () => {
     const { caso, escritor } = gerar([
       card('a', 1, 1, { categoriaSlug: 'brasil', categoriaNome: 'Brasil' }),
